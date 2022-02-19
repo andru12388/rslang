@@ -1,6 +1,6 @@
 .wrapper
-  width: 100vw
-  background-image: url("../assets/img/bg-home2.jpg")
+  width: 100%
+  background-color: #fff
   background-repeat: no-repeat
   background-size: cover
   position: relative
@@ -184,6 +184,12 @@
         height: 100%
         background: transparent
 
+.menu-list-item
+  display: block
+
+.menu-list-item.active-hidden
+  display: none
+
 .menu-header.active
   transform: translateX(0)
   transition: all 0.5s ease
@@ -220,8 +226,12 @@
 
 .main
   flex-grow: 1
+
+.main.active-study
+  background: rgba(#13be21, 0.2)
+
+.wrapper-home
   display: flex
-  // align-items: center
   justify-content: center
 
 .main-align-center
