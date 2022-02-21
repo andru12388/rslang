@@ -2,31 +2,16 @@
   .wrapper-card-words,
   .wrapper-card-words-difficult
     justify-content: space-evenly
-
-@media (max-width: 1200px)
   .wrapper-home
-    max-width: 50rem
+    max-width: 35rem
     margin: 0 auto
   .main-align-center
     .h1
-      font-size: 3rem
-      border: 3px solid #223C50
-      padding: 1.2rem 0
+      font-size: 1.7rem
+      padding: 0.8rem 0
       &::after, &::before
         height: 3px
-        width: 6rem
-    .text-title
-      line-height: normal 
-      font-size: 1rem
-  .button
-    font-size: 1.3rem
-
-@media (max-width: 1000px)
-  .main-align-center
-    .h1
-      font-size: 2rem
-      border: 3px solid #223C50
-      padding: 1rem 0
+        width: 4rem
       &::after
         right: 15%
         top: 50%
@@ -35,8 +20,61 @@
         left: 15%
         top: 50%
         margin-top: -2px
+  .title-composition
+    border-top: 16rem solid rgba(34, 60, 80, 0.9)
+    border-left: 17rem solid transparent
+    border-right: 17rem solid transparent
+    &::before
+      top: -15rem
+      left: -14rem
+      font-size: 1rem
+      width: 28rem
+    &::after
+      top: -9rem
+      left: -6.5rem
+      font-size: 1rem
+      width: 13rem
   .button
-    font-size: 1.1rem
+      font-size: 1.1rem
+  .btn-details
+    padding: 0.7rem 1.8rem
+    margin-top: 2.5rem
+
+@media (max-width: 1200px)
+  .wrapper-home
+    max-width: 35rem
+    margin: 0 auto
+  .main-align-center
+    .h1
+      border-width: 3px
+      padding: 1.2rem 0
+      &::after, &::before
+        height: 3px
+        width: 6rem
+
+@media (max-width: 1000px)
+  .wrapper-home
+    max-width: 26rem
+  .main-align-center
+    .title-composition
+      border-top: 15rem solid rgba(34, 60, 80, 0.9)
+      border-left: 16rem solid transparent
+      border-right: 16rem solid transparent
+      &::before
+        top: -14rem
+        left: -12rem
+        font-size: 1rem
+        width: 24rem
+      &::after
+        top: -9rem
+        left: -6rem
+        font-size: 1rem
+        width: 12rem
+    .button
+      font-size: 1rem
+    .btn-details
+      padding: 0.5rem 1.5rem
+      margin-top: 2rem
 
   .card-words
     width: 20rem
@@ -67,11 +105,12 @@
 @media (max-width: 768px)
   .wrapper-home
     max-width: 25rem
-    margin: 0 auto
+    height: 70vh
+    align-items: center
   .main-align-center
     .h1
       font-size: 2rem
-      border: 2px solid #223C50
+      border-width: 2px
       padding: 1rem 0
       &::after, &::before
         height: 2px
@@ -87,10 +126,22 @@
     .text-title
       line-height: normal 
       font-size: 0.8rem
+    .title-composition
+      border-top: 13rem solid rgba(34, 60, 80, 0.9)
+      border-left: 12rem solid transparent
+      border-right: 12rem solid transparent
+      &::before
+        top: -12rem
+        left: -10rem
+        font-size: 0.9rem
+        width: 20rem
+      &::after
+        top: -8rem
+        left: -6rem
+        font-size: 0.9rem
+        width: 12rem
   .button
     font-size: 0.9rem
-  .btn-details
-    padding: 0.7rem 2rem
 
   .header .h2
     font-size: 1.3rem
@@ -110,7 +161,7 @@
     font-size: 1rem
   .menu-btn.active
     transform: translateX(11rem)
-    margin-top: -2.2rem
+    margin-top: -1.2rem
     margin-right: 1rem
   .menu-btn
     width: 3rem
@@ -259,12 +310,10 @@
 
 @media (max-width: 500px)
   .wrapper-home
-    max-width: 18rem
-    margin: 0 auto
+    max-width: 21rem
   .main-align-center
     .h1
       font-size: 1.5rem
-      border: 2px solid #223C50
       padding: 0.8rem 0
       &::after, &::before
         height: 2px
@@ -279,7 +328,21 @@
         margin-top: -2px
     .text-title
       line-height: normal 
-      font-size: 0.6rem
+      font-size: 0.8rem
+    .title-composition
+      border-top: 9rem solid rgba(34, 60, 80, 0.9)
+      border-left: 10.5rem solid transparent
+      border-right: 10.5rem solid transparent
+      &::before
+        top: -8.5rem
+        left: -8rem
+        font-size: 0.8rem
+        width: 16rem
+      &::after
+        top: -5.5rem
+        left: -5rem
+        font-size: 0.8rem
+        width: 10.5rem
   .button
     font-size: 0.7rem
   .btn-details
@@ -346,7 +409,8 @@
 
 @media (max-width: 400px)
   .header .h2
-    display: none
+    visibility: hidden
+    opacity: 0
   .textbook-title
     font-size: 1.4rem
   .btn-pagination,
@@ -372,8 +436,22 @@
   .icon-audio
     width: 1.15rem
     height: 0.9rem
-  .games-wrapper
-    flex-direction: column
-    align-items: center
-  .game-card-sprint
-    margin-right: 0
+
+@media (max-width: 340px)
+  .wrapper-home
+    max-width: 19rem
+  .main-align-center
+    .title-composition
+      border-top: 9rem solid rgba(34, 60, 80, 0.9)
+      border-left: 9.5rem solid transparent
+      border-right: 9.5rem solid transparent
+      &::before
+        top: -8.5rem
+        left: -7rem
+        font-size: 0.7rem
+        width: 14rem
+      &::after
+        top: -5.5rem
+        left: -4.5rem
+        font-size: 0.7rem
+        width: 9.5rem

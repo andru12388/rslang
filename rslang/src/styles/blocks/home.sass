@@ -141,7 +141,7 @@
   position: fixed
   top: 0
   left: 0
-  height: 100%
+  bottom: 0
   width: 18rem
   background: rgba(#fff, 1)
   z-index: 90
@@ -239,11 +239,15 @@
 .main-align-center
   text-align: center
   .h1
-    font-size: 5rem
+    font-size: 3rem
     position: relative
-    color: #223C50
-    background: rgba(#223C50, 0.2)
-    border: 4px solid #223C50
+    background-color: rgba(#223C50, 1)
+    background-image: rgba(#223C50, 1)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+    border-width: 4px
+    border-style: solid
+    border-image: linear-gradient(69deg, rgba(254, 242, 0, 1) 5%, rgba(208,7,41,1) 100%) 1
     padding: 1.5rem 0
     backdrop-filter: blur(0.4rem)
     &::after, &::before
@@ -268,14 +272,47 @@
     font-size: 1.4rem
     color: $textcolor
 
+.title-composition
+  width: 0
+  height: 0
+  position: relative
+  border-top: 20rem solid rgba(#223c50, 0.9)
+  border-left: 25rem solid transparent
+  border-right: 25rem solid transparent
+  transition: all 0.5s ease
+  &::before
+    content: "Самый лучший и эффективный способ для изучения английского языка."
+    position: absolute
+    top: -18rem
+    left: -20rem
+    font-size: 1.5rem
+    width: 40rem
+    font-weight: 700
+    background-color: rgba(254, 242, 0, 1)
+    background-image: linear-gradient(69deg, rgba(254, 242, 0, 1) 5%, rgba(208,7,41,1) 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+  &::after
+    content: "Теперь учить английский язык легко и увлекательно!"
+    position: absolute
+    top: -10rem
+    left: -10rem 
+    font-size: 1.5rem
+    width: 20rem
+    font-weight: 700
+    background-color: rgba(254, 242, 0, 1)
+    background-image: linear-gradient(69deg, rgba(254, 242, 0, 1) 1%, rgba(208,7,41,1) 100%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
 .button
-  background: rgba(#223C50, 0.2)
+  background: rgba(#A0094E, 0.3)
   border: 2px solid $textcolor
   border-radius: 1.5rem
   color: $textcolor
   cursor: pointer
   font-size: 1.5rem
-  backdrop-filter: blur(0.4rem)
+  backdrop-filter: blur(1.4rem)
 
 .btn-details
   padding: 0.7rem 4rem

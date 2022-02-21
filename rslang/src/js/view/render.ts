@@ -5,8 +5,7 @@ class RenderView {
       <div class="wrapper-home">
         <div class="main-align-center">
           <h1 class="h1">RS Lang</h1>
-          <p class="text-title">Самый лучший и эффективный способ для изучения английского языка.</p>
-          <p class="text-title">Теперь учить английский язык легко и увлекательно!</p>
+          <div class="title-composition"></div>
           <button class="button btn-details">Подробнее</button>
         </div>
       </div>
