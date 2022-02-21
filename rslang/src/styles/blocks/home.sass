@@ -17,6 +17,7 @@
     width: 100%
     height: 100%
     background: rgba($bgdark, 0.5)
+    z-index: 50
 
 .header
   display: flex
@@ -88,7 +89,7 @@
   border-radius: 50%
   transition: all 0.5s ease
   position: relative
-  z-index: 6
+  z-index: 91
   &:hover
     background: rgba($bgdark, 0.3)
     transition: all 0.5s ease
@@ -143,7 +144,7 @@
   height: 100%
   width: 18rem
   background: rgba(#fff, 1)
-  z-index: 5
+  z-index: 90
   transform: translateX(-200%)
   transition: all 0.5s ease
   .menu-list
@@ -226,6 +227,7 @@
 
 .main
   flex-grow: 1
+  position: relative
 
 .main.active-study
   background: rgba(#13be21, 0.2)
@@ -300,6 +302,9 @@
   background: rgba(85, 85, 85, 0.4)
   box-shadow: 0px -5px 8px rgb(224 238 255 / 44%)
 
+.footer.active-hidden
+  display: none
+
 .footer-logo
   display: block
   background: url("../assets/svg/rss.svg") no-repeat 100% 100%
@@ -311,5 +316,58 @@
   text-decoration: none
   color: $textcolor
   &::before
-    content: url("../assets/svg/github.svg")
+    content: ""
+    display: inline-block
+    background: url("../assets/svg/github.svg") no-repeat 100% 100%
+    background-size: contain
+    width: 1.5rem
+    height: 1.5rem
     margin-right: 0.5rem
+
+::-webkit-scrollbar 
+  width: 8px
+  background: transparent
+  border-radius: 8px
+  transition: all 1s ease
+
+
+::-webkit-scrollbar-thumb
+  background: #666
+  border-radius: 8px
+
+
+::-webkit-scrollbar-track
+  background: transparent
+  border-radius: 8px
+  transition: all 1s ease
+
+.top
+  position: fixed
+  display: flex
+  justify-content: center
+  align-items: center
+  bottom: 45px
+  right: -100px
+  background-color: #666
+  z-index: 12
+  border-radius: 10em
+  font-size: 36px
+  width: 70px
+  height: 70px
+  text-align: center
+  line-height: 70px
+  cursor: pointer
+  transition: all 0.3s ease
+  opacity: 0.5
+
+
+.top:hover
+  background-color: #666
+  opacity: 1
+  transition: all 0.3s ease
+
+
+.top.active-up
+  right: 45px
+  transition: all 0.3s ease
+

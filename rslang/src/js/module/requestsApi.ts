@@ -1,5 +1,8 @@
 import { ICreateUser, ILoginUser, IWords, IGeneralInfo } from './components/interface';
 import { storeUserInfo } from '../controller/storage';
+import PreloaderPage from './components/preloader';
+
+const preloaderPage = new PreloaderPage();
 
 class RequestsApi {
   base = 'https://rslang-bak.herokuapp.com';
@@ -75,6 +78,9 @@ class RequestsApi {
 
   async getTextbookWords(group: number, page: number): Promise<IWords> {
     const response = await fetch(`${this.words}?group=${group}&page=${page}`);
+    if (response.ok) {
+      preloaderPage.hidePreloaderPage();
+    }
     return await response.json();
   }
 
@@ -121,6 +127,9 @@ class RequestsApi {
         'Content-Type': 'application/json'
       },
     });
+    if (response.ok) {
+      preloaderPage.hidePreloaderPage();
+    }
     return await response.json();
   }
 
@@ -132,6 +141,9 @@ class RequestsApi {
         'Content-Type': 'application/json'
       },
     });
+    if (response.ok) {
+      preloaderPage.hidePreloaderPage();
+    }
     return await response.json();
   }
 
@@ -143,6 +155,9 @@ class RequestsApi {
         'Content-Type': 'application/json'
       },
     });
+    if (response.ok) {
+      preloaderPage.hidePreloaderPage();
+    }
     return await response.json();
   }
 }

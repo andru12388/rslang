@@ -3,12 +3,15 @@ import RequestsApi from '../requestsApi';
 import { storeUserInfo, storage } from '../../controller/storage';
 import CreateCard from '../../view/createCardsWords';
 import Paginator from '../../view/pagination';
+import PreloaderPage from './preloader';
 
 const api = new RequestsApi();
+const preloaderPage = new PreloaderPage();
 
 class Utils {
 
   async getCardsWords(group: number, page: number) {
+    preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words')).innerHTML = '';
     Object.values(await api.getTextbookWords(group, page)).forEach((item) => {
       const createCards = new CreateCard(item.id, item.image, item.word, item.wordTranslate, item.transcription, item.audio, item.textMeaning, item.textMeaningTranslate, item.textExample, item.textExampleTranslate);
@@ -17,6 +20,7 @@ class Utils {
   }
 
   async getCardsWordsSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+    preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words')).innerHTML = '';
     const arrWords = Object.values(await api.getTextbookWordsSignupUser(storeUser, storeGeneral))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
@@ -41,6 +45,7 @@ class Utils {
   }
 
   async getAllDifficultyCardsWords(storeUser: ILoginUser) {
+    preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
     const arrWords = Object.values(await api.getDifficultWordsSignupUser(storeUser))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
@@ -52,6 +57,7 @@ class Utils {
   }
 
   async getAllLearnedCardsWords(storeUser: ILoginUser) {
+    preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
     const arrWords = Object.values(await api.getLearnedWordsSignupUser(storeUser))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)

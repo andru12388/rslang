@@ -2,8 +2,7 @@ import { ICreateUser, ILoginUser, IWords } from '../module/components/interface'
 import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
 import { storeUserInfo, storage } from './storage';
-import CreateCard from '../view/createCardsWords';
-import Paginator from '../view/pagination';
+
 import Utils from '../module/components/utils';
 
 const api = new RequestsApi();
@@ -351,7 +350,7 @@ class AppController {
   
   hideMenuClickBody() {
     this.wrapper.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).classList.contains('wrapper') === true) {
+      if ((event.target as HTMLElement).classList.contains('wrapper')) {
         this.menuBurg.classList.remove('active');
         this.menuHeader.classList.remove('active');
         this.wrapper.classList.remove('active');

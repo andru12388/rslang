@@ -23,34 +23,37 @@ class RenderView {
 
   renderTextbook() {
     return `
+      <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-textbook">
-        <h2 class="textbook-title">Учебник</h2>
-        <p class="title-levels-words">Уровни сложности слов</p>
-        <div class="difficulty-levels-words">
-          <div class="levels-item item-1" data-group="0">1 (A1)</div>
-          <div class="levels-item item-2" data-group="1">2 (A2)</div>
-          <div class="levels-item item-3" data-group="2">3 (B1)</div>
-          <div class="levels-item item-4" data-group="3">4 (B2)</div>
-          <div class="levels-item item-5" data-group="4">5 (C1)</div>
-          <div class="levels-item item-6" data-group="5">6 (C2)</div>
-        </div>
-        <div class="difficult-words active-hidden">Сложные слова</div>
-        <div class="wrapper-card-words">
+        <div class="textbook-content">
+          <h2 class="textbook-title">Учебник</h2>
+          <p class="title-levels-words">Уровни сложности слов</p>
+          <div class="difficulty-levels-words">
+            <div class="levels-item item-1" data-group="0">1 (A1)</div>
+            <div class="levels-item item-2" data-group="1">2 (A2)</div>
+            <div class="levels-item item-3" data-group="2">3 (B1)</div>
+            <div class="levels-item item-4" data-group="3">4 (B2)</div>
+            <div class="levels-item item-5" data-group="4">5 (C1)</div>
+            <div class="levels-item item-6" data-group="5">6 (C2)</div>
+          </div>
+          <div class="difficult-words active-hidden">Сложные слова</div>
+          <div class="wrapper-card-words">
           
-        </div>
-        <div class="pagination-textbook"></div>
-        <div class="games-block">
-          <h2 class="game-title">Игры</h2>
-          <div class="games-wrapper">
-            <div class="game-card game-card-sprint">
-              <h4 class="game-name">Спринт</h4>
-              <div class="game-img game-icon-sprint"></div>
-              <p class="discription-game">Игра на время. Определи верный перевод слова или нет.</p>
-            </div>
-            <div class="game-card game-card-audio-call">
-              <h4 class="game-name">Аудиовызов</h4>
-              <div class="game-img game-icon-audio"></div>
-              <p class="discription-game">Попробуй понять, какое слово было произнесено.</p>
+          </div>
+          <div class="pagination-textbook"></div>
+          <div class="games-block">
+            <h2 class="game-title">Игры</h2>
+            <div class="games-wrapper">
+              <div class="game-card game-card-sprint">
+                <h4 class="game-name">Спринт</h4>
+                <div class="game-img game-icon-sprint"></div>
+                <p class="discription-game">Игра на время. Определи верный перевод слова или нет.</p>
+              </div>
+              <div class="game-card game-card-audio-call">
+                <h4 class="game-name">Аудиовызов</h4>
+                <div class="game-img game-icon-audio"></div>
+                <p class="discription-game">Попробуй понять, какое слово было произнесено.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -98,6 +101,7 @@ class RenderView {
 
   async render(): Promise<void> {
     const html = `
+      <div class="preloader"><div class="pulse"></div></div>
       <header class="header">
         <div class="menu-burger">
           <button class="menu-btn">
@@ -144,6 +148,9 @@ class RenderView {
         <a href="https://github.com/andru12388" class="footer-git" target="_blank">Алисеев Андрей</a>
         <p class="app-dev">2022</p>
       </footer>
+      <div class="top" title="Up">
+        <i class="fa fa-angle-double-up"></i>
+      </div>
       <div class="popup-sign-in">
         <div class="form-close-btn"></div>
         <form class="form-popap-registered">
