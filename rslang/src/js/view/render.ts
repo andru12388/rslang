@@ -157,7 +157,7 @@ class RenderView {
           <p class="form-title">Регистрация</p>
           <div class="form-input-box">
             <input class="input enter-name" type="text" name="nameUser" placeholder="Имя" required>
-            <input class="input enter-email" type="email" name="email" placeholder="E-mail (q@e.ru)" pattern="^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$" title="Минимально корректный e-mail" required>
+            <input class="input enter-email" type="email" name="email" placeholder="E-mail" title="Минимально корректный e-mail (q@e.ru)" required>
             <input class="input enter-password" type="password" name="password" placeholder="Пароль (от 8 до 12 символов)" minlength="8" maxlength="12" required>
           </div>
           <div class="message-error"></div>
@@ -171,7 +171,7 @@ class RenderView {
         <form class="form-popap-signup">
           <p class="form-title">Вход</p>
           <div class="form-input-box">
-            <input class="input enter-email" type="email" name="email" placeholder="E-mail (q@e.ru)" pattern="^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$" title="Минимально корректный e-mail" required>
+            <input class="input enter-email" type="email" name="email" placeholder="E-mail" title="Минимально корректный e-mail (q@e.ru)" required>
             <input class="input enter-password" type="password" name="password" placeholder="Пароль (от 8 до 12 символов)" minlength="8" maxlength="12" required>
           </div>
           <div class="message-error-signin"></div>

@@ -6,26 +6,30 @@ const preloaderPage = new PreloaderPage();
 
 class RequestsApi {
   base = 'https://rslang-bak.herokuapp.com';
+
   users = `${this.base}/users`;
+
   signin = `${this.base}/signin`;
+
   words = `${this.base}/words`;
 
   async createUser(user: ICreateUser) {
     const messageError = <HTMLElement>document.querySelector('.message-error');
     const response = await fetch(`${this.users}`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(user)
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
     });
     if (response.status === 417) {
       messageError.textContent = 'Пользователь с таким e-mail уже существует! Введите другой e-mail.';
       messageError.style.display = 'block';
     }
-    return await response.json();
-  };
+    const content = await response.json();
+    return content;
+  }
 
   async loginUser({ email, password }: ICreateUser) {
     const messageErrorSignin = <HTMLElement>document.querySelector('.message-error-signin');
@@ -33,9 +37,9 @@ class RequestsApi {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ email, password }),
     });
     switch (response.status) {
       case 404:
@@ -49,39 +53,41 @@ class RequestsApi {
     }
     const content = await response.json();
     localStorage.setItem('user-info', JSON.stringify(content));
-  };
+  }
 
   async getNewUserToken({ userId, refreshToken }: ILoginUser) {
     const response = await fetch(`${this.users}/${userId}/tokens`, {
       headers: {
         'Authorization': `Bearer ${refreshToken}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     const content = await response.json();
     storeUserInfo.token = content.token;
     storeUserInfo.refreshToken = content.refreshToken;
     localStorage.setItem('user-info', JSON.stringify(storeUserInfo));
-  };
+  }
 
   async getUser({ userId, token }: ILoginUser) {
     const response = await fetch(`${this.users}/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
-    return await response.json();
-  };
+    const content = await response.json();
+    return content;
+  }
 
   async getTextbookWords(group: number, page: number): Promise<IWords> {
     const response = await fetch(`${this.words}?group=${group}&page=${page}`);
     if (response.ok) {
       preloaderPage.hidePreloaderPage();
     }
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 
   async createWordsDifficulty({ userId, token }: ILoginUser, { wordId, groupWords, pageWords }: IGeneralInfo, levelWord: string) {
@@ -90,11 +96,12 @@ class RequestsApi {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } })
+      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } }),
     });
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 
   async updateWordsDifficulty({ userId, token }: ILoginUser, { wordId, groupWords, pageWords }: IGeneralInfo, levelWord: string) {
@@ -103,11 +110,12 @@ class RequestsApi {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } })
+      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } }),
     });
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 
   async deleteWordsDifficulty({ userId, token }: ILoginUser, { wordId }: IGeneralInfo) {
@@ -124,13 +132,14 @@ class RequestsApi {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
       preloaderPage.hidePreloaderPage();
     }
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 
   async getDifficultWordsSignupUser({ userId, token }: ILoginUser) {
@@ -138,13 +147,14 @@ class RequestsApi {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
       preloaderPage.hidePreloaderPage();
     }
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 
   async getLearnedWordsSignupUser({ userId, token }: ILoginUser) {
@@ -152,13 +162,14 @@ class RequestsApi {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
     });
     if (response.ok) {
       preloaderPage.hidePreloaderPage();
     }
-    return await response.json();
+    const content = await response.json();
+    return content;
   }
 }
 

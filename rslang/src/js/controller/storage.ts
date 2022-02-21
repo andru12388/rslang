@@ -14,7 +14,7 @@ let storage: IGeneralInfo = {
   pageWords: 0,
   isSignupUser: false,
   wordId: null,
-}
+};
 
 window.addEventListener('load', () => {
   if (localStorage.getItem('general-info')) {

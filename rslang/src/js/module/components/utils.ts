@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser } from './interface';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser } from './interface';
 import RequestsApi from '../requestsApi';
 import { storeUserInfo, storage } from '../../controller/storage';
 import CreateCard from '../../view/createCardsWords';
@@ -22,18 +22,18 @@ class Utils {
   async getCardsWordsSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words')).innerHTML = '';
-    const arrWords = Object.values(await api.getTextbookWordsSignupUser(storeUser, storeGeneral))
+    Object.values(await api.getTextbookWordsSignupUser(storeUser, storeGeneral))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
         if (el.userWord) {
+          const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
+          const createCardsStudied = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
           switch (el.userWord.difficulty) {
             case 'hard':
-              const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
               createCardsDifficulty.createAndRenderCardsDifficulty();
               break;
             case 'easy':
-              const createCardsStudied = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
               createCardsStudied.createAndRenderCardsLearned();
               break;
           }
@@ -41,34 +41,34 @@ class Utils {
           const createCards = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
           createCards.createAndRenderCards();
         }
-      })
+      });
   }
 
   async getAllDifficultyCardsWords(storeUser: ILoginUser) {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
-    const arrWords = Object.values(await api.getDifficultWordsSignupUser(storeUser))
+    Object.values(await api.getDifficultWordsSignupUser(storeUser))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
         const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
         createCardsDifficulty.renderCardsDifficultyPage();
-      })
+      });
   }
 
   async getAllLearnedCardsWords(storeUser: ILoginUser) {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
-    const arrWords = Object.values(await api.getLearnedWordsSignupUser(storeUser))
+    Object.values(await api.getLearnedWordsSignupUser(storeUser))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
         const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
         createCardsDifficulty.renderCardsLearnedPage();
-      })
+      });
   }
 
-  getPaginationCards(pageWords: number, allPageWords: number = 30, parentElement: HTMLElement = <HTMLElement>document.querySelector('.pagination-textbook')) {
+  getPaginationCards(pageWords: number, allPageWords = 30, parentElement: HTMLElement = <HTMLElement>document.querySelector('.pagination-textbook')) {
     parentElement.innerHTML = '';
     const paginator = new Paginator(pageWords + 1, allPageWords, parentElement);
     paginator.renderPagination();
@@ -105,7 +105,7 @@ class Utils {
   isEmptyDifficultyWords() {
     const wrapperCardWordsDifficult = (<HTMLElement>document.querySelector('.wrapper-card-words-difficult'));
     if (!wrapperCardWordsDifficult.firstChild) {
-      const blockMessageEmpty = '<div class="empty-block"><p class="empty-message">Пока в этой категории ничего нет.</p></div>'
+      const blockMessageEmpty = '<div class="empty-block"><p class="empty-message">Пока в этой категории ничего нет.</p></div>';
       wrapperCardWordsDifficult.insertAdjacentHTML('beforeend', blockMessageEmpty);
     }
   }

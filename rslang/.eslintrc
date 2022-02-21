@@ -19,7 +19,7 @@
   "rules": {
     "no-plusplus": "off",
     "no-console": "warn",
-    "max-len": ["warn", { "code": 170, "ignoreTemplateLiterals": true }],
+    "max-len": ["warn", { "code": 220, "ignoreTemplateLiterals": true }],
     "indent": ["warn", 2, {
       "SwitchCase": 1
     }],

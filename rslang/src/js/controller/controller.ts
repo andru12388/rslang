@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords } from '../module/components/interface';
+import { ICreateUser } from '../module/components/interface';
 import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
 import { storeUserInfo, storage } from './storage';
@@ -11,31 +11,57 @@ const utils = new Utils();
 
 class AppController {
   wrapper = <HTMLElement>document.querySelector('.wrapper');
+
   main = <HTMLElement>document.querySelector('.main');
+
   signIn = <HTMLElement>document.querySelector('.sign-in');
+
   popupSignIn = <HTMLElement>document.querySelector('.popup-sign-in');
+
   popupAbout = <HTMLElement>document.querySelector('.popup-about');
+
   menuBurg = <HTMLElement>document.querySelector('.menu-btn');
+
   menuHeader = <HTMLElement>document.querySelector('.menu-header');
+
   subMenuList = <HTMLElement>document.querySelector('.submenu-list');
+
   subMenuLink = <HTMLElement>document.querySelector('.sub-menu-link');
+
   linkToRegistered = <HTMLElement>document.querySelector('.link-to-registered');
+
   linkToSignup = <HTMLElement>document.querySelector('.link-to-signup');
+
   formPopapRegistered = <HTMLElement>document.querySelector('.form-popap-registered');
+
   formPopapSignup = <HTMLElement>document.querySelector('.form-popap-signup');
+
   formCloseBtn = <HTMLElement>document.querySelector('.form-close-btn');
+
   aboutCloseBtn = <HTMLElement>document.querySelector('.about-close-btn');
+
   messageError = <HTMLElement>document.querySelector('.message-error');
+
   messageErrorSignin = <HTMLElement>document.querySelector('.message-error-signin');
+
   logOutBox = <HTMLElement>document.querySelector('.avatar-box');
+
   logOutBtn = <HTMLElement>document.querySelector('.log-out');
+
   linkTextbook = <HTMLElement>document.querySelector('#link-textbook');
+
   linkHome = <HTMLElement>document.querySelector('#link-home');
+
   linkTeam = <HTMLElement>document.querySelector('#link-team');
+
   logoLinkHome = <HTMLElement>document.querySelector('.logo');
+
   paginationTextbook = <HTMLElement>document.querySelector('.pagination-textbook');
+
   wrapperCardWords = <HTMLElement>document.querySelector('.wrapper-card-words');
+
   menuListItemDifficulty = <HTMLElement>document.querySelector('.menu-list-item-difficulty');
+
   audio = new Audio() as HTMLAudioElement;
 
   showMenu() {
@@ -297,7 +323,7 @@ class AppController {
         this.audio.src = `https://rslang-bak.herokuapp.com/${arrAudio[playNum]}`;
         this.audio.play();
         const playNext = () => {
-          let newPlayNum = (playNum + 1) % arrAudio.length;
+          const newPlayNum = (playNum + 1) % arrAudio.length;
           this.audio.currentTime = 0;
           playNum = newPlayNum;
           this.audio.src = `https://rslang-bak.herokuapp.com/${arrAudio[playNum]}`;
@@ -450,9 +476,9 @@ class AppController {
       this.messageError.textContent = '';
       this.messageError.style.display = 'none';
       const newUser: ICreateUser = {
-        name: (<HTMLFormElement>this.formPopapRegistered).nameUser.value,
-        email: (<HTMLFormElement>this.formPopapRegistered).email.value,
-        password: (<HTMLFormElement>this.formPopapRegistered).password.value
+        name: (<HTMLFormElement> this.formPopapRegistered).nameUser.value,
+        email: (<HTMLFormElement> this.formPopapRegistered).email.value,
+        password: (<HTMLFormElement> this.formPopapRegistered).password.value,
       };
       await api.createUser(newUser);
       await api.loginUser(newUser);
@@ -486,8 +512,8 @@ class AppController {
       this.messageErrorSignin.textContent = '';
       this.messageErrorSignin.style.display = 'none';
       const newUser: ICreateUser = {
-        email: (<HTMLFormElement>this.formPopapSignup).email.value,
-        password: (<HTMLFormElement>this.formPopapSignup).password.value
+        email: (<HTMLFormElement> this.formPopapSignup).email.value,
+        password: (<HTMLFormElement> this.formPopapSignup).password.value,
       };
       await api.loginUser(newUser);
       utils.updateStorageUserInfo();
@@ -544,21 +570,21 @@ class AppController {
             this.transitionFromTextbookToHardWords();
             this.addLearnedWords();
             break;
-            case 'difficult-words':
-              if (storage.isSignupUser) {
-                await this.outputDifficultWordPage();
-                utils.isEmptyDifficultyWords();
-                this.deleteWordDifficult();
-              }
-              break;
-            case 'learned-words':
+          case 'difficult-words':
+            if (storage.isSignupUser) {
               await this.outputDifficultWordPage();
-              utils.disabledLinkFromDifficultPage();
-              await utils.getAllLearnedCardsWords(storeUserInfo);
-              this.returnDifficultPageFromLearnedPage();
               utils.isEmptyDifficultyWords();
-              this.deleteWordLearned();
-              break;
+              this.deleteWordDifficult();
+            }
+            break;
+          case 'learned-words':
+            await this.outputDifficultWordPage();
+            utils.disabledLinkFromDifficultPage();
+            await utils.getAllLearnedCardsWords(storeUserInfo);
+            this.returnDifficultPageFromLearnedPage();
+            utils.isEmptyDifficultyWords();
+            this.deleteWordLearned();
+            break;
         }
       } else {
         this.wrapper.style.backgroundImage = 'url("./assets/img/bg-home2.jpg")';
