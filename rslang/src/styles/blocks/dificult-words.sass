@@ -1,0 +1,104 @@
+.wrapper-difficult-words
+  display: block
+  margin: 0 1.5rem
+
+
+.wrapper-difficult-words.active-hidden
+  display: none
+
+.empty-block
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: 25vh
+  color: #000
+  font-size: 1.2rem
+  font-weight: 700
+  .empty-message
+    background: rgba(#a3a3a3, 0.2)
+    box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px
+
+.wrapper-card-words-difficult
+  width: 100%
+  display: flex
+  align-items: stretch
+  justify-content: space-between
+  flex-wrap: wrap
+
+.nav-difficult-words
+  display: flex
+  align-items: center
+  justify-content: space-between
+  margin: 2rem 0
+
+.button-delete-difficult
+  padding: 0.2rem 0.5rem
+  cursor: pointer
+  border-radius: 1rem
+  text-transform: uppercase
+  transition: all 0.5s ease
+  color: rgba(#A0094E, 1)
+  border: 2px solid rgba(#A0094E, 1)
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#A0094E, 0.5)
+    border: 2px solid rgba(#A0094E, 0.5)
+
+.button-delete-difficult.active
+  color: rgba(#000, 1)
+  border: 2px solid rgba(#A0094E, 1)
+  background: rgba(#A0094E, 1)
+  transition: all 0.5s ease
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#fff, 1)
+    border: 2px solid rgba(#000, 1)
+
+.button-delete-study
+  padding: 0.2rem 0.5rem
+  cursor: pointer
+  border-radius: 1rem
+  text-transform: uppercase
+  transition: all 0.5s ease
+  color: rgba(#13be21, 1)
+  border: 2px solid rgba(#13be21, 1)
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#13be21, 0.5)
+    border: 2px solid rgba(#13be21, 0.5)
+
+.button-delete-study.active
+  color: rgba(#000, 1)
+  border: 2px solid rgba(#13be21, 1)
+  background: rgba(#13be21, 1)
+  transition: all 0.5s ease
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#fff, 1)
+    border: 2px solid rgba(#000, 1)
+
+.back-to-textbook,
+.link-study-word,
+.back-to-difficult
+  text-decoration: none
+  text-transform: uppercase
+  display: inline-block
+  background: rgba(#a3a3a3, 0.8)
+  font-size: 1.4rem
+  font-weight: 500
+  cursor: pointer
+  padding: 1rem 0.5rem
+  border-radius: 2rem
+  border: 2px solid transparent
+  color: #000
+  transition: all 0.5s ease
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#fff, 1)
+    border: 2px solid rgba(#000, 1)
+    background: rgba(#a3a3a3, 1)
+  &:disabled
+    background: rgba(#a3a3a3, 0.2)
+    cursor: none
+    pointer-events: none

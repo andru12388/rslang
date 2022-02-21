@@ -1,0 +1,104 @@
+.preloader 
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  z-index: 100
+  background-color: #212529
+  visibility: visible
+  opacity: 1
+  // visibility: hidden
+  // opacity: 0
+  transition: opacity 2s linear
+
+
+.preloader .pulse 
+  position: relative
+  left: 50%
+  top: 50vh
+  margin-left: -40px
+  margin-top: -40px
+
+
+.preloader .pulse::before, .preloader .pulse::after 
+  content: ""
+  border: 5px solid #323232
+  width: 80px
+  height: 80px
+  border-radius: 500px
+  position: absolute
+
+
+.preloader .pulse::before 
+  animation: pulse-outer 0.8s ease-in infinite
+
+
+.preloader .pulse::after 
+  animation: pulse-inner 0.8s linear infinite
+
+@keyframes pulse-outer 
+  0% 
+    opacity: 1
+    filter: alpha(opacity=100)
+  50% 
+    opacity: 0.5
+    filter: alpha(opacity=50)
+  100% 
+    opacity: 0
+    filter: alpha(opacity=0)
+
+@keyframes pulse-inner 
+  0% 
+    opacity: 0
+    filter: alpha(opacity=0)
+    transform: scale(0)
+  100% 
+    opacity: 1
+    filter: alpha(opacity=100)
+    transform: scale(1)
+
+
+.preloader.preloader-hidden 
+  visibility: hidden
+  opacity: 0
+  transition: visibility 0s 1.5s, opacity 1.5s linear
+
+.preloader-page
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0px
+  z-index: 100
+  background: transparent
+  backdrop-filter: blur(12rem)
+  visibility: hidden
+  opacity: 0
+  transition: visibility 0s 1s, opacity 1s linear
+
+.preloader-page .pulse 
+  position: relative
+  left: 50%
+  top: 50vh
+  margin-left: -40px
+  margin-top: -40px
+
+.preloader-page .pulse::before, .preloader-page .pulse::after 
+  content: ""
+  border: 3px solid #323232
+  width: 80px
+  height: 80px
+  border-radius: 50%
+  position: absolute
+
+.preloader-page .pulse::before 
+  animation: pulse-outer 0.8s ease-in infinite
+
+.preloader-page .pulse::after 
+  animation: pulse-inner 0.8s linear infinite
+
+.preloader-page.preloader-visible 
+  visibility: visible
+  opacity: 1
+  transition: opacity 0s linear

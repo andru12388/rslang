@@ -1,0 +1,373 @@
+.wrapper
+  width: 100%
+  background-color: #fff
+  background-repeat: no-repeat
+  background-size: cover
+  position: relative
+  display: flex
+  flex-direction: column
+  min-height: 100vh
+
+.wrapper.active
+  &::before
+    content: ""
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: rgba($bgdark, 0.5)
+    z-index: 50
+
+.header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0.8rem 1.5rem
+  background: rgba(85, 85, 85, 0.1)
+  box-shadow: 0px 5px 8px rgb(224 238 255 / 44%)
+  .h2
+    font-size: 1.7rem
+    font-weight: 900
+    .logo
+      text-decoration: none
+      color: $textcolor
+
+.sign-in,
+.log-out
+  border: none
+  outline: none
+  background: rgba($bgdark, 0.1)
+  padding: 1rem 1.5rem
+  border-radius: 1rem
+  font-size: 1.1rem
+  cursor: pointer
+  font-weight: 500
+  transition: all 0.5s ease
+  &:hover
+    background: rgba($bgdark, 0.3)
+    transition: all 0.5s ease
+
+.sign-in.active-hidden
+  display: none
+
+.log-out
+  padding: 0.7rem 0.9rem
+  i
+    pointer-events: none
+
+.avatar-box
+  display: none
+  width: auto
+  align-items: center
+  justify-content: space-between
+  .fa-user-circle
+    font-size: 2.5rem
+    cursor: pointer
+
+.avatar-box.active
+  display: flex
+
+.avatar-img
+  margin-right: 1rem
+
+.text-hello
+  text-align: center
+  font-weight: 700
+  margin-right: 1rem
+  span
+    display: block
+
+.menu-btn
+  display: block
+  width: 4rem
+  height: 4rem
+  cursor: pointer
+  border: none
+  outline: none
+  background-color: rgba($bgdark, .1)
+  border-radius: 50%
+  transition: all 0.5s ease
+  position: relative
+  z-index: 91
+  &:hover
+    background: rgba($bgdark, 0.3)
+    transition: all 0.5s ease
+  span
+    position: absolute
+    top: 50%
+    left: 50%
+    margin-top: -1px
+    margin-left: -15px
+    width: 30px
+    height: 2px
+    transition: all 0.2s ease
+    background-color: $bgdark
+    &::before, &::after
+      content: ""
+      position: absolute
+      top: 50%
+      left: 50%
+      margin-top: -1px
+      margin-left: -15px
+      width: 30px
+      height: 2px
+      background-color: $bgdark
+      transition: all .5s ease
+    &::before
+      transform: translateY(-7px)
+    &::after
+      transform: translateY(7px)
+
+.menu-btn.active
+  transform: translateX(14rem)
+  height: 2rem
+  width: 2rem
+  margin-top: -2.8rem
+  margin-right: 2rem
+  transition: all .5s ease
+  span
+    height: 0
+    &::before
+      width: 15px
+      margin-left: -7.5px
+      transform: rotate(45deg)
+    &::after
+      width: 15px
+      margin-left: -7.5px
+      transform: rotate(-45deg)
+
+.menu-header
+  position: fixed
+  top: 0
+  left: 0
+  height: 100%
+  width: 18rem
+  background: rgba(#fff, 1)
+  z-index: 90
+  transform: translateX(-200%)
+  transition: all 0.5s ease
+  .menu-list
+    margin-top: 2.7rem
+  ul, li
+    list-style: none
+    padding: 0
+    margin: 0
+  .submenu-list-item
+    .fas
+      padding-left: 2rem
+  li
+    position: relative
+    a
+      display: block
+      text-decoration: none
+      color: $textcolor
+      font-size: 1.2rem
+      font-weight: 500
+      padding: 1rem
+      white-space: nowrap
+      position: relative
+      transition: all 0.5s ease
+      i
+        margin-right: 1rem
+        color: rgba($textcolor, 0.5)
+      &:hover
+        background: rgba($bgdark, 0.1)
+        transition: all 0.5s ease
+      &:focus
+        background: rgba($bgdark, 0.1)
+      &::before
+        content: ""
+        position: absolute
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background: transparent
+
+.menu-list-item
+  display: block
+
+.menu-list-item.active-hidden
+  display: none
+
+.menu-header.active
+  transform: translateX(0)
+  transition: all 0.5s ease
+
+.submenu-list
+  height: 0px
+  opacity: 0
+  visibility: hidden
+  transform: translateY(-6rem)
+  transition: transform 0.5s ease, height 0.5s ease
+
+.submenu-list.active
+  opacity: 1
+  visibility: visible
+  height: 6.85rem
+  transform: translateY(0)
+  transition: all 0.5s ease
+
+.sub-menu-link
+  &::after
+    content: "▼"
+    position: absolute
+    color: rgba($textcolor, 0.6)
+    top: 30%
+    right: 10%
+
+.sub-menu-link.active
+  &::after
+    content: "▲"
+    position: absolute
+    color: rgba($textcolor, 0.6)
+    top: 30%
+    right: 10%
+
+.main
+  flex-grow: 1
+  position: relative
+
+.main.active-study
+  background: rgba(#13be21, 0.2)
+
+.wrapper-home
+  display: flex
+  justify-content: center
+
+.main-align-center
+  text-align: center
+  .h1
+    font-size: 5rem
+    position: relative
+    color: #223C50
+    background: rgba(#223C50, 0.2)
+    border: 4px solid #223C50
+    padding: 1.5rem 0
+    backdrop-filter: blur(0.4rem)
+    &::after, &::before
+      content: ""
+      position: absolute
+      background: #223C50
+      display: block
+      border-radius: 4px
+      height: 4px
+      width: 8rem
+    &::after
+      right: 10%
+      top: 50%
+      margin-top: -2px
+    &::before
+      left: 10%
+      top: 50%
+      margin-top: -2px
+  .text-title
+    font-weight: 700
+    line-height: 0.6rem 
+    font-size: 1.4rem
+    color: $textcolor
+
+.button
+  background: rgba(#223C50, 0.2)
+  border: 2px solid $textcolor
+  border-radius: 1.5rem
+  color: $textcolor
+  cursor: pointer
+  font-size: 1.5rem
+  backdrop-filter: blur(0.4rem)
+
+.btn-details
+  padding: 0.7rem 4rem
+  font-weight: bold
+  letter-spacing: 0.2rem
+  outline: 2px solid
+  outline-color: rgba($textcolor, 0.1)
+  outline-offset: 0px
+  margin-top: 3rem
+  transition: all .5s ease
+  &:hover
+    outline-color: rgba(#fff, 0)
+    outline-offset: 2rem
+    transition: all .5s ease
+
+.footer
+  flex-shrink: 0
+  max-width: 100%
+  font-size: 1.3rem
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 0.8rem 1.5rem
+  background: rgba(85, 85, 85, 0.4)
+  box-shadow: 0px -5px 8px rgb(224 238 255 / 44%)
+
+.footer.active-hidden
+  display: none
+
+.footer-logo
+  display: block
+  background: url("../assets/svg/rss.svg") no-repeat 100% 100%
+  background-size: contain
+  width: 6rem
+  height: 2.5rem
+
+.footer-git
+  text-decoration: none
+  color: $textcolor
+  &::before
+    content: ""
+    display: inline-block
+    background: url("../assets/svg/github.svg") no-repeat 100% 100%
+    background-size: contain
+    width: 1.5rem
+    height: 1.5rem
+    margin-right: 0.5rem
+
+::-webkit-scrollbar 
+  width: 8px
+  background: transparent
+  border-radius: 8px
+  transition: all 1s ease
+
+
+::-webkit-scrollbar-thumb
+  background: #666
+  border-radius: 8px
+
+
+::-webkit-scrollbar-track
+  background: transparent
+  border-radius: 8px
+  transition: all 1s ease
+
+.top
+  position: fixed
+  display: flex
+  justify-content: center
+  align-items: center
+  bottom: 45px
+  right: -100px
+  background-color: #666
+  z-index: 12
+  border-radius: 10em
+  font-size: 36px
+  width: 70px
+  height: 70px
+  text-align: center
+  line-height: 70px
+  cursor: pointer
+  transition: all 0.3s ease
+  opacity: 0.5
+
+
+.top:hover
+  background-color: #666
+  opacity: 1
+  transition: all 0.3s ease
+
+
+.top.active-up
+  right: 45px
+  transition: all 0.3s ease
+

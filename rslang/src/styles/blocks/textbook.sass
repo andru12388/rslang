@@ -1,0 +1,307 @@
+.wrapper-textbook
+  margin: 0 1.5rem
+  display: block
+
+.wrapper-textbook.active-hidden
+  display: none
+
+.title-levels-words
+  text-align: center
+  font-weight: 500
+  font-size: 1.2rem
+
+.difficulty-levels-words
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 30rem
+  margin: 0 auto
+
+.levels-item,
+.difficult-words
+  width: 3rem
+  cursor: pointer
+  border-radius: 0.6rem
+  padding: 1rem 0.5rem
+  font-weight: 500
+  border: 2px solid transparent
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px
+  transition: all 0.5s ease
+  &:hover
+    border: 2px solid #0011ac
+    color: #0011ac
+    transition: all 0.5s ease
+
+.levels-item.active,
+.difficult-words.active
+  border: 2px solid #000
+  color: #000
+  font-weight: 700
+  transition: all 0.5s ease
+  &:hover
+    border: 2px solid #fff
+    color: #fff
+    transition: all 0.5s ease
+
+.levels-item.item-1
+  background: rgba(#FEF200, 1)
+
+.levels-item.item-2
+  background: rgba(#FFBE00, 1)
+
+.levels-item.item-3
+  background: rgba(#FFA300, 1)
+
+.levels-item.item-4
+  background: rgba(#FF3F00, 1)
+
+.levels-item.item-5
+  background: rgba(#EE0405, 1)
+
+.levels-item.item-6
+  background: rgba(#D00729, 1)
+
+.difficult-words
+  display: block
+  width: fit-content
+  margin: 1rem auto
+  background: rgba(#A0094E, 1)
+
+.difficult-words.active-hidden
+  display: none
+
+.wrapper-card-words
+  width: 100%
+  display: flex
+  align-items: stretch
+  justify-content: space-between
+  flex-wrap: wrap
+
+.card-words,
+.game-card
+  background: rgba(#a3a3a3, 0.3)
+  display: flex
+  flex-direction: column
+  width: 27rem
+  border-radius: 2rem
+  padding-bottom: 1rem
+  border: 2px solid transparent
+  margin: 1.5rem 0
+  box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px
+
+.card-words.active-difficulty
+  border: 2px solid #A0094E
+  background: rgba(#A0094E, 0.3)
+
+.card-words.active-learnt
+  border: 2px solid #13be21
+  background: rgba(#13be21, 0.3)
+
+.card-words-img
+  width: 27rem
+  height: 19.25rem
+  border-radius: 2rem 2rem 0 0
+
+.word
+  font-size: 2.2rem
+  margin: 0.5rem 1rem 0 1rem
+  font-weight: 700
+  align-self: flex-end
+
+.block-words
+  margin: 0.5rem 1rem 0 1rem
+  padding-bottom: 1rem
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  border-bottom: 1px solid #000
+
+.word-translate,
+.word-transcription
+  margin: 0
+  font-size: 1.3rem
+
+.word-transcription
+  margin: 0 1.2rem
+
+.icon-audio
+  width: 1.5rem
+  height: 1.25rem
+  border: none
+  outline: none
+  cursor: pointer
+  background: url("../assets/svg/button_volume.svg") no-repeat 100% 100%
+  background-size: contain
+
+.block-example
+  padding: 0 1rem
+  margin-bottom: 1rem
+  .h3
+    font-size: 1rem
+    margin-bottom: 0.5rem
+  p
+    font-size: 0.8rem
+    margin: 0
+    margin-bottom: 0.2rem
+
+.block-btn
+  margin-top: auto
+  padding: 0 1rem
+  display: flex
+  align-items: center
+  justify-content: flex-end
+
+.block-btn.active-hidden
+  display: none
+
+.button-add-difficult,
+.button-study-word
+  padding: 0.2rem 0.5rem
+  cursor: pointer
+  border-radius: 1rem
+  text-transform: uppercase
+  transition: all 0.5s ease
+
+.button-study-word
+  color: rgba(#13be21, 1)
+  border: 2px solid rgba(#13be21, 1)
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#13be21, 0.5)
+    border: 2px solid rgba(#13be21, 0.5)
+
+.button-study-word.active
+  color: rgba(#000, 1)
+  border: 2px solid rgba(#13be21, 1)
+  background: rgba(#13be21, 1)
+  transition: all 0.5s ease
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#fff, 1)
+    border: 2px solid rgba(#000, 1)
+
+.button-add-difficult
+  margin-right: 1rem
+  color: rgba(#A0094E, 1)
+  border: 2px solid rgba(#A0094E, 1)
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#A0094E, 0.5)
+    border: 2px solid rgba(#A0094E, 0.5)
+
+.button-add-difficult.active
+  color: rgba(#000, 1)
+  border: 2px solid rgba(#A0094E, 1)
+  background: rgba(#A0094E, 1)
+  transition: all 0.5s ease
+  &:hover
+    transition: all 0.5s ease
+    color: rgba(#fff, 1)
+    border: 2px solid rgba(#000, 1)
+
+.pagination-textbook
+  width: 30rem
+  height: 2rem
+  margin: 1rem auto 0 auto
+  display: flex
+  align-items: center
+  justify-content: space-between
+  margin-bottom: 1rem
+
+.btn-pagination,
+.prev-arrow,
+.next-arrow
+  display: block
+  width: 2rem
+  height: 2rem
+  cursor: pointer
+  font-weight: 700
+  font-size: 1rem
+  background: transparent
+  border: 2px solid $textcolor
+  border-radius: 0.6rem
+  padding: 0
+  transition: all 0.5s ease
+  &:hover
+    border: 2px solid #F2695C
+    color: #F2695C
+    transition: all 0.5s ease
+  &:disabled
+    border: 2px solid rgba($textcolor, 0.2)
+    color: rgba($textcolor, 0.2)
+    pointer-events: none
+    cursor: none
+
+.prev-arrow,
+.next-arrow
+  i
+    pointer-events: none
+
+.btn-pagination.current
+  border: 2px solid #F2695C
+  color: #F2695C
+  transition: all 0.5s ease
+  &:hover
+    border: 2px solid #5563df
+    color: #5563df
+    transition: all 0.5s ease
+
+.btn-pagination.current.active-study
+  background: rgba(#13be21, 0.7)
+
+
+.rest-page
+  font-weight: 900
+  font-size: 1.2rem
+  align-self: flex-end
+
+.games-wrapper
+  display: flex
+  align-items: center
+  justify-content: center
+
+.game-card
+  width: 15rem
+  height: auto
+  padding: 1rem
+  cursor: pointer
+  border: 2px solid #000
+  background: rgba(#a3a3a3, 0.7)
+  position: relative
+  transition: all 0.5s ease
+  .game-name, .discription-game
+    text-align: center
+  &::before
+    content: ""
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: transparent
+  &:hover
+    border: 2px solid #fff
+    transition: all 0.5s ease
+    background: rgba(#a3a3a3, 1)
+
+.game-card.active-disabled
+  cursor: none
+  pointer-events: none
+  background: rgba(#a3a3a3, 0.2)
+  border: 2px solid rgba(#000, 0.2)
+
+.game-card-sprint
+  margin-right: 3rem
+
+.game-img
+  width: 4rem
+  height: 4rem
+  margin: 0 auto
+
+.game-icon-sprint
+  background: url("../assets/svg/run1.svg") no-repeat 100% 100%
+  background-size: contain
+
+.game-icon-audio
+  background: url("../assets/svg/audio.svg") no-repeat 100% 100%
+  background-size: contain
