@@ -1,4 +1,4 @@
-import { ILoginUser, IGeneralInfo } from '../module/components/interface';
+import { ILoginUser, IGeneralInfo, IStoreGame } from '../module/components/interface';
 
 const storeUserInfo: ILoginUser = {
   message: null,
@@ -14,6 +14,17 @@ let storage: IGeneralInfo = {
   pageWords: 0,
   isSignupUser: false,
   wordId: null,
+  levelGame: 0,
+};
+
+const storeGameRound: IStoreGame = {
+  gameAudio: [],
+  arrAnswerGameAudio: [],
+  countGameAudio: 0,
+  divineWordTranslate: '',
+  divineWord: '',
+  trueAnswerGame: [],
+  falseAnswerGame: [],
 };
 
 window.addEventListener('load', () => {
@@ -26,4 +37,4 @@ window.addEventListener('load', () => {
 //   localStorage.setItem('general-info', JSON.stringify(storage));
 // });
 
-export { storeUserInfo, storage };
+export { storeUserInfo, storage, storeGameRound };

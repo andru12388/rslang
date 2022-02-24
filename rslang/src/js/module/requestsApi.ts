@@ -1,5 +1,5 @@
 import { ICreateUser, ILoginUser, IWords, IGeneralInfo } from './components/interface';
-import { storeUserInfo } from '../controller/storage';
+import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
 const preloaderPage = new PreloaderPage();
@@ -83,8 +83,10 @@ class RequestsApi {
 
   async getTextbookWords(group: number, page: number): Promise<IWords> {
     const response = await fetch(`${this.words}?group=${group}&page=${page}`);
-    if (response.ok) {
-      preloaderPage.hidePreloaderPage();
+    if (storage.currentPage === 'textbook') {
+      if (response.ok) {
+        preloaderPage.hidePreloaderPage();
+      }
     }
     const content = await response.json();
     return content;
@@ -135,8 +137,10 @@ class RequestsApi {
         'Content-Type': 'application/json',
       },
     });
-    if (response.ok) {
-      preloaderPage.hidePreloaderPage();
+    if (storage.currentPage === 'textbook') {
+      if (response.ok) {
+        preloaderPage.hidePreloaderPage();
+      }
     }
     const content = await response.json();
     return content;

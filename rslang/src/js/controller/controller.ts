@@ -2,7 +2,6 @@ import { ICreateUser } from '../module/components/interface';
 import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
 import { storeUserInfo, storage } from './storage';
-
 import Utils from '../module/components/utils';
 
 const api = new RequestsApi();
@@ -15,6 +14,8 @@ class AppController {
   main = <HTMLElement>document.querySelector('.main');
 
   signIn = <HTMLElement>document.querySelector('.sign-in');
+
+  footer = <HTMLElement>document.querySelector('.footer');
 
   popupSignIn = <HTMLElement>document.querySelector('.popup-sign-in');
 
@@ -112,6 +113,7 @@ class AppController {
     this.linkTextbook.addEventListener('click', async () => {
       await this.outputTextbook();
       this.wrapper.style.backgroundImage = '';
+      this.footer.classList.remove('active-hidden');
       this.menuBurg.click();
     });
   }
@@ -350,6 +352,7 @@ class AppController {
       this.wrapper.style.backgroundImage = 'url("./assets/img/bg-home2.jpg")';
       utils.removeClassActiveFromMain();
       this.goToInfoProject();
+      this.footer.classList.remove('active-hidden');
       this.menuBurg.click();
     });
     this.logoLinkHome.addEventListener('click', (event) => {
@@ -358,6 +361,7 @@ class AppController {
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.main.innerHTML = render.renderHomePage();
       this.wrapper.style.backgroundImage = 'url("./assets/img/bg-home2.jpg")';
+      this.footer.classList.remove('active-hidden');
       this.goToInfoProject();
       utils.removeClassActiveFromMain();
     });

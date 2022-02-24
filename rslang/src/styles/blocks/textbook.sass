@@ -18,7 +18,8 @@
   margin: 0 auto
 
 .levels-item,
-.difficult-words
+.difficult-words,
+.levels-game-item
   width: 3rem
   cursor: pointer
   border-radius: 0.6rem
@@ -33,7 +34,8 @@
     transition: all 0.5s ease
 
 .levels-item.active,
-.difficult-words.active
+.difficult-words.active,
+.levels-game-item.active
   border: 2px solid #000
   color: #000
   font-weight: 700
@@ -43,22 +45,28 @@
     color: #fff
     transition: all 0.5s ease
 
-.levels-item.item-1
+.levels-item.item-1,
+.levels-game-item.item-1
   background: rgba(#FEF200, 1)
 
-.levels-item.item-2
+.levels-item.item-2,
+.levels-game-item.item-2
   background: rgba(#FFBE00, 1)
 
-.levels-item.item-3
+.levels-item.item-3,
+.levels-game-item.item-3
   background: rgba(#FFA300, 1)
 
-.levels-item.item-4
+.levels-item.item-4,
+.levels-game-item.item-4
   background: rgba(#FF3F00, 1)
 
-.levels-item.item-5
+.levels-item.item-5,
+.levels-game-item.item-5
   background: rgba(#EE0405, 1)
 
-.levels-item.item-6
+.levels-item.item-6,
+.levels-game-item.item-6
   background: rgba(#D00729, 1)
 
 .difficult-words
@@ -292,6 +300,16 @@
 
 .game-card-sprint
   margin-right: 3rem
+
+.game-card-audio-call
+  &::before
+    content: ""
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    background: transparent
 
 .game-img
   width: 4rem

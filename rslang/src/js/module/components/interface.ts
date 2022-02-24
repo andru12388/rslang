@@ -18,6 +18,7 @@ interface IGeneralInfo {
   pageWords: number;
   isSignupUser: boolean;
   wordId: string | null;
+  levelGame: number;
 }
 
 interface IWords {
@@ -35,6 +36,16 @@ interface IWords {
   transcription: string;
   word: string;
   wordTranslate: string;
+}
+
+interface IStoreGame {
+  gameAudio: IWords[];
+  arrAnswerGameAudio: string[];
+  countGameAudio: number;
+  divineWordTranslate: string;
+  divineWord: string;
+  trueAnswerGame: string[];
+  falseAnswerGame: string[];
 }
 
 interface IUserWord {
@@ -65,4 +76,4 @@ interface IResponseWordsSignUser {
   totalCount: Array<{ count: number }>;
 }
 
-export { ICreateUser, ILoginUser, IWords, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser };
+export { ICreateUser, ILoginUser, IWords, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser, IStoreGame };

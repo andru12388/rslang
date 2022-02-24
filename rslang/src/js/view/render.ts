@@ -20,6 +20,19 @@ class RenderView {
     `;
   }
 
+  renderLevelsWords() {
+    return `
+      <div class="difficulty-levels-words">
+        <div class="levels-item item-1" data-group="0">1 (A1)</div>
+        <div class="levels-item item-2" data-group="1">2 (A2)</div>
+        <div class="levels-item item-3" data-group="2">3 (B1)</div>
+        <div class="levels-item item-4" data-group="3">4 (B2)</div>
+        <div class="levels-item item-5" data-group="4">5 (C1)</div>
+        <div class="levels-item item-6" data-group="5">6 (C2)</div>
+      </div>
+    `;
+  }
+
   renderTextbook() {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
@@ -27,14 +40,7 @@ class RenderView {
         <div class="textbook-content">
           <h2 class="textbook-title">Учебник</h2>
           <p class="title-levels-words">Уровни сложности слов</p>
-          <div class="difficulty-levels-words">
-            <div class="levels-item item-1" data-group="0">1 (A1)</div>
-            <div class="levels-item item-2" data-group="1">2 (A2)</div>
-            <div class="levels-item item-3" data-group="2">3 (B1)</div>
-            <div class="levels-item item-4" data-group="3">4 (B2)</div>
-            <div class="levels-item item-5" data-group="4">5 (C1)</div>
-            <div class="levels-item item-6" data-group="5">6 (C2)</div>
-          </div>
+          ${this.renderLevelsWords()}
           <div class="difficult-words active-hidden">Сложные слова</div>
           <div class="wrapper-card-words">
           
@@ -85,6 +91,46 @@ class RenderView {
     `;
   }
 
+  renderGameAudioCall() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Аудиовызов</h2>
+          <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
+        </div>
+        <p class="selection-title-game">Выберите сложность игры</p>
+        <div class="levels-game">
+          <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
+          <div class="levels-game-item item-2" data-group="1">2 (A2)</div>
+          <div class="levels-game-item item-3" data-group="2">3 (B1)</div>
+          <div class="levels-game-item item-4" data-group="3">4 (B2)</div>
+          <div class="levels-game-item item-5" data-group="4">5 (C1)</div>
+          <div class="levels-game-item item-6" data-group="5">6 (C2)</div>
+        </div>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start" title="Выберите сложность" disabled>Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameAudioCallFromTextbook() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Аудиовызов</h2>
+          <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
+        </div>
+        <p class="selection-title-game">Игра начнется с текущими словами из учебника. Удачи!</p>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start">Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
   selectionRenderPage() {
     if (localStorage.getItem('general-info')) {
       const store = JSON.parse(<string>localStorage.getItem('general-info'));
@@ -122,7 +168,7 @@ class RenderView {
               <a href="" class="sub-menu-link menu-link"><i class="fas fa-gamepad"></i>Игры</a>
               <ul class="submenu-list">
                 <li class="submenu-list-item"><a href="" class="menu-link"><i class="fas fa-running"></i>Спринт</a></li>
-                <li class="submenu-list-item"><a href="" class="menu-link"><i class="fas fa-headphones-alt"></i>Аудиовызов</a></li>
+                <li class="submenu-list-item"><a href="" class="menu-link" id="link-game-audio"><i class="fas fa-headphones-alt"></i>Аудиовызов</a></li>
               </ul>
             </li>
             <li class="menu-list-item menu-list-item-statistic active-hidden">
@@ -211,6 +257,29 @@ class RenderView {
 					<img class="img-responsive" src="./assets/img/Avatar.jpg" alt="My photo">
 				</figure>
         <a href="https://github.com/andru12388" class="popap-git" target="_blank">Андрей</a>
+      </div>
+      <div class="popup-result-game active-hidden">
+        <h4>Результат</h4>
+        <div class="wrapper-result">
+          <div class="box-bad-answer">
+            <p class="wrong-result">Ошибок <span class="number-wrong"></span></p>
+            <div class="block-wrong">
+              
+            </div>
+          </div>
+          <div class="box-nice-answer">
+            <p class="correct-result">Знаю <span class="number-correct"></span></p>
+            <div class="block-correct">
+              
+            </div>
+          </div>
+        </div>
+        <div class="box-btn-repeat-exit">
+          <button class="button-repeat">Еще раз</button>
+          <button class="button-exit">Закончить игру</button>
+          <button class="button-repeat-from-textbook active-hidden">Еще раз</button>
+          <button class="button-exit-from-textbook active-hidden">Закончить игру</button>
+        </div>
       </div>
     `;
     const root = document.createElement('div');

@@ -8,6 +8,7 @@ import PreloaderPage from './preloader';
 const api = new RequestsApi();
 const preloaderPage = new PreloaderPage();
 
+
 class Utils {
 
   async getCardsWords(group: number, page: number) {
