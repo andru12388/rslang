@@ -26,6 +26,7 @@ class CreateGamePage {
       <div class="wrapper-games">
         <div class="game-audio-call">
           <div class="game-audio-close"></div>
+          <div class="game-audio-fullscreen"></div>
           <div class="box-correct-answer">
             
           </div>

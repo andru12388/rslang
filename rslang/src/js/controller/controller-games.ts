@@ -41,6 +41,8 @@ class GamesController {
 
   linkTextbook = <HTMLElement>document.querySelector('#link-textbook');
 
+  header = <HTMLElement>document.querySelector('.header');
+
   showGameAudio() {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameAudioCall());
@@ -115,6 +117,20 @@ class GamesController {
       storeGameRound.trueAnswerGame.length = 0;
       this.footer.classList.remove('active-hidden');
       this.logoLinkHome.click();
+    });
+  }
+
+  fullscreenRoundGame() {
+    document.addEventListener('click', (event) => {
+      const element = <HTMLElement>event.target;
+      if (!element.classList.contains('game-audio-fullscreen')) return false;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+        this.header.style.display = '';
+      } else {
+        document.documentElement.requestFullscreen();
+        this.header.style.display = 'none';
+      }
     });
   }
 
@@ -221,6 +237,15 @@ class GamesController {
   keyDownHandler() {
     document.addEventListener('keydown', (event) => {
       if ((<HTMLElement> this.main.firstElementChild).className === 'wrapper-games') {
+        if (event.code == 'KeyF') {
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+            this.header.style.display = '';
+          } else {
+            document.documentElement.requestFullscreen();
+            this.header.style.display = 'none';
+          }
+        }
         if (event.code == 'Space') {
           const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
           event.preventDefault();
@@ -423,6 +448,7 @@ class GamesController {
     this.rebootPage();
     this.transitionTextbook();
     this.keyDownHandler();
+    this.fullscreenRoundGame();
   }
 }
 

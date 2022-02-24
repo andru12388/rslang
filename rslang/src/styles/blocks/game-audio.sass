@@ -157,6 +157,21 @@
     outline-offset: 0.5rem
     transition: all 0.5s ease
 
+.game-audio-fullscreen
+  position: absolute
+  top: 2.5rem
+  right: 0
+  background: url("../assets/svg/button_fullscrin.svg") no-repeat 100% 100%
+  background-size: contain
+  cursor: pointer
+  width: 1.4rem
+  height: 1.5rem
+  transform: scale(1)
+  transition: all 0.5s ease
+  &:hover
+    transform: scale(1.1)
+    transition: all 0.5s ease
+
 .box-correct-answer
   .card-words
     width: 13rem
@@ -288,3 +303,4 @@
 .button-repeat-from-textbook.active-hidden,
 .button-exit-from-textbook.active-hidden
   display: none
+
