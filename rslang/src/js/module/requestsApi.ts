@@ -120,6 +120,8 @@ class RequestsApi {
     return content;
   }
 
+  // group: groupWords, page: pageWords, audiocall: {correct: 0, wrong: 0, total: 0}, sprint: {correct: 0, wrong: 0, total: 0}
+
   async deleteWordsDifficulty({ userId, token }: ILoginUser, { wordId }: IGeneralInfo) {
     await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'DELETE',
@@ -131,6 +133,23 @@ class RequestsApi {
 
   async getTextbookWordsSignupUser({ userId, token }: ILoginUser, { groupWords, pageWords }: IGeneralInfo) {
     const response = await fetch(`${this.users}/${userId}/aggregatedWords?wordsPerPage=20&filter={"$and":[{"group":${groupWords}},{"page":${pageWords}}]}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    if (storage.currentPage === 'textbook') {
+      if (response.ok) {
+        preloaderPage.hidePreloaderPage();
+      }
+    }
+    const content = await response.json();
+    return content;
+  }
+
+  async getGameTextbookWordsSignupUser({ userId, token }: ILoginUser, { groupWords, pageWords }: IGeneralInfo) {
+    const response = await fetch(`${this.users}/${userId}/aggregatedWords?group=${groupWords}&wordsPerPage=20&filter={"$and":[{"$or":[{"userWord.difficulty":"hard"},{"userWord.difficulty":"normal"},{"userWord":null}]},{"page":${pageWords}}]}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Accept': 'application/json',

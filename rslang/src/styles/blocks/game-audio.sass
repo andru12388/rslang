@@ -77,6 +77,7 @@
   background: url("../assets/svg/volume-game.svg") no-repeat 100% 100%
   background-size: contain
   margin-bottom: 4rem
+  margin-top: 6rem
   border-radius: 50%
   outline: 2px solid
   outline-color: transparent
@@ -138,34 +139,34 @@
 .btn-not-know.active-hidden
   display: none
 
+.btn-nav-round
+  display: flex
+  justify-content: space-between
+  align-items: center
+  width: 70rem
+
 .game-audio-close
-  position: absolute
-  top: 0
-  right: 0
   background: url("../assets/svg/close.svg") no-repeat 100% 100%
   background-size: contain
   cursor: pointer
-  width: 1.2rem
-  height: 1.2rem
-  border-radius: 50%
-  outline: 2px solid
-  outline-color: #8F8F8F
-  outline-offset: 0.2rem
+  width: 1.5rem
+  height: 1.5rem
+  transform: scale(1)
+  z-index: 5
+  margin-left: 4rem
   transition: all 0.5s ease
   &:hover
-    outline-color: #8F8F8F
-    outline-offset: 0.5rem
+    transform: scale(1.1)
     transition: all 0.5s ease
 
 .game-audio-fullscreen
-  position: absolute
-  top: 2.5rem
-  right: 0
   background: url("../assets/svg/button_fullscrin.svg") no-repeat 100% 100%
   background-size: contain
   cursor: pointer
-  width: 1.4rem
-  height: 1.5rem
+  width: 1.7rem
+  height: 1.8rem
+  z-index: 5
+  margin-right: 4rem
   transform: scale(1)
   transition: all 0.5s ease
   &:hover
@@ -174,12 +175,12 @@
 
 .box-correct-answer
   .card-words
-    width: 13rem
+    width: 18rem
     background: rgba(#fff, 1)
     margin: 0 0 4rem 0
   .card-words-img
-    width: 13rem
-    height: 5.99rem
+    width: 18rem
+    height: 11.9rem
   .word
     font-size: 1.4rem
   .word-translate,

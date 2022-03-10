@@ -1,5 +1,6 @@
 import RenderView from '../view/render';
-import { storage, storeGameRound } from './storage';
+import { storage, storeGameRound, storeUserInfo } from './storage';
+import { IStoreGame } from '../module/components/interface';
 import Utils from '../module/components/utils';
 import UtilsGames from '../module/components/utilsGames';
 import CreateGamePage from '../view/createGamesPage';
@@ -43,6 +44,17 @@ class GamesController {
 
   header = <HTMLElement>document.querySelector('.header');
 
+  audioCorrect = new Audio() as HTMLAudioElement;
+
+  audioWrong = new Audio() as HTMLAudioElement;
+
+  installPathsAndVolumeAudio() {
+    this.audioCorrect.src = './assets/audio/correct-answer.mp3';
+    this.audioWrong.src = './assets/audio/wrong-answer.mp3';
+    this.audioCorrect.volume = 0.3;
+    this.audioWrong.volume = 0.3;
+  }
+
   showGameAudio() {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameAudioCall());
@@ -70,10 +82,7 @@ class GamesController {
     this.linkGameAudio.addEventListener('click', () => {
       storage.currentPage = 'game-audio';
       localStorage.setItem('general-info', JSON.stringify(storage));
-      this.btnExitPopupGameFromTextbook.classList.add('active-hidden');
-      this.btnRepeatPopupGameFromTextbook.classList.add('active-hidden');
-      this.buttonRepeatPopupGame.classList.remove('active-hidden');
-      this.buttonExitPopupGame.classList.remove('active-hidden');
+      this.hideShowToggleBtnPopupGame();
       this.showGameAudio();
       this.menuBurg.click();
     });
@@ -84,12 +93,162 @@ class GamesController {
     btnGameAudio.addEventListener('click', async () => {
       storage.currentPage = 'game-audio-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
+      this.hideShowToggleBtnPopupGame();
+      if (storage.isSignupUser) {
+        await utilsGames.getGamesWordsTextbookSignupUser(storeUserInfo, storage);
+      } else {
+        await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
+      }
+      this.showGameAudioFromTextbook();
+    });
+  }
+
+  hideShowToggleBtnPopupGame() {
+    if (storage.currentPage === 'game-audio') {
+      this.btnExitPopupGameFromTextbook.classList.add('active-hidden');
+      this.btnRepeatPopupGameFromTextbook.classList.add('active-hidden');
+      this.buttonRepeatPopupGame.classList.remove('active-hidden');
+      this.buttonExitPopupGame.classList.remove('active-hidden');
+    } else {
       this.btnExitPopupGameFromTextbook.classList.remove('active-hidden');
       this.btnRepeatPopupGameFromTextbook.classList.remove('active-hidden');
       this.buttonRepeatPopupGame.classList.add('active-hidden');
       this.buttonExitPopupGame.classList.add('active-hidden');
-      await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
-      this.showGameAudioFromTextbook();
+    }
+  }
+
+  saveDataRoundInStoreGameRound() {
+    const dataRound = storeGameRound.gameAudio[storeGameRound.countGameAudio];
+    storeGameRound.currentWord = dataRound.word;
+    storeGameRound.currentWordTranslate = dataRound.wordTranslate;
+    storeGameRound.currentId = <string>dataRound.id;
+  }
+
+  createBtnAnswer({ currentWordTranslate }: IStoreGame) {
+    const arrAnswer = utilsGames.getRandomArrAnswer(currentWordTranslate);
+    const blockAnswerGame = <HTMLButtonElement>document.querySelector('.block-answer-game');
+    arrAnswer.forEach((item, index) => {
+      const button = document.createElement('button');
+      button.classList.add('button-game', 'btn-answer-item', `answer-${index + 1}`);
+      button.textContent = `${index + 1} ${item}`;
+      blockAnswerGame.append(button);
+    });
+  }
+
+  startRoundGameAudio({ gameAudio, countGameAudio }: IStoreGame) {
+    const createGamePage = new CreateGamePage(gameAudio[countGameAudio].audio);
+    createGamePage.createRoundGameAudio();
+    this.createBtnAnswer(storeGameRound);
+    this.playAudioGameAudio();
+    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
+    iconMute.click();
+    this.exitRoundGame();
+    this.answerBtnNotKnow();
+    this.selectAnswer(storeGameRound);
+  }
+
+  clickStartButton() {
+    const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
+    btnStart.addEventListener('click', () => {
+      this.saveDataRoundInStoreGameRound();
+      this.startRoundGameAudio(storeGameRound);
+    });
+  }
+
+  checkDisabledAnswer({ currentWordTranslate }: IStoreGame) {
+    const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
+    btnAnswerItem.forEach((item) => {
+      (<HTMLButtonElement>item).disabled = true;
+      if ((<string>item.textContent).slice(2) === currentWordTranslate) {
+        (<HTMLElement>item).style.background = 'green';
+      }
+    });
+  }
+
+  hideShowBtnWhenAnswer() {
+    const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
+    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
+    const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
+    iconMute.classList.add('active-hidden');
+    btnNotKnow.classList.add('active-hidden');
+    btnNext.classList.remove('active-hidden');
+  }
+
+  answerBtnNotKnow() {
+    const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
+    btnNotKnow.addEventListener('click', () => {
+      this.actionOnWrongAnswer(storeGameRound);
+    });
+  }
+
+  cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame) {
+    this.popupResultGame.classList.remove('active-hidden');
+    this.main.innerHTML = '';
+    this.numberWrong.textContent = String(falseAnswerGame.length);
+    this.numberCorrect.textContent = String(trueAnswerGame.length);
+    storeGameRound.countGameAudio = 0;
+    falseAnswerGame.length = 0;
+    trueAnswerGame.length = 0;
+  }
+
+  pressBtnNext() {
+    const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
+    btnNext.addEventListener('click', () => {
+      storeGameRound.countGameAudio++;
+      if (storeGameRound.countGameAudio > storeGameRound.gameAudio.length - 1) {
+        this.cancelAllRoundsGame(storeGameRound);
+        this.playAudioResultGameAudio();
+        this.exitPopupGame();
+        this.exitPopupGameFromTextbook();
+        this.repeatPopupGameAudio();
+        this.repeatPopupGameFromTextbook();
+      } else {
+        this.saveDataRoundInStoreGameRound();
+        this.startRoundGameAudio(storeGameRound);
+      }
+    });
+  }
+
+  actionOnCorrectAnswer({ gameAudio, countGameAudio, currentWordTranslate, currentWord }: IStoreGame) {
+    const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
+    const dataRound = gameAudio[countGameAudio];
+    this.hideShowBtnWhenAnswer();
+    const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
+    createGamePage.createCorrectAnswer();
+    btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
+    storeGameRound.trueAnswerGame.push(`${currentWord} - ${currentWordTranslate}`);
+    utilsGames.createResultTrueAnswer();
+    this.playAudioAnswerGameAudio();
+    this.pressBtnNext();
+  }
+
+  actionOnWrongAnswer({ gameAudio, countGameAudio, currentWordTranslate, currentWord }: IStoreGame) {
+    const dataRound = gameAudio[countGameAudio];
+    this.hideShowBtnWhenAnswer();
+    const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
+    createGamePage.createCorrectAnswer();
+    this.checkDisabledAnswer(storeGameRound);
+    storeGameRound.falseAnswerGame.push(`${currentWord} - ${currentWordTranslate}`);
+    utilsGames.createResultFalseAnswer();
+    this.playAudioAnswerGameAudio();
+    this.pressBtnNext();
+  }
+
+  selectAnswer({ currentWordTranslate }: IStoreGame) {
+    const blockAnswerGame = <HTMLElement>document.querySelector('.block-answer-game');
+    blockAnswerGame.addEventListener('click', (event) => {
+      const element = <HTMLElement>event.target;
+      const answer = (<string>element.textContent).slice(2);
+      if (!element.classList.contains('btn-answer-item')) return false;
+      if (answer === currentWordTranslate) {
+        element.style.background = 'green';
+        this.audioCorrect.play();
+        this.actionOnCorrectAnswer(storeGameRound);
+      } else {
+        element.style.background = 'red';
+        this.audioWrong.play();
+        this.actionOnWrongAnswer(storeGameRound);
+      }
     });
   }
 
@@ -146,11 +305,7 @@ class GamesController {
 
   exitPopupGameFromTextbook() {
     this.btnExitPopupGameFromTextbook.addEventListener('click', () => {
-      this.popupResultGame.classList.add('active-hidden');
-      this.popupBlockCorrect.innerHTML = '';
-      this.popupBlockWrong.innerHTML = '';
-      this.footer.classList.remove('active-hidden');
-      this.logoLinkHome.click();
+      this.buttonExitPopupGame.click();
     });
   }
 
@@ -188,6 +343,7 @@ class GamesController {
     const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
     blockLevelsGame.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
+      if (!element.classList.contains('levels-game-item')) return false;
       if (element.classList.contains('levels-game-item')) {
         storage.levelGame = Number(element.dataset.group);
         localStorage.setItem('general-info', JSON.stringify(storage));
@@ -196,42 +352,6 @@ class GamesController {
         await utilsGames.getGamesWords(storage.levelGame, utilsGames.getRandom());
       }
     });
-  }
-
-  clickStartButton() {
-    const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
-    btnStart.addEventListener('click', () => {
-      this.startRoundGameAudio();
-    });
-  }
-
-  startRoundGameAudio() {
-    const dataRound = storeGameRound.gameAudio[storeGameRound.countGameAudio];
-    const currentWord = dataRound.word;
-    const currentWordTranslate = dataRound.wordTranslate;
-    storeGameRound.divineWordTranslate = currentWordTranslate;
-    storeGameRound.divineWord = currentWord;
-    const arrAllAnswer = storeGameRound.arrAnswerGameAudio.reduce((total: string[], item) => {
-      if (item !== currentWordTranslate) {
-        total.push(item);
-      }
-      return total;
-    }, []);
-    const arrAnswer = utilsGames.getRandomArrAnswer(arrAllAnswer, currentWordTranslate);
-    const createGamePage = new CreateGamePage(dataRound.audio);
-    createGamePage.createRoundGameAudio();
-    const blockAnswerGame = <HTMLButtonElement>document.querySelector('.block-answer-game');
-    arrAnswer.forEach((item, index) => {
-      const button = document.createElement('button');
-      button.classList.add('button-game', 'btn-answer-item', `answer-${index + 1}`);
-      button.textContent = `${index + 1} ${item}`;
-      blockAnswerGame.append(button);
-    });
-    this.playAudioGameAudio();
-    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
-    iconMute.click();
-    this.exitRoundGame();
-    this.selectAnswer();
   }
 
   keyDownHandler() {
@@ -295,13 +415,9 @@ class GamesController {
 
   playAudioAnswerGameAudio() {
     const iconAudioGame = <HTMLButtonElement>document.querySelector('.icon-audio-game');
-    iconAudioGame.addEventListener('click', (event) => {
-      const audio = new Audio() as HTMLAudioElement;
-      const element = <HTMLElement>event.target;
-      audio.volume = 0.5;
-      const currentAudio = <string>element.dataset.source;
-      audio.src = `https://rslang-bak.herokuapp.com/${currentAudio}`;
-      audio.play();
+    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
+    iconAudioGame.addEventListener('click', () => {
+      iconMute.click();
     });
   }
 
@@ -316,110 +432,6 @@ class GamesController {
         audio.src = `https://rslang-bak.herokuapp.com/${currentAudio}`;
         audio.play();
       });
-    });
-  }
-
-  clickBtnNotKnow() {
-    const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
-    const dataRound = storeGameRound.gameAudio[storeGameRound.countGameAudio];
-    const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
-    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
-    const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
-    btnNotKnow.addEventListener('click', () => {
-      iconMute.classList.add('active-hidden');
-      btnNotKnow.classList.add('active-hidden');
-      btnNext.classList.remove('active-hidden');
-      const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
-      createGamePage.createCorrectAnswer();
-      btnAnswerItem.forEach((item) => {
-        (<HTMLButtonElement>item).disabled = true;
-        if ((<string>item.textContent).slice(2) === storeGameRound.divineWordTranslate) {
-          (<HTMLElement>item).style.background = 'green';
-        }
-      });
-      const str = `${storeGameRound.divineWord} - ${storeGameRound.divineWordTranslate}`;
-      storeGameRound.falseAnswerGame.push(str);
-      utilsGames.createResultFalseAnswer();
-      this.playAudioAnswerGameAudio();
-      this.clickBtnNext();
-    });
-  }
-
-  clickBtnNext() {
-    const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
-    btnNext.addEventListener('click', () => {
-      storeGameRound.countGameAudio++;
-      if (storeGameRound.countGameAudio > 19) {
-        this.popupResultGame.classList.remove('active-hidden');
-        this.main.innerHTML = '';
-        this.numberWrong.textContent = String(storeGameRound.falseAnswerGame.length);
-        this.numberCorrect.textContent = String(storeGameRound.trueAnswerGame.length);
-        storeGameRound.countGameAudio = 0;
-        storeGameRound.falseAnswerGame.length = 0;
-        storeGameRound.trueAnswerGame.length = 0;
-        this.playAudioResultGameAudio();
-        this.exitPopupGame();
-        this.exitPopupGameFromTextbook();
-        this.repeatPopupGameAudio();
-        this.repeatPopupGameFromTextbook();
-      } else {
-        this.startRoundGameAudio();
-      }
-    });
-  }
-
-  selectAnswer() {
-    this.clickBtnNotKnow();
-    const blockAnswerGame = <HTMLElement>document.querySelector('.block-answer-game');
-    const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
-    const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
-    const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
-    const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
-    const dataRound = storeGameRound.gameAudio[storeGameRound.countGameAudio];
-    blockAnswerGame.addEventListener('click', (event) => {
-      const element = <HTMLElement>event.target;
-      if (!element.classList.contains('btn-answer-item')) return false;
-      const audioCorrect = new Audio() as HTMLAudioElement;
-      const audioWrong = new Audio() as HTMLAudioElement;
-      audioCorrect.src = './assets/audio/correct-answer.mp3';
-      audioWrong.src = './assets/audio/wrong-answer.mp3';
-      audioCorrect.volume = 0.3;
-      audioWrong.volume = 0.3;
-      const answer = (<string>element.textContent).slice(2);
-      if (answer === storeGameRound.divineWordTranslate) {
-        element.style.background = 'green';
-        audioCorrect.play();
-        iconMute.classList.add('active-hidden');
-        btnNotKnow.classList.add('active-hidden');
-        btnNext.classList.remove('active-hidden');
-        const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
-        createGamePage.createCorrectAnswer();
-        btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
-        const str = `${storeGameRound.divineWord} - ${storeGameRound.divineWordTranslate}`;
-        storeGameRound.trueAnswerGame.push(str);
-        utilsGames.createResultTrueAnswer();
-        this.playAudioAnswerGameAudio();
-        this.clickBtnNext();
-      } else {
-        element.style.background = 'red';
-        audioWrong.play();
-        iconMute.classList.add('active-hidden');
-        btnNotKnow.classList.add('active-hidden');
-        btnNext.classList.remove('active-hidden');
-        const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
-        createGamePage.createCorrectAnswer();
-        btnAnswerItem.forEach((item) => {
-          (<HTMLButtonElement>item).disabled = true;
-          if ((<string>item.textContent).slice(2) === storeGameRound.divineWordTranslate) {
-            (<HTMLElement>item).style.background = 'green';
-          }
-        });
-        const str = `${storeGameRound.divineWord} - ${storeGameRound.divineWordTranslate}`;
-        storeGameRound.falseAnswerGame.push(str);
-        utilsGames.createResultFalseAnswer();
-        this.playAudioAnswerGameAudio();
-        this.clickBtnNext();
-      }
     });
   }
 
@@ -449,6 +461,7 @@ class GamesController {
     this.transitionTextbook();
     this.keyDownHandler();
     this.fullscreenRoundGame();
+    this.installPathsAndVolumeAudio();
   }
 }
 

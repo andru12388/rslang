@@ -263,15 +263,11 @@ class RenderView {
         <div class="wrapper-result">
           <div class="box-bad-answer">
             <p class="wrong-result">Ошибок <span class="number-wrong"></span></p>
-            <div class="block-wrong">
-              
-            </div>
+            <div class="block-wrong"></div>
           </div>
           <div class="box-nice-answer">
             <p class="correct-result">Знаю <span class="number-correct"></span></p>
-            <div class="block-correct">
-              
-            </div>
+            <div class="block-correct"></div>
           </div>
         </div>
         <div class="box-btn-repeat-exit">

@@ -1,5 +1,6 @@
 import RequestsApi from '../requestsApi';
 import { storeGameRound } from '../../controller/storage';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser } from './interface';
 
 const api = new RequestsApi();
 
@@ -10,14 +11,22 @@ class UtilsGames {
     storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
+  async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+    storeGameRound.gameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
+      .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+      .flat()];
+    storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
+  }
+
   getRandom(min = 0, max = 29) {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  getRandomArrAnswer(arr: string[], currentWord: string): string[] {
-    const randomArrAnswer = arr.sort(() => Math.random() - Math.random()).slice(0, 4);
-    const arrAnswer = [...randomArrAnswer].concat(currentWord);
-    return arrAnswer.sort(() => Math.random() - 0.5);
+  getRandomArrAnswer(currentWord: string): string[] {
+    const arrAllAnswer = storeGameRound.arrAnswerGameAudio
+      .filter((item) => item !== currentWord)
+      .sort(() => Math.random() - Math.random()).slice(0, 4);
+    return [...arrAllAnswer, currentWord].sort(() => Math.random() - 0.5);
   }
 
   createResultTrueAnswer() {

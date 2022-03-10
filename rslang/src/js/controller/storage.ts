@@ -21,8 +21,9 @@ const storeGameRound: IStoreGame = {
   gameAudio: [],
   arrAnswerGameAudio: [],
   countGameAudio: 0,
-  divineWordTranslate: '',
-  divineWord: '',
+  currentWordTranslate: '',
+  currentWord: '',
+  currentId: '',
   trueAnswerGame: [],
   falseAnswerGame: [],
 };

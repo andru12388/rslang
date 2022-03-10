@@ -24,16 +24,14 @@ class CreateGamePage {
     this.main.innerHTML = '';
     const page = `
       <div class="wrapper-games">
-        <div class="game-audio-call">
+        <div class="btn-nav-round">
           <div class="game-audio-close"></div>
           <div class="game-audio-fullscreen"></div>
-          <div class="box-correct-answer">
-            
-          </div>
+        </div>
+        <div class="game-audio-call">
+          <div class="box-correct-answer"></div>
           <button class="icon-mute" data-source="${this.audio}"></button>
-          <div class="block-answer-game">
-            
-          </div>
+          <div class="block-answer-game"></div>
           <div class="block-btn-game-audio">
             <button class="button-game btn-not-know">Не знаю</button>
             <button class="button-game btn-next active-hidden">Дальше</button>

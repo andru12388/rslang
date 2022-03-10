@@ -26,7 +26,7 @@ interface IWords {
   audioExample?: string;
   audioMeaning?: string;
   group?: number;
-  id: string;
+  id?: string;
   image: string;
   page?: number;
   textExample: string;
@@ -42,8 +42,9 @@ interface IStoreGame {
   gameAudio: IWords[];
   arrAnswerGameAudio: string[];
   countGameAudio: number;
-  divineWordTranslate: string;
-  divineWord: string;
+  currentWordTranslate: string;
+  currentWord: string;
+  currentId: string;
   trueAnswerGame: string[];
   falseAnswerGame: string[];
 }
