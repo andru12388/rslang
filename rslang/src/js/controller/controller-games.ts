@@ -184,11 +184,11 @@ class GamesController {
   cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame) {
     this.popupResultGame.classList.remove('active-hidden');
     this.main.innerHTML = '';
-    this.numberWrong.textContent = String(falseAnswerGame.length);
-    this.numberCorrect.textContent = String(trueAnswerGame.length);
+    this.numberWrong.textContent = String(Object.keys(falseAnswerGame).length);
+    this.numberCorrect.textContent = String(Object.keys(trueAnswerGame).length);
     storeGameRound.countGameAudio = 0;
-    falseAnswerGame.length = 0;
-    trueAnswerGame.length = 0;
+    for (const item in falseAnswerGame) delete falseAnswerGame[item];
+    for (const item in trueAnswerGame) delete trueAnswerGame[item];
   }
 
   pressBtnNext() {
@@ -216,8 +216,9 @@ class GamesController {
     const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
     createGamePage.createCorrectAnswer();
     btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
-    storeGameRound.trueAnswerGame.push(`${currentWord} - ${currentWordTranslate}`);
-    utilsGames.createResultTrueAnswer();
+    storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    console.log('trueAnswerGame = ', storeGameRound.trueAnswerGame);
+    utilsGames.createResultTrueAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();
   }
@@ -228,8 +229,9 @@ class GamesController {
     const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
     createGamePage.createCorrectAnswer();
     this.checkDisabledAnswer(storeGameRound);
-    storeGameRound.falseAnswerGame.push(`${currentWord} - ${currentWordTranslate}`);
-    utilsGames.createResultFalseAnswer();
+    storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    console.log('falseAnswerGame = ',storeGameRound.falseAnswerGame);
+    utilsGames.createResultFalseAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();
   }
@@ -238,8 +240,8 @@ class GamesController {
     const blockAnswerGame = <HTMLElement>document.querySelector('.block-answer-game');
     blockAnswerGame.addEventListener('click', (event) => {
       const element = <HTMLElement>event.target;
-      const answer = (<string>element.textContent).slice(2);
       if (!element.classList.contains('btn-answer-item')) return false;
+      const answer = (<string>element.textContent).slice(2);
       if (answer === currentWordTranslate) {
         element.style.background = 'green';
         this.audioCorrect.play();
@@ -272,8 +274,8 @@ class GamesController {
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
       storeGameRound.countGameAudio = 0;
-      storeGameRound.falseAnswerGame.length = 0;
-      storeGameRound.trueAnswerGame.length = 0;
+      for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
+      for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
       this.footer.classList.remove('active-hidden');
       this.logoLinkHome.click();
     });

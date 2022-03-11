@@ -24,8 +24,10 @@ const storeGameRound: IStoreGame = {
   currentWordTranslate: '',
   currentWord: '',
   currentId: '',
-  trueAnswerGame: [],
-  falseAnswerGame: [],
+  trueAnswerGame: {},
+  falseAnswerGame: {},
+  optionalAudioCall: { correct: 0, wrong: 0, total: 0 },
+  optionalSprint: { correct: 0, wrong: 0, total: 0 },
 };
 
 window.addEventListener('load', () => {

@@ -13,12 +13,12 @@ interface ILoginUser {
 }
 
 interface IGeneralInfo {
-  currentPage: string;
+  currentPage?: string;
   groupWords: number;
   pageWords: number;
-  isSignupUser: boolean;
-  wordId: string | null;
-  levelGame: number;
+  isSignupUser?: boolean;
+  wordId?: string | null;
+  levelGame?: number;
 }
 
 interface IWords {
@@ -27,6 +27,7 @@ interface IWords {
   audioMeaning?: string;
   group?: number;
   id?: string;
+  _id?: string;
   image: string;
   page?: number;
   textExample: string;
@@ -45,8 +46,22 @@ interface IStoreGame {
   currentWordTranslate: string;
   currentWord: string;
   currentId: string;
-  trueAnswerGame: string[];
-  falseAnswerGame: string[];
+  trueAnswerGame: {
+    [key: string]: string;
+  };
+  falseAnswerGame: {
+    [key: string]: string;
+  };
+  optionalAudioCall: {
+    correct?: number;
+    wrong?: number;
+    total?: number;
+  };
+  optionalSprint: {
+    correct?: number;
+    wrong?: number;
+    total?: number;
+  };
 }
 
 interface IUserWord {
@@ -77,4 +92,19 @@ interface IResponseWordsSignUser {
   totalCount: Array<{ count: number }>;
 }
 
-export { ICreateUser, ILoginUser, IWords, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser, IStoreGame };
+interface IOptionalGames {
+  correct?: number;
+  wrong?: number; 
+  total?: number;
+}
+
+export { 
+  ICreateUser,
+  ILoginUser,
+  IWords,
+  IGeneralInfo,
+  IResponseWordsSignUser,
+  IWordsSignupUser,
+  IStoreGame,
+  IOptionalGames
+};

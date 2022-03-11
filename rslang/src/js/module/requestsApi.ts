@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo } from './components/interface';
+import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames } from './components/interface';
 import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
@@ -92,7 +92,24 @@ class RequestsApi {
     return content;
   }
 
-  async createWordsDifficulty({ userId, token }: ILoginUser, { wordId, groupWords, pageWords }: IGeneralInfo, levelWord: string) {
+  async getWord({ userId, token }: ILoginUser, { wordId }: IGeneralInfo) {
+    const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const content = await response.json();
+    return content;
+  }
+
+  async createWordsDifficulty(
+    { userId, token }: ILoginUser,
+    { wordId }: IGeneralInfo,
+    { correct, wrong, total }: IOptionalGames,
+    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    levelWord: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -100,13 +117,21 @@ class RequestsApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } }),
+      body: JSON.stringify({
+        difficulty: levelWord,
+        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+      }),
     });
     const content = await response.json();
     return content;
   }
 
-  async updateWordsDifficulty({ userId, token }: ILoginUser, { wordId, groupWords, pageWords }: IGeneralInfo, levelWord: string) {
+  async updateWordsDifficulty(
+    { userId, token }: ILoginUser,
+    { wordId }: IGeneralInfo,
+    { correct, wrong, total }: IOptionalGames,
+    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    levelWord: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
@@ -114,21 +139,13 @@ class RequestsApi {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ difficulty: levelWord, optional: { group: groupWords, page: pageWords } }),
+      body: JSON.stringify({
+        difficulty: levelWord,
+        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+      }),
     });
     const content = await response.json();
     return content;
-  }
-
-  // group: groupWords, page: pageWords, audiocall: {correct: 0, wrong: 0, total: 0}, sprint: {correct: 0, wrong: 0, total: 0}
-
-  async deleteWordsDifficulty({ userId, token }: ILoginUser, { wordId }: IGeneralInfo) {
-    await fetch(`${this.users}/${userId}/words/${wordId}`, {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
   }
 
   async getTextbookWordsSignupUser({ userId, token }: ILoginUser, { groupWords, pageWords }: IGeneralInfo) {

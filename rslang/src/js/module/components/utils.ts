@@ -27,19 +27,20 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
+        const createCards = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
         if (el.userWord) {
-          const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
-          const createCardsStudied = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
           switch (el.userWord.difficulty) {
+            case 'normal':
+              createCards.createAndRenderCards();
+              break;
             case 'hard':
-              createCardsDifficulty.createAndRenderCardsDifficulty();
+              createCards.createAndRenderCardsDifficulty();
               break;
             case 'easy':
-              createCardsStudied.createAndRenderCardsLearned();
+              createCards.createAndRenderCardsLearned();
               break;
           }
         } else {
-          const createCards = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
           createCards.createAndRenderCards();
         }
       });

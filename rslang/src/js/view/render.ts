@@ -122,7 +122,7 @@ class RenderView {
           <h2 class="title-game-audio-call">Аудиовызов</h2>
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
-        <p class="selection-title-game">Игра начнется с текущими словами из учебника. Удачи!</p>
+        <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
           <button class="btn-cancel">Выйти</button>
           <button class="btn-start">Начать</button>

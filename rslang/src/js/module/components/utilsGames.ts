@@ -1,6 +1,6 @@
 import RequestsApi from '../requestsApi';
 import { storeGameRound } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser } from './interface';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame } from './interface';
 
 const api = new RequestsApi();
 
@@ -12,9 +12,23 @@ class UtilsGames {
   }
 
   async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+    let { groupWords: newGroupWords, pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()];
+    while (storeGameRound.gameAudio.length < 20 && newPageWords !== 0) {
+      newPageWords--;
+      const missingElements = 20 - storeGameRound.gameAudio.length;
+      const newStoreGeneral = { groupWords: newGroupWords, pageWords: newPageWords };
+      const newGameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, newStoreGeneral))
+        .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+        .flat()];
+      if (newGameAudio.length > missingElements) {
+        storeGameRound.gameAudio = [...storeGameRound.gameAudio, ...newGameAudio.slice(0, missingElements)];
+      } else {
+        storeGameRound.gameAudio = [...storeGameRound.gameAudio, ...newGameAudio];
+      }
+    }
     storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
@@ -29,10 +43,22 @@ class UtilsGames {
     return [...arrAllAnswer, currentWord].sort(() => Math.random() - 0.5);
   }
 
-  createResultTrueAnswer() {
+  selectCorrectId({ gameAudio, countGameAudio }: IStoreGame): string {
+    const dataRound = gameAudio[countGameAudio];
+    let correctIdWord = '';
+    if (dataRound._id === undefined) {
+      correctIdWord = <string>dataRound.id;
+    } else {
+      correctIdWord = <string>dataRound._id;
+    }
+    return correctIdWord;
+  }
+
+  createResultTrueAnswer({ gameAudio, countGameAudio, trueAnswerGame }: IStoreGame) {
     const blockCorrect = <HTMLElement>document.querySelector('.block-correct');
-    const dataAtrAudio = storeGameRound.gameAudio[storeGameRound.countGameAudio].audio;
-    const correctAnswer = storeGameRound.trueAnswerGame[storeGameRound.trueAnswerGame.length - 1];
+    const dataRound = gameAudio[countGameAudio];
+    const dataAtrAudio = dataRound.audio;
+    const correctAnswer = trueAnswerGame[this.selectCorrectId(storeGameRound)];
     const div = document.createElement('div');
     div.classList.add('answer-correct-item');
     const span = document.createElement('span');
@@ -46,10 +72,11 @@ class UtilsGames {
     blockCorrect.append(div);
   }
 
-  createResultFalseAnswer() {
+  createResultFalseAnswer({ gameAudio, countGameAudio, falseAnswerGame }: IStoreGame) {
     const blockWrong = <HTMLElement>document.querySelector('.block-wrong');
-    const dataAtrAudio = storeGameRound.gameAudio[storeGameRound.countGameAudio].audio;
-    const wrongAnswer = storeGameRound.falseAnswerGame[storeGameRound.falseAnswerGame.length - 1];
+    const dataRound = gameAudio[countGameAudio];
+    const dataAtrAudio = dataRound.audio;
+    const wrongAnswer = falseAnswerGame[this.selectCorrectId(storeGameRound)];
     const div = document.createElement('div');
     div.classList.add('answer-wrong-item');
     const span = document.createElement('span');

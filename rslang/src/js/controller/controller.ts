@@ -1,7 +1,7 @@
 import { ICreateUser } from '../module/components/interface';
 import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
-import { storeUserInfo, storage } from './storage';
+import { storeUserInfo, storage, storeGameRound } from './storage';
 import Utils from '../module/components/utils';
 
 const api = new RequestsApi();
@@ -199,24 +199,20 @@ class AppController {
         const element = <HTMLElement>event.target;
         const elementCard = (<HTMLElement>element.parentNode).parentNode;
         const elementButtonEasy = <HTMLElement>element.nextElementSibling;
+        storage.wordId = <string>element.dataset.idword;
+        localStorage.setItem('general-info', JSON.stringify(storage));
+        utils.updateStorageGeneralInfo();
         try {
-          storage.wordId = <string>element.dataset.idword;
-          localStorage.setItem('general-info', JSON.stringify(storage));
-          utils.updateStorageGeneralInfo();
-          switch (element.classList.contains('active')) {
-            case true:
-              await api.deleteWordsDifficulty(storeUserInfo, storage);
-              break;
-            case false:
-              if (elementButtonEasy.classList.contains('active')) {
-                await api.updateWordsDifficulty(storeUserInfo, storage, 'hard');
-              } else {
-                await api.createWordsDifficulty(storeUserInfo, storage, 'hard');
-              }
-              break;
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.optionalAudioCall = response.optional.audiocall;
+          storeGameRound.optionalSprint = response.optional.sprint;
+          if (element.classList.contains('active')) {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          } else {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'hard');
           }
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'hard');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'hard');
         } finally {
           elementButtonEasy.classList.remove('active');
           element.classList.toggle('active');
@@ -239,9 +235,12 @@ class AppController {
         localStorage.setItem('general-info', JSON.stringify(storage));
         utils.updateStorageGeneralInfo();
         try {
-          await api.deleteWordsDifficulty(storeUserInfo, storage);
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.optionalAudioCall = response.optional.audiocall;
+          storeGameRound.optionalSprint = response.optional.sprint;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
         } finally {
           await utils.getAllDifficultyCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -260,9 +259,12 @@ class AppController {
         localStorage.setItem('general-info', JSON.stringify(storage));
         utils.updateStorageGeneralInfo();
         try {
-          await api.deleteWordsDifficulty(storeUserInfo, storage);
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.optionalAudioCall = response.optional.audiocall;
+          storeGameRound.optionalSprint = response.optional.sprint;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
         } finally {
           await utils.getAllLearnedCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -279,24 +281,20 @@ class AppController {
         const element = <HTMLElement>event.target;
         const elementCard = (<HTMLElement>element.parentNode).parentNode;
         const elementButtonHard = <HTMLElement>element.previousElementSibling;
+        storage.wordId = <string>element.dataset.idword;
+        localStorage.setItem('general-info', JSON.stringify(storage));
+        utils.updateStorageGeneralInfo();
         try {
-          storage.wordId = <string>element.dataset.idword;
-          localStorage.setItem('general-info', JSON.stringify(storage));
-          utils.updateStorageGeneralInfo();
-          switch (element.classList.contains('active')) {
-            case true:
-              await api.deleteWordsDifficulty(storeUserInfo, storage);
-              break;
-            case false:
-              if (elementButtonHard.classList.contains('active')) {
-                await api.updateWordsDifficulty(storeUserInfo, storage, 'easy');
-              } else {
-                await api.createWordsDifficulty(storeUserInfo, storage, 'easy');
-              }
-              break;
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.optionalAudioCall = response.optional.audiocall;
+          storeGameRound.optionalSprint = response.optional.sprint;
+          if (element.classList.contains('active')) {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          } else {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'easy');
           }
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'easy');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'easy');
         } finally {
           elementButtonHard.classList.remove('active');
           element.classList.toggle('active');
