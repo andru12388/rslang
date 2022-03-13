@@ -1,6 +1,6 @@
 import RequestsApi from '../requestsApi';
-import { storeGameRound } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame } from './interface';
+import { storeGameRound, storeUserInfo, storage } from '../../controller/storage';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord } from './interface';
 
 const api = new RequestsApi();
 
@@ -88,6 +88,119 @@ class UtilsGames {
     span2.textContent = `${wrongAnswer}`;
     div.append(span2);
     blockWrong.append(div);
+  }
+
+  async saveResponseGameWordInStore(wordId: string): Promise<IResponseGetWord> {
+    const response = await api.getGameWord(storeUserInfo, wordId);
+    return {
+      optionalAudioCall: response.optional.audiocall,
+      optionalSprint: response.optional.sprint,
+      difficultyWord: response.difficulty,
+    };
+  }
+
+  async actionOnTrueRequestWrongResult(wordId: string) {
+    let { optionalAudioCall, optionalSprint, difficultyWord } = await this.saveResponseGameWordInStore(wordId);
+    if (difficultyWord === 'easy') {
+      difficultyWord = 'normal';
+    }
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+      (<number>optionalAudioCall.wrong)++;
+      (<number>optionalAudioCall.total)++;
+    }
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      (<number>optionalSprint.wrong)++;
+      (<number>optionalSprint.total)++;
+    }
+    await api.updateGameWords(storeUserInfo, optionalAudioCall, optionalSprint, difficultyWord, wordId);
+  }
+
+  async actionOnFalseRequestWrongResult(wordId: string) {
+    const optionalAudioCall = { correct: 0, wrong: 0, total: 0 }
+    const optionalSprint = { correct: 0, wrong: 0, total: 0 }
+    const difficultyWord = 'normal';
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+      optionalAudioCall.wrong++;
+      optionalAudioCall.total++;
+    }
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      optionalSprint.wrong++;
+      optionalSprint.total++;
+    }
+    await api.createGameWords(storeUserInfo, optionalAudioCall, optionalSprint, difficultyWord, wordId);
+  }
+
+  async actionOnTrueRequestCorrectResult(wordId: string) {
+    let { optionalAudioCall, optionalSprint, difficultyWord } = await this.saveResponseGameWordInStore(wordId);
+    const differenceAnswer = <number>optionalAudioCall.correct - <number>optionalAudioCall.wrong;
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+      (<number>optionalAudioCall.correct)++;
+      (<number>optionalAudioCall.total)++;
+      if (differenceAnswer >= 3 && difficultyWord !== 'hard') {
+        difficultyWord = 'easy';
+      }
+      if (differenceAnswer >= 5 && difficultyWord === 'hard') {
+        difficultyWord = 'easy';
+      }
+    }
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      (<number>optionalSprint.correct)++;
+      (<number>optionalSprint.total)++;
+      if (differenceAnswer >= 3 && difficultyWord !== 'hard') {
+        difficultyWord = 'easy';
+      }
+      if (differenceAnswer >= 5 && difficultyWord === 'hard') {
+        difficultyWord = 'easy';
+      }
+    }
+    await api.updateGameWords(storeUserInfo, optionalAudioCall, optionalSprint, difficultyWord, wordId);
+  }
+
+  async actionOnFalseRequestCorrectResult(wordId: string) {
+    const optionalAudioCall = { correct: 0, wrong: 0, total: 0 }
+    const optionalSprint = { correct: 0, wrong: 0, total: 0 }
+    const difficultyWord = 'normal';
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+      optionalAudioCall.correct++;
+      optionalAudioCall.total++;
+    }
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      optionalSprint.correct++;
+      optionalSprint.total++;
+    }
+    await api.createGameWords(storeUserInfo, optionalAudioCall, optionalSprint, difficultyWord, wordId);
+  }
+
+  savedWrongResultGameDataBase() {
+    Object.keys(storeGameRound.falseAnswerGame).forEach(async (item) => {
+      try {
+        await this.actionOnTrueRequestWrongResult(item);
+        // console.log('ok')
+      } catch (error) {
+        // console.log('error')
+        await this.actionOnFalseRequestWrongResult(item);
+      }
+    });
+    // for await (const item of resultFalse) {
+    //   try {
+    //     await this.actionOnTrueRequestWrongResult(item);
+    //     console.log('ok')
+    //   } catch (error) {
+    //     console.log('error')
+    //     await this.actionOnFalseRequestWrongResult(item);
+    //   }
+    // }
+    
+  }
+
+  savedCorrectResultGameDataBase() {
+    Object.keys(storeGameRound.trueAnswerGame).forEach(async (item) => {
+      try {
+        await this.actionOnTrueRequestCorrectResult(item);
+      } catch (error) {
+        await this.actionOnFalseRequestCorrectResult(item);
+      }
+    });
   }
 
 }

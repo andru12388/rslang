@@ -28,6 +28,7 @@ const storeGameRound: IStoreGame = {
   falseAnswerGame: {},
   optionalAudioCall: { correct: 0, wrong: 0, total: 0 },
   optionalSprint: { correct: 0, wrong: 0, total: 0 },
+  difficultyWord: '',
 };
 
 window.addEventListener('load', () => {

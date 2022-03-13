@@ -3,12 +3,13 @@ import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
 import { storeUserInfo, storage, storeGameRound } from './storage';
 import Utils from '../module/components/utils';
+import GamesController from './controller-games';
 
 const api = new RequestsApi();
 const render = new RenderView();
 const utils = new Utils();
 
-class AppController {
+class AppController extends GamesController {
   wrapper = <HTMLElement>document.querySelector('.wrapper');
 
   main = <HTMLElement>document.querySelector('.main');
@@ -424,6 +425,7 @@ class AppController {
     const backToTextbooks = <HTMLElement>document.querySelector('.back-to-textbook');
     backToTextbooks.addEventListener('click', async () => {
       await this.outputTextbook();
+      this.goToGameAudioFromPageTextbook();
     });
   }
   

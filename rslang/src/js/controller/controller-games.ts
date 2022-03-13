@@ -193,9 +193,11 @@ class GamesController {
 
   pressBtnNext() {
     const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
-    btnNext.addEventListener('click', () => {
+    btnNext.addEventListener('click', async () => {
       storeGameRound.countGameAudio++;
       if (storeGameRound.countGameAudio > storeGameRound.gameAudio.length - 1) {
+        utilsGames.savedWrongResultGameDataBase();
+        utilsGames.savedCorrectResultGameDataBase();
         this.cancelAllRoundsGame(storeGameRound);
         this.playAudioResultGameAudio();
         this.exitPopupGame();
@@ -217,7 +219,6 @@ class GamesController {
     createGamePage.createCorrectAnswer();
     btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
     storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
-    console.log('trueAnswerGame = ', storeGameRound.trueAnswerGame);
     utilsGames.createResultTrueAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();
@@ -230,7 +231,6 @@ class GamesController {
     createGamePage.createCorrectAnswer();
     this.checkDisabledAnswer(storeGameRound);
     storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
-    console.log('falseAnswerGame = ',storeGameRound.falseAnswerGame);
     utilsGames.createResultFalseAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();

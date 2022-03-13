@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames } from './components/interface';
+import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IStoreGame } from './components/interface';
 import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
@@ -88,6 +88,62 @@ class RequestsApi {
         preloaderPage.hidePreloaderPage();
       }
     }
+    const content = await response.json();
+    return content;
+  }
+
+  async getGameWord({ userId, token }: ILoginUser, wordId: string) {
+    const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const content = await response.json();
+    return content;
+  }
+
+  async updateGameWords(
+    { userId, token }: ILoginUser,
+    { correct, wrong, total }: IOptionalGames,
+    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    difficultyWord: string,
+    wordId: string) {
+    const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        difficulty: difficultyWord,
+        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+      }),
+    });
+    const content = await response.json();
+    return content;
+  }
+
+  async createGameWords(
+    { userId, token }: ILoginUser,
+    { correct, wrong, total }: IOptionalGames,
+    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    difficultyWord: string,
+    wordId: string) {
+    const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        difficulty: difficultyWord,
+        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+      }),
+    });
     const content = await response.json();
     return content;
   }

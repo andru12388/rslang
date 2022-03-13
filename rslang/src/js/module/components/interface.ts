@@ -62,6 +62,7 @@ interface IStoreGame {
     wrong?: number;
     total?: number;
   };
+  difficultyWord: string;
 }
 
 interface IUserWord {
@@ -98,6 +99,12 @@ interface IOptionalGames {
   total?: number;
 }
 
+interface IResponseGetWord {
+  optionalAudioCall: IOptionalGames;
+  optionalSprint: IOptionalGames;
+  difficultyWord: string;
+}
+
 export { 
   ICreateUser,
   ILoginUser,
@@ -106,5 +113,6 @@ export {
   IResponseWordsSignUser,
   IWordsSignupUser,
   IStoreGame,
-  IOptionalGames
+  IOptionalGames,
+  IResponseGetWord
 };

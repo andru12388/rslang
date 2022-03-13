@@ -72,7 +72,7 @@ class RenderView {
         <div class="wrapper-card-words-difficult">
           
         </div>
-        <div class="games-block">
+        <div class="games-block" style="display: none;">
           <h2 class="game-title">Игры</h2>
           <div class="games-wrapper">
             <div class="game-card game-card-sprint">
