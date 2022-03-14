@@ -27,7 +27,7 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
-        const createCards = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
+        const createCards = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate, el.userWord);
         if (el.userWord) {
           switch (el.userWord.difficulty) {
             case 'normal':
@@ -53,7 +53,7 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
-        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
+        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate, el.userWord);
         createCardsDifficulty.renderCardsDifficultyPage();
       });
   }
@@ -65,7 +65,7 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
-        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate);
+        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate, el.userWord);
         createCardsDifficulty.renderCardsLearnedPage();
       });
   }
@@ -215,6 +215,16 @@ class Utils {
       blockBtnDifficulty.forEach((item) => item.classList.remove('active-hidden'));
     } else {
       blockBtnDifficulty.forEach((item) => item.classList.add('active-hidden'));
+    }
+    this.showHideBtnIconInfoStat();
+  }
+
+  showHideBtnIconInfoStat() {
+    const iconInfoStat = <NodeListOf<Element>>document.querySelectorAll('.icon-info-stat');
+    if (storage.isSignupUser) {
+      iconInfoStat.forEach((item) => item.classList.remove('active-hidden'));
+    } else {
+      iconInfoStat.forEach((item) => item.classList.add('active-hidden'));
     }
   }
 

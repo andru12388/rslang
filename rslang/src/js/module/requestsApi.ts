@@ -106,8 +106,7 @@ class RequestsApi {
 
   async updateGameWords(
     { userId, token }: ILoginUser,
-    { correct, wrong, total }: IOptionalGames,
-    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    { correct, wrong }: IOptionalGames,
     difficultyWord: string,
     wordId: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
@@ -119,7 +118,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: difficultyWord,
-        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
       }),
     });
     const content = await response.json();
@@ -128,8 +127,7 @@ class RequestsApi {
 
   async createGameWords(
     { userId, token }: ILoginUser,
-    { correct, wrong, total }: IOptionalGames,
-    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    { correct, wrong }: IOptionalGames,
     difficultyWord: string,
     wordId: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
@@ -141,7 +139,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: difficultyWord,
-        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
       }),
     });
     const content = await response.json();
@@ -163,8 +161,7 @@ class RequestsApi {
   async createWordsDifficulty(
     { userId, token }: ILoginUser,
     { wordId }: IGeneralInfo,
-    { correct, wrong, total }: IOptionalGames,
-    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    { correct, wrong }: IOptionalGames,
     levelWord: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
@@ -175,7 +172,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: levelWord,
-        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
       }),
     });
     const content = await response.json();
@@ -185,8 +182,7 @@ class RequestsApi {
   async updateWordsDifficulty(
     { userId, token }: ILoginUser,
     { wordId }: IGeneralInfo,
-    { correct, wrong, total }: IOptionalGames,
-    { correct: correctSprint, wrong: wrongSprint, total: totalSprint }: IOptionalGames,
+    { correct, wrong }: IOptionalGames,
     levelWord: string) {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'PUT',
@@ -197,7 +193,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: levelWord,
-        optional: { audiocall: { correct: correct, wrong: wrong, total: total }, sprint: { correct: correctSprint, wrong: wrongSprint, total: totalSprint } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
       }),
     });
     const content = await response.json();

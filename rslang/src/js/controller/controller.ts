@@ -124,6 +124,7 @@ class AppController extends GamesController {
       await this.outputDifficultWordPage();
       this.wrapper.style.backgroundImage = '';
       utils.removeClassActiveFromMain();
+      utils.showHideBtnIconInfoStat();
       this.menuBurg.click();
     });
   }
@@ -138,6 +139,7 @@ class AppController extends GamesController {
       this.returnDifficultPageFromLearnedPage();
       utils.isEmptyDifficultyWords();
       this.deleteWordLearned();
+      utils.showHideBtnIconInfoStat();
     });
   }
 
@@ -147,6 +149,7 @@ class AppController extends GamesController {
       await this.outputDifficultWordPage();
       utils.isEmptyDifficultyWords();
       this.deleteWordDifficult();
+      utils.showHideBtnIconInfoStat();
     });
   }
 
@@ -205,15 +208,14 @@ class AppController extends GamesController {
         utils.updateStorageGeneralInfo();
         try {
           const response = await api.getWord(storeUserInfo, storage);
-          storeGameRound.optionalAudioCall = response.optional.audiocall;
-          storeGameRound.optionalSprint = response.optional.sprint;
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
           if (element.classList.contains('active')) {
-            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
           } else {
-            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'hard');
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'hard');
           }
         } catch (error) {
-          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'hard');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'hard');
         } finally {
           elementButtonEasy.classList.remove('active');
           element.classList.toggle('active');
@@ -237,11 +239,10 @@ class AppController extends GamesController {
         utils.updateStorageGeneralInfo();
         try {
           const response = await api.getWord(storeUserInfo, storage);
-          storeGameRound.optionalAudioCall = response.optional.audiocall;
-          storeGameRound.optionalSprint = response.optional.sprint;
-          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } finally {
           await utils.getAllDifficultyCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -261,11 +262,10 @@ class AppController extends GamesController {
         utils.updateStorageGeneralInfo();
         try {
           const response = await api.getWord(storeUserInfo, storage);
-          storeGameRound.optionalAudioCall = response.optional.audiocall;
-          storeGameRound.optionalSprint = response.optional.sprint;
-          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } finally {
           await utils.getAllLearnedCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -287,15 +287,14 @@ class AppController extends GamesController {
         utils.updateStorageGeneralInfo();
         try {
           const response = await api.getWord(storeUserInfo, storage);
-          storeGameRound.optionalAudioCall = response.optional.audiocall;
-          storeGameRound.optionalSprint = response.optional.sprint;
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
           if (element.classList.contains('active')) {
-            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'normal');
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
           } else {
-            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'easy');
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'easy');
           }
         } catch (error) {
-          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.optionalAudioCall, storeGameRound.optionalSprint, 'easy');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'easy');
         } finally {
           elementButtonHard.classList.remove('active');
           element.classList.toggle('active');
@@ -340,6 +339,15 @@ class AppController extends GamesController {
           playNext();
         });
       }
+    });
+  }
+
+  showHideLearningProgress() {
+    this.main.addEventListener('click',  (event) => {
+      const element = <HTMLElement>event.target;
+      const messageElement = (<HTMLElement>event.target).nextElementSibling;
+      if (!element.classList.contains('icon-info-stat')) return false;
+      (<HTMLElement>messageElement).classList.toggle('active-hidden');
     });
   }
 
@@ -418,6 +426,7 @@ class AppController extends GamesController {
       utils.isEmptyDifficultyWords();
       this.deleteWordDifficult();
       utils.removeClassActiveFromMain();
+      utils.showHideBtnIconInfoStat();
     });
   }
 
@@ -579,6 +588,7 @@ class AppController extends GamesController {
               await this.outputDifficultWordPage();
               utils.isEmptyDifficultyWords();
               this.deleteWordDifficult();
+              utils.showHideBtnIconInfoStat();
             }
             break;
           case 'learned-words':
@@ -588,6 +598,7 @@ class AppController extends GamesController {
             this.returnDifficultPageFromLearnedPage();
             utils.isEmptyDifficultyWords();
             this.deleteWordLearned();
+            utils.showHideBtnIconInfoStat();
             break;
         }
       } else {
@@ -616,6 +627,7 @@ class AppController extends GamesController {
     this.playAudioExample();
     this.goToDifficultWordsPage();
     this.showHideTeamPage();
+    this.showHideLearningProgress();
   }
 }
 

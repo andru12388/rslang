@@ -62,12 +62,16 @@ interface IStoreGame {
     wrong?: number;
     total?: number;
   };
+  gamesAnswer: {
+    correct?: number;
+    wrong?: number;
+  };
   difficultyWord: string;
 }
 
 interface IUserWord {
   difficulty: string;
-  optional: { group: number, page: number }
+  optional: { gamesAnswer: { correct: number, wrong: number } }
 }
 
 interface IWordsSignupUser {
@@ -100,8 +104,7 @@ interface IOptionalGames {
 }
 
 interface IResponseGetWord {
-  optionalAudioCall: IOptionalGames;
-  optionalSprint: IOptionalGames;
+  gamesAnswer: IOptionalGames;
   difficultyWord: string;
 }
 
@@ -113,6 +116,7 @@ export {
   IResponseWordsSignUser,
   IWordsSignupUser,
   IStoreGame,
+  IUserWord,
   IOptionalGames,
   IResponseGetWord
 };

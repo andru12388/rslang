@@ -181,12 +181,14 @@ class GamesController {
     });
   }
 
-  cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame) {
+  async cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame) {
     this.popupResultGame.classList.remove('active-hidden');
     this.main.innerHTML = '';
     this.numberWrong.textContent = String(Object.keys(falseAnswerGame).length);
     this.numberCorrect.textContent = String(Object.keys(trueAnswerGame).length);
     storeGameRound.countGameAudio = 0;
+    await utilsGames.savedWrongResultGameDataBase();
+    await utilsGames.savedCorrectResultGameDataBase();
     for (const item in falseAnswerGame) delete falseAnswerGame[item];
     for (const item in trueAnswerGame) delete trueAnswerGame[item];
   }
@@ -196,9 +198,7 @@ class GamesController {
     btnNext.addEventListener('click', async () => {
       storeGameRound.countGameAudio++;
       if (storeGameRound.countGameAudio > storeGameRound.gameAudio.length - 1) {
-        utilsGames.savedWrongResultGameDataBase();
-        utilsGames.savedCorrectResultGameDataBase();
-        this.cancelAllRoundsGame(storeGameRound);
+        await this.cancelAllRoundsGame(storeGameRound);
         this.playAudioResultGameAudio();
         this.exitPopupGame();
         this.exitPopupGameFromTextbook();

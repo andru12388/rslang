@@ -97,6 +97,9 @@
   margin: 1.5rem 0
   box-shadow: rgb(0 0 0 / 15%) 0px 0px 10px
 
+.card-words
+  position: relative
+
 .card-words.active-difficulty
   border: 2px solid #A0094E
   background: rgba(#A0094E, 0.3)
@@ -104,6 +107,59 @@
 .card-words.active-learnt
   border: 2px solid #13be21
   background: rgba(#13be21, 0.3)
+
+.icon-info-stat
+  position: absolute
+  left: 1rem
+  bottom: 1rem
+  width: 2rem
+  height: 2rem
+  border: none
+  outline: none
+  cursor: pointer
+  background: url("../assets/svg/info.svg") no-repeat 100% 100%
+  background-size: contain
+  transform: rotate(0)
+  transition: all 0.5s ease
+  &:hover
+    transform: rotate(360deg)
+    transition: all 0.5s ease
+
+.icon-info-stat.active-hidden
+  display: none
+
+.info-message
+  position: absolute
+  left: 0
+  bottom: 4rem
+  width: 100%
+  height: 8.5rem
+  border-radius: 1rem
+  opacity: 1
+  visibility: visible
+  background: rgba(#ce4b61, 1)
+  transition: all 0.5s ease
+
+.info-message.active-hidden
+  opacity: 0
+  visibility: hidden
+  transition: all 0.5s ease
+
+.info-block-text
+  position: relative
+  text-align: center
+  color: #000
+  &::before
+    content: ""
+    width: 0
+    height: 0
+    position: absolute
+    top: 119%
+    left: 1.1rem
+    border-top: 19px solid rgba(#ce4b61, 1)
+    border-left: 14px solid transparent
+    border-right: 14px solid transparent
+
 
 .card-words-img
   width: 27rem
