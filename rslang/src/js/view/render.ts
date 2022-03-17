@@ -63,7 +63,13 @@ class RenderView {
           </div>
         </div>
       </div>
-      <div class="wrapper-difficult-words active-hidden">
+    `;
+  }
+
+  renderDifficultyPage() {
+    return `
+      <div class="preloader-page"><div class="pulse"></div></div>
+      <div class="wrapper-difficult-words">
         <div class="nav-difficult-words">
           <button href="" class="back-to-textbook">🠔 назад в учебник</button>
           <button href="" class="back-to-difficult" disabled>Сложные слова</button>
@@ -72,7 +78,7 @@ class RenderView {
         <div class="wrapper-card-words-difficult">
           
         </div>
-        <div class="games-block" style="display: none;">
+        <div class="games-block">
           <h2 class="game-title">Игры</h2>
           <div class="games-wrapper">
             <div class="game-card game-card-sprint">
@@ -86,6 +92,30 @@ class RenderView {
               <p class="discription-game">Попробуй понять, какое слово было произнесено.</p>
             </div>
           </div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameSprint() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Спринт</h2>
+          <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
+        </div>
+        <p class="selection-title-game">Выберите сложность игры</p>
+        <div class="levels-game">
+          <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
+          <div class="levels-game-item item-2" data-group="1">2 (A2)</div>
+          <div class="levels-game-item item-3" data-group="2">3 (B1)</div>
+          <div class="levels-game-item item-4" data-group="3">4 (B2)</div>
+          <div class="levels-game-item item-5" data-group="4">5 (C1)</div>
+          <div class="levels-game-item item-6" data-group="5">6 (C2)</div>
+        </div>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start" title="Выберите сложность" disabled>Начать</button>
         </div>
       </div>
     `;
@@ -121,6 +151,22 @@ class RenderView {
         <div class="block-description-game">
           <h2 class="title-game-audio-call">Аудиовызов</h2>
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
+        </div>
+        <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start">Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameSprintFromTextbook() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Спринт</h2>
+          <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
         <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
@@ -167,7 +213,7 @@ class RenderView {
             <li class="menu-list-item">
               <a href="" class="sub-menu-link menu-link"><i class="fas fa-gamepad"></i>Игры</a>
               <ul class="submenu-list">
-                <li class="submenu-list-item"><a href="" class="menu-link"><i class="fas fa-running"></i>Спринт</a></li>
+                <li class="submenu-list-item"><a href="" class="menu-link" id="link-game-sprint"><i class="fas fa-running"></i>Спринт</a></li>
                 <li class="submenu-list-item"><a href="" class="menu-link" id="link-game-audio"><i class="fas fa-headphones-alt"></i>Аудиовызов</a></li>
               </ul>
             </li>
@@ -259,7 +305,7 @@ class RenderView {
         <a href="https://github.com/andru12388" class="popap-git" target="_blank">Андрей</a>
       </div>
       <div class="popup-result-game active-hidden">
-        <h4>Результат</h4>
+        <h4>Результат <span class="result-game-sprint"></span></h4>
         <div class="wrapper-result">
           <div class="box-bad-answer">
             <p class="wrong-result">Ошибок <span class="number-wrong"></span></p>

@@ -12,6 +12,8 @@ const utilsGames = new UtilsGames();
 class GamesController {
   linkGameAudio = <HTMLElement>document.querySelector('#link-game-audio');
 
+  linkGameSprint = <HTMLElement>document.querySelector('#link-game-sprint');
+
   main = <HTMLElement>document.querySelector('.main');
 
   footer = <HTMLElement>document.querySelector('.footer');
@@ -44,9 +46,161 @@ class GamesController {
 
   header = <HTMLElement>document.querySelector('.header');
 
+  resultGameSprint = <HTMLElement>document.querySelector('.result-game-sprint');
+
   audioCorrect = new Audio() as HTMLAudioElement;
 
   audioWrong = new Audio() as HTMLAudioElement;
+
+  interval: NodeJS.Timer | null = null;
+
+  async cancelRoundGameSprint() {
+    const totalScores = <HTMLElement>document.querySelector('.total-score');
+    const total = totalScores.textContent;
+    this.resultGameSprint.textContent = `- ${total} очков`;
+    clearInterval(<NodeJS.Timer>this.interval);
+    await this.cancelAllRoundsGame(storeGameRound);
+    this.playAudioResultGameAudio();
+    this.exitPopupGame();
+    this.exitPopupGameFromTextbook();
+    this.repeatPopupGameAudio();
+    this.repeatPopupGameFromTextbook();
+  }
+
+  timer() {
+    const time = <HTMLElement>document.querySelector('.time');
+    let timeRound = 59;
+    this.interval = setInterval(async () => {
+      time.textContent = `${timeRound}`;
+      timeRound--;
+      if (timeRound === -1) {
+        clearInterval(<NodeJS.Timer>this.interval);
+        await this.cancelRoundGameSprint();
+      }
+    }, 1000);
+  }
+
+  startRoundGameSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+    storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(currentWordTranslate)[utilsGames.getRandom(0, 1)];
+    console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
+    const createGamePage = new CreateGamePage(currentWord, storeGameRound.randomWord);
+    createGamePage.startGameSprint();
+    this.timer();
+    this.selectAnswerGameSprint();
+    this.exitRoundGame();
+  }
+
+  async actionOnWrongAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+    const paginationItem = <NodeListOf<Element>>document.querySelectorAll('.pagination-item');
+    storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    utilsGames.createResultFalseAnswer(storeGameRound);
+    this.audioWrong.play();
+    storeGameRound.countCorrectAnswerInRowSprint = 0;
+    storeGameRound.countPaginationSprint = 0;
+    utilsGames.factorPointsGameSprint(storeGameRound);
+    paginationItem.forEach((item) => (<HTMLElement>item).style.background = 'none');
+    storeGameRound.countGame++;
+    if (storeGameRound.countGame > storeGameRound.gameSprint.length - 1) {
+      await this.cancelRoundGameSprint();
+    } else {
+      this.saveDataRoundInStoreGameRound();
+      storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(storeGameRound.currentWordTranslate)[utilsGames.getRandom(0, 1)];
+      console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
+      const createGamePage = new CreateGamePage(storeGameRound.currentWord, storeGameRound.randomWord);
+      createGamePage.createRoundGameSprint();
+    }
+  }
+
+  async actionOnCorrectAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+    storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    utilsGames.createResultTrueAnswer(storeGameRound);
+    this.audioCorrect.play();
+    storeGameRound.countCorrectAnswerInRowSprint++;
+    utilsGames.factorPointsGameSprint(storeGameRound);
+    utilsGames.plusPointsInTotalScoreSprint();
+    utilsGames.resetPaginationGameSprint();
+    storeGameRound.countGame++;
+    if (storeGameRound.countGame > storeGameRound.gameSprint.length - 1) {
+      await this.cancelRoundGameSprint();
+    } else {
+      this.saveDataRoundInStoreGameRound();
+      storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(storeGameRound.currentWordTranslate)[utilsGames.getRandom(0, 1)];
+      console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
+      const createGamePage = new CreateGamePage(storeGameRound.currentWord, storeGameRound.randomWord);
+      createGamePage.createRoundGameSprint();
+    }
+  }
+
+  selectAnswerGameSprint() {
+    const blockBtnGameSprint = <HTMLElement>document.querySelector('.block-btn-game-sprint');
+    blockBtnGameSprint.addEventListener('click', async (event) => {
+      const element = <HTMLElement>event.target;
+      if (element.classList.contains('btn-wrong')) {
+        if (storeGameRound.currentWordTranslate === storeGameRound.randomWord) {
+          await this.actionOnWrongAnswerSprint(storeGameRound);
+        } else {
+          await this.actionOnCorrectAnswerSprint(storeGameRound);
+        }
+      }
+      if (element.classList.contains('btn-correct')) {
+        if (storeGameRound.currentWordTranslate === storeGameRound.randomWord) {
+          await this.actionOnCorrectAnswerSprint(storeGameRound);
+        } else {
+          await this.actionOnWrongAnswerSprint(storeGameRound);
+        }
+      }
+    });
+  }
+
+  showGameSprint() {
+    this.main.innerHTML = '';
+    this.main.insertAdjacentHTML('beforeend', render.renderGameSprint());
+    this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-sprint.webp")';
+    const popupGameLevel = <HTMLElement>document.querySelector('.popup-game-level');
+    popupGameLevel.classList.remove('active-hidden');
+    this.footer.classList.add('active-hidden');
+    this.selectionLevelGame();
+    this.clickStartButton();
+    this.exitGames();
+  }
+
+  showGameSprintFromTextbook() {
+    this.main.innerHTML = '';
+    this.main.insertAdjacentHTML('beforeend', render.renderGameSprintFromTextbook());
+    this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-sprint.webp")';
+    const popupGameLevel = <HTMLElement>document.querySelector('.popup-game-level');
+    popupGameLevel.classList.remove('active-hidden');
+    this.footer.classList.add('active-hidden');
+    this.clickStartButton();
+    this.exitGames();
+  }
+
+  goToGameSprint() {
+    this.linkGameSprint.addEventListener('click', () => {
+      storage.currentPage = 'game-sprint';
+      localStorage.setItem('general-info', JSON.stringify(storage));
+      this.hideShowToggleBtnPopupGame();
+      this.showGameSprint();
+      this.menuBurg.click();
+    });
+  }
+
+  goToGameSprintFromPageTextbook() {
+    const btnGameSprint = <HTMLElement>document.querySelector('.game-card-sprint');
+    btnGameSprint.addEventListener('click', async () => {
+      storage.currentPage = 'game-sprint-from-textbook';
+      localStorage.setItem('general-info', JSON.stringify(storage));
+      this.hideShowToggleBtnPopupGame();
+      if (storage.isSignupUser) {
+        await utilsGames.getGamesWordsSprintTextbookSignupUser(storeUserInfo, storage);
+      } else {
+        await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
+      }
+      this.showGameSprintFromTextbook();
+    });
+  }
+
+  // AudioGame //
 
   installPathsAndVolumeAudio() {
     this.audioCorrect.src = './assets/audio/correct-answer.mp3';
@@ -118,10 +272,15 @@ class GamesController {
   }
 
   saveDataRoundInStoreGameRound() {
-    const dataRound = storeGameRound.gameAudio[storeGameRound.countGameAudio];
-    storeGameRound.currentWord = dataRound.word;
-    storeGameRound.currentWordTranslate = dataRound.wordTranslate;
-    storeGameRound.currentId = <string>dataRound.id;
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      const dataRound = storeGameRound.gameSprint[storeGameRound.countGame];
+      storeGameRound.currentWord = dataRound.word;
+      storeGameRound.currentWordTranslate = dataRound.wordTranslate;
+    } else {
+      const dataRound = storeGameRound.gameAudio[storeGameRound.countGame];
+      storeGameRound.currentWord = dataRound.word;
+      storeGameRound.currentWordTranslate = dataRound.wordTranslate;
+    }
   }
 
   createBtnAnswer({ currentWordTranslate }: IStoreGame) {
@@ -135,8 +294,9 @@ class GamesController {
     });
   }
 
-  startRoundGameAudio({ gameAudio, countGameAudio }: IStoreGame) {
-    const createGamePage = new CreateGamePage(gameAudio[countGameAudio].audio);
+  startRoundGameAudio({ gameAudio, countGame }: IStoreGame) {
+    const dataRound = gameAudio[countGame];
+    const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createRoundGameAudio();
     this.createBtnAnswer(storeGameRound);
     this.playAudioGameAudio();
@@ -151,7 +311,11 @@ class GamesController {
     const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
     btnStart.addEventListener('click', () => {
       this.saveDataRoundInStoreGameRound();
-      this.startRoundGameAudio(storeGameRound);
+      if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+        this.startRoundGameSprint(storeGameRound);
+      } else {
+        this.startRoundGameAudio(storeGameRound);
+      }
     });
   }
 
@@ -186,9 +350,13 @@ class GamesController {
     this.main.innerHTML = '';
     this.numberWrong.textContent = String(Object.keys(falseAnswerGame).length);
     this.numberCorrect.textContent = String(Object.keys(trueAnswerGame).length);
-    storeGameRound.countGameAudio = 0;
-    await utilsGames.savedWrongResultGameDataBase();
-    await utilsGames.savedCorrectResultGameDataBase();
+    storeGameRound.countGame = 0;
+    storeGameRound.countCorrectAnswerInRowSprint = 0;
+    storeGameRound.countPaginationSprint = 0;
+    if (storage.isSignupUser) {
+      await utilsGames.savedWrongResultGameDataBase();
+      await utilsGames.savedCorrectResultGameDataBase();
+    }
     for (const item in falseAnswerGame) delete falseAnswerGame[item];
     for (const item in trueAnswerGame) delete trueAnswerGame[item];
   }
@@ -196,8 +364,8 @@ class GamesController {
   pressBtnNext() {
     const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
     btnNext.addEventListener('click', async () => {
-      storeGameRound.countGameAudio++;
-      if (storeGameRound.countGameAudio > storeGameRound.gameAudio.length - 1) {
+      storeGameRound.countGame++;
+      if (storeGameRound.countGame > storeGameRound.gameAudio.length - 1) {
         await this.cancelAllRoundsGame(storeGameRound);
         this.playAudioResultGameAudio();
         this.exitPopupGame();
@@ -211,11 +379,11 @@ class GamesController {
     });
   }
 
-  actionOnCorrectAnswer({ gameAudio, countGameAudio, currentWordTranslate, currentWord }: IStoreGame) {
+  actionOnCorrectAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
     const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
-    const dataRound = gameAudio[countGameAudio];
+    const dataRound = gameAudio[countGame];
     this.hideShowBtnWhenAnswer();
-    const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
+    const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createCorrectAnswer();
     btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
     storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
@@ -224,10 +392,10 @@ class GamesController {
     this.pressBtnNext();
   }
 
-  actionOnWrongAnswer({ gameAudio, countGameAudio, currentWordTranslate, currentWord }: IStoreGame) {
-    const dataRound = gameAudio[countGameAudio];
+  actionOnWrongAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
+    const dataRound = gameAudio[countGame];
     this.hideShowBtnWhenAnswer();
-    const createGamePage = new CreateGamePage(dataRound.audio, dataRound.id, dataRound.image, dataRound.word, dataRound.wordTranslate);
+    const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createCorrectAnswer();
     this.checkDisabledAnswer(storeGameRound);
     storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
@@ -257,6 +425,7 @@ class GamesController {
   transitionTextbook() {
     this.linkTextbook.addEventListener('click', async () => {
       this.goToGameAudioFromPageTextbook();
+      this.goToGameSprintFromPageTextbook();
     });
   }
 
@@ -273,7 +442,9 @@ class GamesController {
     btnExit.addEventListener('click', () => {
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
-      storeGameRound.countGameAudio = 0;
+      storeGameRound.countGame = 0;
+      storeGameRound.countCorrectAnswerInRowSprint = 0;
+      storeGameRound.countPaginationSprint = 0;
       for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
       for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
       this.footer.classList.remove('active-hidden');
@@ -300,6 +471,7 @@ class GamesController {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
+      this.resultGameSprint.textContent = '';
       this.footer.classList.remove('active-hidden');
       this.logoLinkHome.click();
     });
@@ -316,7 +488,12 @@ class GamesController {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
-      this.showGameAudio();
+      this.resultGameSprint.textContent = '';
+      if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+        this.showGameSprint();
+      } else {
+        this.showGameAudio();
+      }
     });
   }
 
@@ -325,7 +502,12 @@ class GamesController {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
-      this.showGameAudioFromTextbook();
+      this.resultGameSprint.textContent = '';
+      if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+        this.showGameSprintFromTextbook();
+      } else {
+        this.showGameAudioFromTextbook();
+      }
     });
   }
 
@@ -346,11 +528,13 @@ class GamesController {
     blockLevelsGame.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
       if (!element.classList.contains('levels-game-item')) return false;
-      if (element.classList.contains('levels-game-item')) {
-        storage.levelGame = Number(element.dataset.group);
-        localStorage.setItem('general-info', JSON.stringify(storage));
-        this.currentLevelGame();
-        btnStart.disabled = false;
+      storage.levelGame = Number(element.dataset.group);
+      localStorage.setItem('general-info', JSON.stringify(storage));
+      this.currentLevelGame();
+      btnStart.disabled = false;
+      if (storage.currentPage === 'game-sprint') {
+        await utilsGames.getGamesWordsSprint(storage.levelGame, utilsGames.getRandom());
+      } else {
         await utilsGames.getGamesWords(storage.levelGame, utilsGames.getRandom());
       }
     });
@@ -446,10 +630,17 @@ class GamesController {
             this.showGameAudio();
             this.transitionTextbook();
             break;
+          case 'game-sprint':
+            this.showGameSprint();
+            break;
           case 'textbook':
             this.goToGameAudioFromPageTextbook();
+            this.goToGameSprintFromPageTextbook();
             break;
           case 'game-audio-from-textbook':
+            this.logoLinkHome.click();
+            break;
+          case 'game-sprint-from-textbook':
             this.logoLinkHome.click();
             break;
         }
@@ -458,6 +649,8 @@ class GamesController {
   }
 
   startAllListenerGames() {
+    this.goToGameSprint();
+
     this.goToGameAudio();
     this.rebootPage();
     this.transitionTextbook();

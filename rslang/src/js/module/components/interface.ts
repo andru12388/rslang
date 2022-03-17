@@ -41,11 +41,15 @@ interface IWords {
 
 interface IStoreGame {
   gameAudio: IWords[];
+  gameSprint: IWords[];
   arrAnswerGameAudio: string[];
-  countGameAudio: number;
+  arrAnswerGameSprint: string[];
+  countGame: number;
+  countCorrectAnswerInRowSprint: number;
+  countPaginationSprint: number;
   currentWordTranslate: string;
   currentWord: string;
-  currentId: string;
+  randomWord: string;
   trueAnswerGame: {
     [key: string]: string;
   };

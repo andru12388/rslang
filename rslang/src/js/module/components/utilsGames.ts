@@ -1,14 +1,107 @@
 import RequestsApi from '../requestsApi';
 import { storeGameRound, storeUserInfo, storage } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord } from './interface';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord, IWords } from './interface';
 
 const api = new RequestsApi();
 
 class UtilsGames {
+  audioLevelUp = new Audio() as HTMLAudioElement;
+
+  async getGamesWordsSprint(group: number, page: number) {
+    storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+    while (storeGameRound.gameSprint.length < 80) {
+      page++;
+      if (page > 29) page = 0;
+      const newGameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+      storeGameRound.gameSprint = [...storeGameRound.gameSprint, ...newGameSprint];
+    }
+    storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
+    console.log(storeGameRound.gameSprint, storeGameRound.arrAnswerGameSprint);
+  }
+
+  async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+    let { groupWords: newGroupWords, pageWords: newPageWords } = storeGeneral;
+    storeGameRound.gameSprint = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
+      .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+      .flat()];
+    while (storeGameRound.gameSprint.length < 20 && newPageWords !== 0) {
+      newPageWords--;
+      const missingElements = 20 - storeGameRound.gameSprint.length;
+      const newStoreGeneral = { groupWords: newGroupWords, pageWords: newPageWords };
+      const newGameSprint = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, newStoreGeneral))
+        .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+        .flat()];
+      if (newGameSprint.length > missingElements) {
+        storeGameRound.gameSprint = [...storeGameRound.gameSprint, ...newGameSprint.slice(0, missingElements)];
+      } else {
+        storeGameRound.gameSprint = [...storeGameRound.gameSprint, ...newGameSprint];
+      }
+    }
+    storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
+    console.log(storeGameRound.gameSprint, storeGameRound.arrAnswerGameSprint);
+  }
+
+  getRandomArrAnswerSprint(word: string): string[] {
+    const arrAllAnswer = storeGameRound.arrAnswerGameSprint
+      .filter((item) => item !== word)
+      .sort(() => Math.random() - Math.random()).slice(0, 1);
+    return [...arrAllAnswer, word].sort(() => Math.random() - 0.5);
+  }
+
+  factorPointsGameSprint({ countCorrectAnswerInRowSprint }: IStoreGame) {
+    const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
+    this.audioLevelUp.src = './assets/audio/level-up.mp3';
+    this.audioLevelUp.volume = 0.3;
+    const points = Number(qualityPoints.textContent);
+    switch (countCorrectAnswerInRowSprint) {
+      case 0:
+        qualityPoints.textContent = '10';
+        break;
+      case 4:
+        qualityPoints.textContent = `${points * 2}`;
+        this.audioLevelUp.play();
+        break;
+      case 8:
+        qualityPoints.textContent = `${points * 2}`;
+        this.audioLevelUp.play();
+        break;
+      case 12:
+        qualityPoints.textContent = `${points * 2}`;
+        this.audioLevelUp.play();
+        break;
+    }
+  }
+
+  plusPointsInTotalScoreSprint() {
+    const totalScores = <HTMLElement>document.querySelector('.total-score');
+    const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
+    const total = Number(totalScores.textContent);
+    const points = Number(qualityPoints.textContent);
+    totalScores.textContent = `${total + points}`;
+  }
+
+  resetPaginationGameSprint() {
+    const paginationItem = <NodeListOf<Element>>document.querySelectorAll('.pagination-item');
+    if (storeGameRound.countPaginationSprint > 2) {
+      storeGameRound.countPaginationSprint = 0;
+      paginationItem.forEach((item) => (<HTMLElement>item).style.background = 'none');
+      return false;
+    } else {
+      (<HTMLElement>paginationItem[storeGameRound.countPaginationSprint]).style.background = 'green';
+      storeGameRound.countPaginationSprint++;
+    }
+  }
+
+  // Audiocall //
 
   async getGamesWords(group: number, page: number) {
-    storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
-    storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+      storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
+    } else {
+      storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
+      storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
+    }
   }
 
   async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
@@ -32,7 +125,7 @@ class UtilsGames {
     storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
-  getRandom(min = 0, max = 29) {
+  getRandom(min = 0, max = 29): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
@@ -43,8 +136,13 @@ class UtilsGames {
     return [...arrAllAnswer, currentWord].sort(() => Math.random() - 0.5);
   }
 
-  selectCorrectId({ gameAudio, countGameAudio }: IStoreGame): string {
-    const dataRound = gameAudio[countGameAudio];
+  selectCorrectId({ gameAudio, gameSprint, countGame }: IStoreGame): string {
+    let dataRound = null;
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      dataRound = gameSprint[countGame];
+    } else {
+      dataRound = gameAudio[countGame];
+    }
     let correctIdWord = '';
     if (dataRound._id === undefined) {
       correctIdWord = <string>dataRound.id;
@@ -54,9 +152,14 @@ class UtilsGames {
     return correctIdWord;
   }
 
-  createResultTrueAnswer({ gameAudio, countGameAudio, trueAnswerGame }: IStoreGame) {
+  createResultTrueAnswer({ gameAudio, gameSprint, countGame, trueAnswerGame }: IStoreGame) {
     const blockCorrect = <HTMLElement>document.querySelector('.block-correct');
-    const dataRound = gameAudio[countGameAudio];
+    let dataRound = null;
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      dataRound = gameSprint[countGame];
+    } else {
+      dataRound = gameAudio[countGame];
+    }
     const dataAtrAudio = dataRound.audio;
     const correctAnswer = trueAnswerGame[this.selectCorrectId(storeGameRound)];
     const div = document.createElement('div');
@@ -72,9 +175,14 @@ class UtilsGames {
     blockCorrect.append(div);
   }
 
-  createResultFalseAnswer({ gameAudio, countGameAudio, falseAnswerGame }: IStoreGame) {
+  createResultFalseAnswer({ gameAudio, gameSprint, countGame, falseAnswerGame }: IStoreGame) {
     const blockWrong = <HTMLElement>document.querySelector('.block-wrong');
-    const dataRound = gameAudio[countGameAudio];
+    let dataRound = null;
+    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+      dataRound = gameSprint[countGame];
+    } else {
+      dataRound = gameAudio[countGame];
+    }
     const dataAtrAudio = dataRound.audio;
     const wrongAnswer = falseAnswerGame[this.selectCorrectId(storeGameRound)];
     const div = document.createElement('div');
@@ -131,7 +239,6 @@ class UtilsGames {
     const gamesAnswer = { correct: 0, wrong: 0 };
     const difficultyWord = 'normal';
     gamesAnswer.correct++;
-    await api.createGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
     await api.createGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 

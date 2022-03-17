@@ -7,12 +7,9 @@ class CreateGamePage {
 
   wordTranslate: string;
 
-  id: string;
-
   main: HTMLElement;
 
-  constructor(audio?: string, id?: string, image?: string, word?: string, wordTranslate?: string) {
-    this.id = <string>id;
+  constructor(word?: string, wordTranslate?: string, audio?: string, image?: string) {
     this.image = <string>image;
     this.word = <string>word;
     this.wordTranslate = <string>wordTranslate;
@@ -57,6 +54,52 @@ class CreateGamePage {
     `;
     boxCorrectAnswer.insertAdjacentHTML('beforeend', blockAnswer);
   }
+
+  startGameSprint() {
+    this.main.innerHTML = '';
+    const page = `
+      <div class="wrapper-games">
+        <div class="btn-nav-round">
+          <div class="game-sprint-close game-audio-close"></div>
+          <div class="game-audio-fullscreen"></div>
+        </div>
+        <div class="game-sprint">
+          <div class="timer-game"><span class="time">60</span></div>
+          <div class="block-score">
+            <div class="point-word"><b>+</b> <span class="quality-points">10</span> очков за слово</div>
+            <div class="total-point">Итого: <span class="total-score">0</span></div>
+          </div>
+          <div class="card-game-sprint">
+            <div class="pagination-game-sprint">
+              <div class="pagination-item"></div>
+              <div class="pagination-item"></div>
+              <div class="pagination-item"></div>
+            </div>
+            <div class="question-box">
+              <p class="word-game">${this.word}</p>
+              <p class="word-translate-game">${this.wordTranslate}</p>
+            </div>
+            <div class="block-btn-game-sprint">
+              <button class="button-game-sprint btn-wrong">Неверно</button>
+              <button class="button-game-sprint btn-correct">Верно</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    this.main.insertAdjacentHTML('beforeend', page);
+  }
+
+  createRoundGameSprint() {
+    const questionBox = <HTMLElement>document.querySelector('.question-box');
+    questionBox.innerHTML = '';
+    const blockQuestion = `
+      <p class="word-game">${this.word}</p>
+      <p class="word-translate-game">${this.wordTranslate}</p>
+    `;
+    questionBox.insertAdjacentHTML('beforeend', blockQuestion);
+  }
+
 }
 
 export default CreateGamePage;

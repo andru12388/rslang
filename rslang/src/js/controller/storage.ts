@@ -19,11 +19,15 @@ let storage: IGeneralInfo = {
 
 const storeGameRound: IStoreGame = {
   gameAudio: [],
+  gameSprint: [],
   arrAnswerGameAudio: [],
-  countGameAudio: 0,
+  arrAnswerGameSprint: [],
+  countGame: 0,
+  countCorrectAnswerInRowSprint: 0,
+  countPaginationSprint: 0,
   currentWordTranslate: '',
   currentWord: '',
-  currentId: '',
+  randomWord: '',
   trueAnswerGame: {},
   falseAnswerGame: {},
   optionalAudioCall: { correct: 0, wrong: 0, total: 0 },

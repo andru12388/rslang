@@ -99,20 +99,18 @@ class AppController extends GamesController {
     storage.currentPage = 'difficult-words';
     localStorage.setItem('general-info', JSON.stringify(storage));
     this.main.innerHTML = '';
-    this.main.innerHTML = render.renderTextbook();
-    const wrapperDifficultWords = <HTMLElement>document.querySelector('.wrapper-difficult-words');
-    const wrapperTextbook = <HTMLElement>document.querySelector('.wrapper-textbook');
-    wrapperTextbook.classList.add('active-hidden');
-    wrapperDifficultWords.classList.remove('active-hidden');
+    this.main.innerHTML = render.renderDifficultyPage();
     await utils.getAllDifficultyCardsWords(storeUserInfo);
     this.transitionFromHardWordsToTextbook();
     this.goToLearnedWordsPage();
     utils.removeClassActiveFromMain();
+    this.listenerGamesStart();
   }
 
   goToTextbook() {
     this.linkTextbook.addEventListener('click', async () => {
       await this.outputTextbook();
+      this.listenerGamesStart();
       this.wrapper.style.backgroundImage = '';
       this.footer.classList.remove('active-hidden');
       this.menuBurg.click();
@@ -131,11 +129,13 @@ class AppController extends GamesController {
 
   goToLearnedWordsPage() {
     const linkStudyWord = <HTMLElement>document.querySelector('.link-study-word');
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     linkStudyWord.addEventListener('click', async () => {
       storage.currentPage = 'learned-words';
       localStorage.setItem('general-info', JSON.stringify(storage));
       utils.disabledLinkFromDifficultPage();
       await utils.getAllLearnedCardsWords(storeUserInfo);
+      gamesBlock.classList.add('active-hidden');
       this.returnDifficultPageFromLearnedPage();
       utils.isEmptyDifficultyWords();
       this.deleteWordLearned();
@@ -145,8 +145,10 @@ class AppController extends GamesController {
 
   returnDifficultPageFromLearnedPage() {
     const backToDifficult = <HTMLElement>document.querySelector('.back-to-difficult');
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     backToDifficult.addEventListener('click', async () => {
       await this.outputDifficultWordPage();
+      gamesBlock.classList.remove('active-hidden');
       utils.isEmptyDifficultyWords();
       this.deleteWordDifficult();
       utils.showHideBtnIconInfoStat();
@@ -430,11 +432,16 @@ class AppController extends GamesController {
     });
   }
 
+  listenerGamesStart() {
+    this.goToGameAudioFromPageTextbook();
+    this.goToGameSprintFromPageTextbook();
+  }
+
   transitionFromHardWordsToTextbook() {
     const backToTextbooks = <HTMLElement>document.querySelector('.back-to-textbook');
     backToTextbooks.addEventListener('click', async () => {
       await this.outputTextbook();
-      this.goToGameAudioFromPageTextbook();
+      this.listenerGamesStart();
     });
   }
   
@@ -593,6 +600,8 @@ class AppController extends GamesController {
             break;
           case 'learned-words':
             await this.outputDifficultWordPage();
+            const gamesBlock = <HTMLElement>document.querySelector('.games-block');
+            gamesBlock.classList.add('active-hidden');
             utils.disabledLinkFromDifficultPage();
             await utils.getAllLearnedCardsWords(storeUserInfo);
             this.returnDifficultPageFromLearnedPage();
