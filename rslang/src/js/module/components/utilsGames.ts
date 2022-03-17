@@ -7,6 +7,23 @@ const api = new RequestsApi();
 class UtilsGames {
   audioLevelUp = new Audio() as HTMLAudioElement;
 
+  async getGamesWordsFromDifficultyPage(selectGame: string) {
+    if (selectGame === 'game-sprint') {
+      storeGameRound.gameSprint = [...Object.values(await api.getDifficultWordsSignupUser(storeUserInfo))
+        .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+        .flat()];
+      storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
+    }
+    if (selectGame === 'game-audio') {
+      storeGameRound.gameAudio = [...Object.values(await api.getDifficultWordsSignupUser(storeUserInfo))
+        .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
+        .flat()];
+      storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
+    }
+  }
+
+  // Sprint //
+
   async getGamesWordsSprint(group: number, page: number) {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
     while (storeGameRound.gameSprint.length < 80) {
@@ -17,6 +34,11 @@ class UtilsGames {
     }
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
     console.log(storeGameRound.gameSprint, storeGameRound.arrAnswerGameSprint);
+  }
+
+  async getGameSprintWords(group: number, page: number) {
+    storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+    storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
   }
 
   async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
@@ -95,13 +117,8 @@ class UtilsGames {
   // Audiocall //
 
   async getGamesWords(group: number, page: number) {
-    if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
-      storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
-      storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
-    } else {
-      storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
-      storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
-    }
+    storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
+    storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
   async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {

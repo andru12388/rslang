@@ -1,6 +1,6 @@
 import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser } from './interface';
 import RequestsApi from '../requestsApi';
-import { storeUserInfo, storage } from '../../controller/storage';
+import { storeUserInfo, storage, storeGameRound } from '../../controller/storage';
 import CreateCard from '../../view/createCardsWords';
 import Paginator from '../../view/pagination';
 import PreloaderPage from './preloader';

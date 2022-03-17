@@ -94,6 +94,7 @@ class GamesController {
     const paginationItem = <NodeListOf<Element>>document.querySelectorAll('.pagination-item');
     storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
     utilsGames.createResultFalseAnswer(storeGameRound);
+    this.installPathsAndVolumeAudio();
     this.audioWrong.play();
     storeGameRound.countCorrectAnswerInRowSprint = 0;
     storeGameRound.countPaginationSprint = 0;
@@ -114,6 +115,7 @@ class GamesController {
   async actionOnCorrectAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame) {
     storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
     utilsGames.createResultTrueAnswer(storeGameRound);
+    this.installPathsAndVolumeAudio();
     this.audioCorrect.play();
     storeGameRound.countCorrectAnswerInRowSprint++;
     utilsGames.factorPointsGameSprint(storeGameRound);
@@ -188,14 +190,19 @@ class GamesController {
   goToGameSprintFromPageTextbook() {
     const btnGameSprint = <HTMLElement>document.querySelector('.game-card-sprint');
     btnGameSprint.addEventListener('click', async () => {
+      console.log(storage.currentPage)
+      if (storage.currentPage === 'difficult-words') {
+        await utilsGames.getGamesWordsFromDifficultyPage('game-sprint');
+      } else {
+        if (storage.isSignupUser) {
+          await utilsGames.getGamesWordsSprintTextbookSignupUser(storeUserInfo, storage);
+        } else {
+          await utilsGames.getGameSprintWords(storage.groupWords, storage.pageWords);
+        }
+      }
       storage.currentPage = 'game-sprint-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
-      if (storage.isSignupUser) {
-        await utilsGames.getGamesWordsSprintTextbookSignupUser(storeUserInfo, storage);
-      } else {
-        await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
-      }
       this.showGameSprintFromTextbook();
     });
   }
@@ -245,20 +252,25 @@ class GamesController {
   goToGameAudioFromPageTextbook() {
     const btnGameAudio = <HTMLElement>document.querySelector('.game-card-audio-call');
     btnGameAudio.addEventListener('click', async () => {
+      console.log(storage.currentPage);
+      if (storage.currentPage === 'difficult-words') {
+        await utilsGames.getGamesWordsFromDifficultyPage('game-audio');
+      } else {
+        if (storage.isSignupUser) {
+          await utilsGames.getGamesWordsTextbookSignupUser(storeUserInfo, storage);
+        } else {
+          await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
+        }
+      }
       storage.currentPage = 'game-audio-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
-      if (storage.isSignupUser) {
-        await utilsGames.getGamesWordsTextbookSignupUser(storeUserInfo, storage);
-      } else {
-        await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
-      }
       this.showGameAudioFromTextbook();
     });
   }
 
   hideShowToggleBtnPopupGame() {
-    if (storage.currentPage === 'game-audio') {
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
       this.btnExitPopupGameFromTextbook.classList.add('active-hidden');
       this.btnRepeatPopupGameFromTextbook.classList.add('active-hidden');
       this.buttonRepeatPopupGame.classList.remove('active-hidden');
@@ -412,10 +424,12 @@ class GamesController {
       const answer = (<string>element.textContent).slice(2);
       if (answer === currentWordTranslate) {
         element.style.background = 'green';
+        this.installPathsAndVolumeAudio();
         this.audioCorrect.play();
         this.actionOnCorrectAnswer(storeGameRound);
       } else {
         element.style.background = 'red';
+        this.installPathsAndVolumeAudio();
         this.audioWrong.play();
         this.actionOnWrongAnswer(storeGameRound);
       }
@@ -445,6 +459,7 @@ class GamesController {
       storeGameRound.countGame = 0;
       storeGameRound.countCorrectAnswerInRowSprint = 0;
       storeGameRound.countPaginationSprint = 0;
+      clearInterval(<NodeJS.Timer>this.interval);
       for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
       for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
       this.footer.classList.remove('active-hidden');
