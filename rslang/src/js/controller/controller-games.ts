@@ -82,7 +82,6 @@ class GamesController {
 
   startRoundGameSprint({ currentWordTranslate, currentWord }: IStoreGame) {
     storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(currentWordTranslate)[utilsGames.getRandom(0, 1)];
-    console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
     const createGamePage = new CreateGamePage(currentWord, storeGameRound.randomWord);
     createGamePage.startGameSprint();
     this.timer();
@@ -106,7 +105,6 @@ class GamesController {
     } else {
       this.saveDataRoundInStoreGameRound();
       storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(storeGameRound.currentWordTranslate)[utilsGames.getRandom(0, 1)];
-      console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
       const createGamePage = new CreateGamePage(storeGameRound.currentWord, storeGameRound.randomWord);
       createGamePage.createRoundGameSprint();
     }
@@ -127,7 +125,6 @@ class GamesController {
     } else {
       this.saveDataRoundInStoreGameRound();
       storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(storeGameRound.currentWordTranslate)[utilsGames.getRandom(0, 1)];
-      console.log(storeGameRound.randomWord, storeGameRound.currentWordTranslate)
       const createGamePage = new CreateGamePage(storeGameRound.currentWord, storeGameRound.randomWord);
       createGamePage.createRoundGameSprint();
     }
@@ -190,7 +187,6 @@ class GamesController {
   goToGameSprintFromPageTextbook() {
     const btnGameSprint = <HTMLElement>document.querySelector('.game-card-sprint');
     btnGameSprint.addEventListener('click', async () => {
-      console.log(storage.currentPage)
       if (storage.currentPage === 'difficult-words') {
         await utilsGames.getGamesWordsFromDifficultyPage('game-sprint');
       } else {
@@ -203,6 +199,7 @@ class GamesController {
       storage.currentPage = 'game-sprint-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
+      this.footer.style.display = 'none';
       this.showGameSprintFromTextbook();
     });
   }
@@ -252,7 +249,6 @@ class GamesController {
   goToGameAudioFromPageTextbook() {
     const btnGameAudio = <HTMLElement>document.querySelector('.game-card-audio-call');
     btnGameAudio.addEventListener('click', async () => {
-      console.log(storage.currentPage);
       if (storage.currentPage === 'difficult-words') {
         await utilsGames.getGamesWordsFromDifficultyPage('game-audio');
       } else {
@@ -265,6 +261,7 @@ class GamesController {
       storage.currentPage = 'game-audio-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
+      this.footer.style.display = 'none';
       this.showGameAudioFromTextbook();
     });
   }
@@ -447,6 +444,7 @@ class GamesController {
     const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
     btnCancel.addEventListener('click', () => {
       this.footer.classList.remove('active-hidden');
+      this.footer.style.display = '';
       this.logoLinkHome.click();
     });
   }
@@ -463,6 +461,7 @@ class GamesController {
       for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
       for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
       this.footer.classList.remove('active-hidden');
+      this.footer.style.display = '';
       this.logoLinkHome.click();
     });
   }
@@ -488,6 +487,7 @@ class GamesController {
       this.popupBlockWrong.innerHTML = '';
       this.resultGameSprint.textContent = '';
       this.footer.classList.remove('active-hidden');
+      this.footer.style.display = '';
       this.logoLinkHome.click();
     });
   }
@@ -588,13 +588,21 @@ class GamesController {
           const answerThree = <HTMLButtonElement>document.querySelector('.answer-3');
           answerThree.click();
         }
-        if (event.code == 'Digit4'){
+        if (event.code == 'Digit4') {
           const answerFour = <HTMLButtonElement>document.querySelector('.answer-4');
           answerFour.click();
         }
-        if (event.code == 'Digit5'){
+        if (event.code == 'Digit5') {
           const answerFive = <HTMLButtonElement>document.querySelector('.answer-5');
           answerFive.click();
+        }
+        if (event.code == 'ArrowLeft') { 
+          const btnWrong = <HTMLButtonElement>document.querySelector('.btn-wrong');
+          btnWrong.click();
+        }
+        if (event.code == 'ArrowRight') { 
+          const btnCorrect = <HTMLButtonElement>document.querySelector('.btn-correct');
+          btnCorrect.click();
         }
       } else {
         return false;

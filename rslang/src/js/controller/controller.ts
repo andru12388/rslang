@@ -110,7 +110,6 @@ class AppController extends GamesController {
   goToTextbook() {
     this.linkTextbook.addEventListener('click', async () => {
       await this.outputTextbook();
-      this.listenerGamesStart();
       this.wrapper.style.backgroundImage = '';
       this.footer.classList.remove('active-hidden');
       this.menuBurg.click();

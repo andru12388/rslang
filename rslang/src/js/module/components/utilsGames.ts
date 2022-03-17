@@ -33,7 +33,6 @@ class UtilsGames {
       storeGameRound.gameSprint = [...storeGameRound.gameSprint, ...newGameSprint];
     }
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
-    console.log(storeGameRound.gameSprint, storeGameRound.arrAnswerGameSprint);
   }
 
   async getGameSprintWords(group: number, page: number) {
@@ -60,7 +59,6 @@ class UtilsGames {
       }
     }
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
-    console.log(storeGameRound.gameSprint, storeGameRound.arrAnswerGameSprint);
   }
 
   getRandomArrAnswerSprint(word: string): string[] {
