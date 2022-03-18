@@ -1,24 +1,28 @@
 import { ICreateUser } from '../module/components/interface';
 import RenderView from '../view/render';
 import RequestsApi from '../module/requestsApi';
-import { storeUserInfo, storage } from './storage';
-
+import { storeUserInfo, storage, storeGameRound } from './storage';
 import Utils from '../module/components/utils';
+import GamesController from './controller-games';
 
 const api = new RequestsApi();
 const render = new RenderView();
 const utils = new Utils();
 
-class AppController {
+class AppController extends GamesController {
   wrapper = <HTMLElement>document.querySelector('.wrapper');
 
   main = <HTMLElement>document.querySelector('.main');
 
   signIn = <HTMLElement>document.querySelector('.sign-in');
 
+  footer = <HTMLElement>document.querySelector('.footer');
+
   popupSignIn = <HTMLElement>document.querySelector('.popup-sign-in');
 
   popupAbout = <HTMLElement>document.querySelector('.popup-about');
+
+  popupStatistic = <HTMLElement>document.querySelector('.popup-statistic');
 
   menuBurg = <HTMLElement>document.querySelector('.menu-btn');
 
@@ -40,6 +44,8 @@ class AppController {
 
   aboutCloseBtn = <HTMLElement>document.querySelector('.about-close-btn');
 
+  statisticCloseBtn = <HTMLElement>document.querySelector('.statistic-close-btn');
+
   messageError = <HTMLElement>document.querySelector('.message-error');
 
   messageErrorSignin = <HTMLElement>document.querySelector('.message-error-signin');
@@ -53,6 +59,8 @@ class AppController {
   linkHome = <HTMLElement>document.querySelector('#link-home');
 
   linkTeam = <HTMLElement>document.querySelector('#link-team');
+
+  linkStatistic = <HTMLElement>document.querySelector('#link-statistic');
 
   logoLinkHome = <HTMLElement>document.querySelector('.logo');
 
@@ -97,21 +105,19 @@ class AppController {
     storage.currentPage = 'difficult-words';
     localStorage.setItem('general-info', JSON.stringify(storage));
     this.main.innerHTML = '';
-    this.main.innerHTML = render.renderTextbook();
-    const wrapperDifficultWords = <HTMLElement>document.querySelector('.wrapper-difficult-words');
-    const wrapperTextbook = <HTMLElement>document.querySelector('.wrapper-textbook');
-    wrapperTextbook.classList.add('active-hidden');
-    wrapperDifficultWords.classList.remove('active-hidden');
+    this.main.innerHTML = render.renderDifficultyPage();
     await utils.getAllDifficultyCardsWords(storeUserInfo);
     this.transitionFromHardWordsToTextbook();
     this.goToLearnedWordsPage();
     utils.removeClassActiveFromMain();
+    this.listenerGamesStart();
   }
 
   goToTextbook() {
     this.linkTextbook.addEventListener('click', async () => {
       await this.outputTextbook();
       this.wrapper.style.backgroundImage = '';
+      this.footer.classList.remove('active-hidden');
       this.menuBurg.click();
     });
   }
@@ -121,30 +127,42 @@ class AppController {
       await this.outputDifficultWordPage();
       this.wrapper.style.backgroundImage = '';
       utils.removeClassActiveFromMain();
+      utils.showHideBtnIconInfoStat();
       this.menuBurg.click();
     });
   }
 
   goToLearnedWordsPage() {
     const linkStudyWord = <HTMLElement>document.querySelector('.link-study-word');
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     linkStudyWord.addEventListener('click', async () => {
       storage.currentPage = 'learned-words';
       localStorage.setItem('general-info', JSON.stringify(storage));
       utils.disabledLinkFromDifficultPage();
       await utils.getAllLearnedCardsWords(storeUserInfo);
+      gamesBlock.classList.add('active-hidden');
       this.returnDifficultPageFromLearnedPage();
       utils.isEmptyDifficultyWords();
       this.deleteWordLearned();
+      utils.showHideBtnIconInfoStat();
     });
   }
 
   returnDifficultPageFromLearnedPage() {
     const backToDifficult = <HTMLElement>document.querySelector('.back-to-difficult');
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     backToDifficult.addEventListener('click', async () => {
       await this.outputDifficultWordPage();
+      gamesBlock.classList.remove('active-hidden');
       utils.isEmptyDifficultyWords();
       this.deleteWordDifficult();
+      utils.showHideBtnIconInfoStat();
     });
+  }
+
+  hideBlockGame() {
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
+    gamesBlock.classList.add('active-hidden');
   }
 
   navigationPageWords() {
@@ -197,24 +215,19 @@ class AppController {
         const element = <HTMLElement>event.target;
         const elementCard = (<HTMLElement>element.parentNode).parentNode;
         const elementButtonEasy = <HTMLElement>element.nextElementSibling;
+        storage.wordId = <string>element.dataset.idword;
+        localStorage.setItem('general-info', JSON.stringify(storage));
+        utils.updateStorageGeneralInfo();
         try {
-          storage.wordId = <string>element.dataset.idword;
-          localStorage.setItem('general-info', JSON.stringify(storage));
-          utils.updateStorageGeneralInfo();
-          switch (element.classList.contains('active')) {
-            case true:
-              await api.deleteWordsDifficulty(storeUserInfo, storage);
-              break;
-            case false:
-              if (elementButtonEasy.classList.contains('active')) {
-                await api.updateWordsDifficulty(storeUserInfo, storage, 'hard');
-              } else {
-                await api.createWordsDifficulty(storeUserInfo, storage, 'hard');
-              }
-              break;
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          if (element.classList.contains('active')) {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
+          } else {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'hard');
           }
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'hard');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'hard');
         } finally {
           elementButtonEasy.classList.remove('active');
           element.classList.toggle('active');
@@ -237,9 +250,11 @@ class AppController {
         localStorage.setItem('general-info', JSON.stringify(storage));
         utils.updateStorageGeneralInfo();
         try {
-          await api.deleteWordsDifficulty(storeUserInfo, storage);
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } finally {
           await utils.getAllDifficultyCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -258,9 +273,11 @@ class AppController {
         localStorage.setItem('general-info', JSON.stringify(storage));
         utils.updateStorageGeneralInfo();
         try {
-          await api.deleteWordsDifficulty(storeUserInfo, storage);
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'normal');
+          await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
         } finally {
           await utils.getAllLearnedCardsWords(storeUserInfo);
           utils.isEmptyDifficultyWords();
@@ -277,24 +294,19 @@ class AppController {
         const element = <HTMLElement>event.target;
         const elementCard = (<HTMLElement>element.parentNode).parentNode;
         const elementButtonHard = <HTMLElement>element.previousElementSibling;
+        storage.wordId = <string>element.dataset.idword;
+        localStorage.setItem('general-info', JSON.stringify(storage));
+        utils.updateStorageGeneralInfo();
         try {
-          storage.wordId = <string>element.dataset.idword;
-          localStorage.setItem('general-info', JSON.stringify(storage));
-          utils.updateStorageGeneralInfo();
-          switch (element.classList.contains('active')) {
-            case true:
-              await api.deleteWordsDifficulty(storeUserInfo, storage);
-              break;
-            case false:
-              if (elementButtonHard.classList.contains('active')) {
-                await api.updateWordsDifficulty(storeUserInfo, storage, 'easy');
-              } else {
-                await api.createWordsDifficulty(storeUserInfo, storage, 'easy');
-              }
-              break;
+          const response = await api.getWord(storeUserInfo, storage);
+          storeGameRound.gamesAnswer = response.optional.gamesAnswer;
+          if (element.classList.contains('active')) {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'normal');
+          } else {
+            await api.updateWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'easy');
           }
         } catch (error) {
-          await api.updateWordsDifficulty(storeUserInfo, storage, 'easy');
+          await api.createWordsDifficulty(storeUserInfo, storage, storeGameRound.gamesAnswer, 'easy');
         } finally {
           elementButtonHard.classList.remove('active');
           element.classList.toggle('active');
@@ -342,6 +354,15 @@ class AppController {
     });
   }
 
+  showHideLearningProgress() {
+    this.main.addEventListener('click',  (event) => {
+      const element = <HTMLElement>event.target;
+      const messageElement = (<HTMLElement>event.target).nextElementSibling;
+      if (!element.classList.contains('icon-info-stat')) return false;
+      (<HTMLElement>messageElement).classList.toggle('active-hidden');
+    });
+  }
+
   goToHome() {
     this.linkHome.addEventListener('click', () => {
       storage.currentPage = 'home';
@@ -350,6 +371,7 @@ class AppController {
       this.wrapper.style.backgroundImage = 'url("./assets/img/bg-home2.jpg")';
       utils.removeClassActiveFromMain();
       this.goToInfoProject();
+      this.footer.classList.remove('active-hidden');
       this.menuBurg.click();
     });
     this.logoLinkHome.addEventListener('click', (event) => {
@@ -358,6 +380,7 @@ class AppController {
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.main.innerHTML = render.renderHomePage();
       this.wrapper.style.backgroundImage = 'url("./assets/img/bg-home2.jpg")';
+      this.footer.classList.remove('active-hidden');
       this.goToInfoProject();
       utils.removeClassActiveFromMain();
     });
@@ -415,13 +438,20 @@ class AppController {
       utils.isEmptyDifficultyWords();
       this.deleteWordDifficult();
       utils.removeClassActiveFromMain();
+      utils.showHideBtnIconInfoStat();
     });
+  }
+
+  listenerGamesStart() {
+    this.goToGameAudioFromPageTextbook();
+    this.goToGameSprintFromPageTextbook();
   }
 
   transitionFromHardWordsToTextbook() {
     const backToTextbooks = <HTMLElement>document.querySelector('.back-to-textbook');
     backToTextbooks.addEventListener('click', async () => {
       await this.outputTextbook();
+      this.listenerGamesStart();
     });
   }
   
@@ -446,6 +476,20 @@ class AppController {
     const btnInfoProject = <HTMLElement>document.querySelector('.btn-details');
     btnInfoProject.addEventListener('click', () => {
       this.popupAbout.classList.add('active');
+    });
+  }
+
+  hideStatistic() {
+    this.statisticCloseBtn.addEventListener('click', () => {
+      this.popupStatistic.classList.remove('active');
+    });
+  }
+
+  goToStatistic() {
+    this.linkStatistic.addEventListener('click', () => {
+      this.popupStatistic.classList.add('active');
+      this.menuBurg.click();
+      this.hideStatistic();
     });
   }
 
@@ -575,15 +619,18 @@ class AppController {
               await this.outputDifficultWordPage();
               utils.isEmptyDifficultyWords();
               this.deleteWordDifficult();
+              utils.showHideBtnIconInfoStat();
             }
             break;
           case 'learned-words':
             await this.outputDifficultWordPage();
+            this.hideBlockGame();
             utils.disabledLinkFromDifficultPage();
             await utils.getAllLearnedCardsWords(storeUserInfo);
             this.returnDifficultPageFromLearnedPage();
             utils.isEmptyDifficultyWords();
             this.deleteWordLearned();
+            utils.showHideBtnIconInfoStat();
             break;
         }
       } else {
@@ -612,6 +659,8 @@ class AppController {
     this.playAudioExample();
     this.goToDifficultWordsPage();
     this.showHideTeamPage();
+    this.showHideLearningProgress();
+    this.goToStatistic();
   }
 }
 

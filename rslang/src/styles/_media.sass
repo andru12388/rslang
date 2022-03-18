@@ -2,31 +2,16 @@
   .wrapper-card-words,
   .wrapper-card-words-difficult
     justify-content: space-evenly
-
-@media (max-width: 1200px)
   .wrapper-home
-    max-width: 50rem
+    max-width: 35rem
     margin: 0 auto
   .main-align-center
     .h1
-      font-size: 3rem
-      border: 3px solid #223C50
-      padding: 1.2rem 0
+      font-size: 1.7rem
+      padding: 0.8rem 0
       &::after, &::before
         height: 3px
-        width: 6rem
-    .text-title
-      line-height: normal 
-      font-size: 1rem
-  .button
-    font-size: 1.3rem
-
-@media (max-width: 1000px)
-  .main-align-center
-    .h1
-      font-size: 2rem
-      border: 3px solid #223C50
-      padding: 1rem 0
+        width: 4rem
       &::after
         right: 15%
         top: 50%
@@ -35,8 +20,85 @@
         left: 15%
         top: 50%
         margin-top: -2px
+  .title-composition
+    border-top: 16rem solid rgba(34, 60, 80, 0.9)
+    border-left: 17rem solid transparent
+    border-right: 17rem solid transparent
+    &::before
+      top: -15rem
+      left: -14rem
+      font-size: 1rem
+      width: 28rem
+    &::after
+      top: -9rem
+      left: -6.5rem
+      font-size: 1rem
+      width: 13rem
   .button
-    font-size: 1.1rem
+      font-size: 1.1rem
+  .btn-details
+    padding: 0.7rem 1.8rem
+    margin-top: 2.5rem
+
+@media (max-width: 1200px)
+  .wrapper-home
+    max-width: 35rem
+    margin: 0 auto
+  .main-align-center
+    .h1
+      border-width: 3px
+      padding: 1.2rem 0
+      &::after, &::before
+        height: 3px
+        width: 6rem
+  .block-answer-game
+    width: 54rem
+  .btn-nav-round
+    width: 54rem
+  .game-audio-close
+    margin-left: 1.5rem
+  .game-audio-fullscreen
+    margin-right: 1.5rem
+  .icon-mute
+    width: 8rem
+    height: 8rem
+    margin-top: 1.8rem
+  .box-correct-answer .card-words-img
+    width: 6rem
+    height: 6rem
+    border-radius: 50%
+  .box-correct-answer .card-words
+    align-items: center
+    background: none
+    box-shadow: none
+    border: none
+    padding-bottom: 0
+  .box-correct-answer .word
+    align-self: center
+
+@media (max-width: 1000px)
+  .wrapper-home
+    max-width: 26rem
+  .main-align-center
+    .title-composition
+      border-top: 15rem solid rgba(34, 60, 80, 0.9)
+      border-left: 16rem solid transparent
+      border-right: 16rem solid transparent
+      &::before
+        top: -14rem
+        left: -12rem
+        font-size: 1rem
+        width: 24rem
+      &::after
+        top: -9rem
+        left: -6rem
+        font-size: 1rem
+        width: 12rem
+    .button
+      font-size: 1rem
+    .btn-details
+      padding: 0.5rem 1.5rem
+      margin-top: 2rem
 
   .card-words
     width: 20rem
@@ -63,15 +125,29 @@
     font-size: 1.2rem
     padding: 0.5rem 0.5rem
     border-radius: 1.5rem
+  .block-answer-game
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: 2rem
+    justify-content: space-evenly
+    width: 40rem
+  .btn-nav-round
+    width: 40rem
+  .game-audio-close
+    margin-left: 0
+  .game-audio-fullscreen
+    margin-right: 0
     
 @media (max-width: 768px)
   .wrapper-home
     max-width: 25rem
-    margin: 0 auto
+    height: 70vh
+    align-items: center
   .main-align-center
     .h1
       font-size: 2rem
-      border: 2px solid #223C50
+      border-width: 2px
       padding: 1rem 0
       &::after, &::before
         height: 2px
@@ -87,10 +163,22 @@
     .text-title
       line-height: normal 
       font-size: 0.8rem
+    .title-composition
+      border-top: 13rem solid rgba(34, 60, 80, 0.9)
+      border-left: 12rem solid transparent
+      border-right: 12rem solid transparent
+      &::before
+        top: -12rem
+        left: -10rem
+        font-size: 0.9rem
+        width: 20rem
+      &::after
+        top: -8rem
+        left: -6rem
+        font-size: 0.9rem
+        width: 12rem
   .button
     font-size: 0.9rem
-  .btn-details
-    padding: 0.7rem 2rem
 
   .header .h2
     font-size: 1.3rem
@@ -110,7 +198,7 @@
     font-size: 1rem
   .menu-btn.active
     transform: translateX(11rem)
-    margin-top: -2.2rem
+    margin-top: -1.2rem
     margin-right: 1rem
   .menu-btn
     width: 3rem
@@ -180,6 +268,43 @@
     font-size: 0.9rem
     padding: 0.3rem 0.3rem
     border-radius: 1.1rem
+  .title-game-audio-call
+    font-size: 1.5rem
+  .description-game-audio
+    font-size: 1rem
+  .levels-game 
+    display: flex
+    align-items: center
+    justify-content: space-between
+    width: 12rem
+    flex-wrap: wrap
+    margin: 0 auto
+  .levels-game-item
+    margin-bottom: 1rem
+    width: 2rem
+    text-align: center
+  .block-answer-game
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: 1rem
+    justify-content: space-evenly
+    width: 25rem
+  .btn-nav-round
+    width: 25rem
+  .icon-mute
+    width: 6rem
+    height: 6rem
+    margin: 3rem 0
+  .box-correct-answer .card-words
+    margin-bottom: 2.1rem
+  .button-game
+    font-size: 1rem
+    font-weight: 500
+    text-transform: uppercase
+    padding: 0.4rem 0.8rem
+    border-radius: 1.2rem
+
 
 @media (max-width: 570px)
   .textbook-content
@@ -259,12 +384,10 @@
 
 @media (max-width: 500px)
   .wrapper-home
-    max-width: 18rem
-    margin: 0 auto
+    max-width: 21rem
   .main-align-center
     .h1
       font-size: 1.5rem
-      border: 2px solid #223C50
       padding: 0.8rem 0
       &::after, &::before
         height: 2px
@@ -279,7 +402,21 @@
         margin-top: -2px
     .text-title
       line-height: normal 
-      font-size: 0.6rem
+      font-size: 0.8rem
+    .title-composition
+      border-top: 9rem solid rgba(34, 60, 80, 0.9)
+      border-left: 10.5rem solid transparent
+      border-right: 10.5rem solid transparent
+      &::before
+        top: -8.5rem
+        left: -8rem
+        font-size: 0.8rem
+        width: 16rem
+      &::after
+        top: -5.5rem
+        left: -5rem
+        font-size: 0.8rem
+        width: 10.5rem
   .button
     font-size: 0.7rem
   .btn-details
@@ -343,10 +480,17 @@
   .game-img
     width: 2.2rem
     height: 2.2rem
+  .title-game-audio-call
+    font-size: 1.2rem
+  .description-game-audio
+    font-size: 0.8rem
+  .block-button-popap-game
+    width: 20rem
 
 @media (max-width: 400px)
   .header .h2
-    display: none
+    visibility: hidden
+    opacity: 0
   .textbook-title
     font-size: 1.4rem
   .btn-pagination,
@@ -372,8 +516,70 @@
   .icon-audio
     width: 1.15rem
     height: 0.9rem
-  .games-wrapper
+  .title-game-audio-call
+    font-size: 1rem
+  .description-game-audio
+    font-size: 0.7rem
+  .block-description-game
+    padding: 0.5rem
+  .selection-title-game
+    font-size: 1rem
+    font-weight: 500
+    margin-top: 3rem
+    margin-bottom: 2rem
+  .block-answer-game
+    align-items: stretch
     flex-direction: column
-    align-items: center
-  .game-card-sprint
-    margin-right: 0
+    flex-wrap: nowrap
+    gap: 0.5rem
+    width: 16rem
+  .button-game
+    font-size: 0.8rem
+    font-weight: 400
+    border-radius: 1.2rem
+  .box-correct-answer .card-words-img
+    width: 4rem
+    height: 4rem
+  .icon-mute
+    width: 4rem
+    height: 4rem
+    margin: 2.15rem 0
+  .box-correct-answer .word
+    font-size: 1rem
+  .box-correct-answer .word-translate
+    font-size: 0.8rem
+  .box-correct-answer .icon-audio-game
+    width: 1rem
+    height: 0.75rem
+  .box-correct-answer .card-words
+    margin-bottom: 1.25rem
+  .popup-result-game 
+    width: 18rem
+  .btn-nav-round
+    width: 15rem
+  .game-audio-close
+    width: 1.2rem
+    height: 1.2rem
+  .game-audio-fullscreen
+    width: 1.4rem
+    height: 1.5rem
+  
+
+@media (max-width: 340px)
+  .wrapper-home
+    max-width: 19rem
+  .main-align-center
+    .title-composition
+      border-top: 9rem solid rgba(34, 60, 80, 0.9)
+      border-left: 9.5rem solid transparent
+      border-right: 9.5rem solid transparent
+      &::before
+        top: -8.5rem
+        left: -7rem
+        font-size: 0.7rem
+        width: 14rem
+      &::after
+        top: -5.5rem
+        left: -4.5rem
+        font-size: 0.7rem
+        width: 9.5rem

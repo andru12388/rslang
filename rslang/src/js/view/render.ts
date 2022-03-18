@@ -5,8 +5,7 @@ class RenderView {
       <div class="wrapper-home">
         <div class="main-align-center">
           <h1 class="h1">RS Lang</h1>
-          <p class="text-title">Самый лучший и эффективный способ для изучения английского языка.</p>
-          <p class="text-title">Теперь учить английский язык легко и увлекательно!</p>
+          <div class="title-composition"></div>
           <button class="button btn-details">Подробнее</button>
         </div>
       </div>
@@ -21,6 +20,19 @@ class RenderView {
     `;
   }
 
+  renderLevelsWords() {
+    return `
+      <div class="difficulty-levels-words">
+        <div class="levels-item item-1" data-group="0">1 (A1)</div>
+        <div class="levels-item item-2" data-group="1">2 (A2)</div>
+        <div class="levels-item item-3" data-group="2">3 (B1)</div>
+        <div class="levels-item item-4" data-group="3">4 (B2)</div>
+        <div class="levels-item item-5" data-group="4">5 (C1)</div>
+        <div class="levels-item item-6" data-group="5">6 (C2)</div>
+      </div>
+    `;
+  }
+
   renderTextbook() {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
@@ -28,14 +40,7 @@ class RenderView {
         <div class="textbook-content">
           <h2 class="textbook-title">Учебник</h2>
           <p class="title-levels-words">Уровни сложности слов</p>
-          <div class="difficulty-levels-words">
-            <div class="levels-item item-1" data-group="0">1 (A1)</div>
-            <div class="levels-item item-2" data-group="1">2 (A2)</div>
-            <div class="levels-item item-3" data-group="2">3 (B1)</div>
-            <div class="levels-item item-4" data-group="3">4 (B2)</div>
-            <div class="levels-item item-5" data-group="4">5 (C1)</div>
-            <div class="levels-item item-6" data-group="5">6 (C2)</div>
-          </div>
+          ${this.renderLevelsWords()}
           <div class="difficult-words active-hidden">Сложные слова</div>
           <div class="wrapper-card-words">
           
@@ -58,7 +63,13 @@ class RenderView {
           </div>
         </div>
       </div>
-      <div class="wrapper-difficult-words active-hidden">
+    `;
+  }
+
+  renderDifficultyPage() {
+    return `
+      <div class="preloader-page"><div class="pulse"></div></div>
+      <div class="wrapper-difficult-words">
         <div class="nav-difficult-words">
           <button href="" class="back-to-textbook">🠔 назад в учебник</button>
           <button href="" class="back-to-difficult" disabled>Сложные слова</button>
@@ -81,6 +92,112 @@ class RenderView {
               <p class="discription-game">Попробуй понять, какое слово было произнесено.</p>
             </div>
           </div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameSprint() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Спринт</h2>
+          <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
+        </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>🡄</button> - ответить неверно</p>
+          <p><button>🡆</button> - ответить верно</p>
+        </details>
+        <p class="selection-title-game">Выберите сложность игры</p>
+        <div class="levels-game">
+          <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
+          <div class="levels-game-item item-2" data-group="1">2 (A2)</div>
+          <div class="levels-game-item item-3" data-group="2">3 (B1)</div>
+          <div class="levels-game-item item-4" data-group="3">4 (B2)</div>
+          <div class="levels-game-item item-5" data-group="4">5 (C1)</div>
+          <div class="levels-game-item item-6" data-group="5">6 (C2)</div>
+        </div>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start" title="Выберите сложность" disabled>Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameAudioCall() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Аудиовызов</h2>
+          <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
+        </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>SPACE</button> - не знаю</p>
+          <p><button>ENTER</button> - далее</p>
+          <p><button>1,2,3,4,5</button> - варианты ответов</p>
+        </details>
+        <p class="selection-title-game">Выберите сложность игры</p>
+        <div class="levels-game">
+          <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
+          <div class="levels-game-item item-2" data-group="1">2 (A2)</div>
+          <div class="levels-game-item item-3" data-group="2">3 (B1)</div>
+          <div class="levels-game-item item-4" data-group="3">4 (B2)</div>
+          <div class="levels-game-item item-5" data-group="4">5 (C1)</div>
+          <div class="levels-game-item item-6" data-group="5">6 (C2)</div>
+        </div>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start" title="Выберите сложность" disabled>Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameAudioCallFromTextbook() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Аудиовызов</h2>
+          <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
+        </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>SPACE</button> - не знаю</p>
+          <p><button>ENTER</button> - далее</p>
+          <p><button>1,2,3,4,5</button> - варианты ответов</p>
+        </details>
+        <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start">Начать</button>
+        </div>
+      </div>
+    `;
+  }
+
+  renderGameSprintFromTextbook() {
+    return `
+      <div class="popup-game-level active-hidden">
+        <div class="block-description-game">
+          <h2 class="title-game-audio-call">Спринт</h2>
+          <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
+        </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>🡄</button> - ответить неверно</p>
+          <p><button>🡆</button> - ответить верно</p>
+        </details>
+        <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
+        <div class="block-button-popap-game">
+          <button class="btn-cancel">Выйти</button>
+          <button class="btn-start">Начать</button>
         </div>
       </div>
     `;
@@ -122,12 +239,12 @@ class RenderView {
             <li class="menu-list-item">
               <a href="" class="sub-menu-link menu-link"><i class="fas fa-gamepad"></i>Игры</a>
               <ul class="submenu-list">
-                <li class="submenu-list-item"><a href="" class="menu-link"><i class="fas fa-running"></i>Спринт</a></li>
-                <li class="submenu-list-item"><a href="" class="menu-link"><i class="fas fa-headphones-alt"></i>Аудиовызов</a></li>
+                <li class="submenu-list-item"><a href="" class="menu-link" id="link-game-sprint"><i class="fas fa-running"></i>Спринт</a></li>
+                <li class="submenu-list-item"><a href="" class="menu-link" id="link-game-audio"><i class="fas fa-headphones-alt"></i>Аудиовызов</a></li>
               </ul>
             </li>
             <li class="menu-list-item menu-list-item-statistic active-hidden">
-              <a href="" class="menu-link"><i class="fas fa-trophy"></i>Статистика</a>
+              <a href="" class="menu-link" id="link-statistic"><i class="fas fa-trophy"></i>Статистика</a>
             </li>
             <li class="menu-list-item">
               <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>Команда</a>
@@ -212,6 +329,71 @@ class RenderView {
 					<img class="img-responsive" src="./assets/img/Avatar.jpg" alt="My photo">
 				</figure>
         <a href="https://github.com/andru12388" class="popap-git" target="_blank">Андрей</a>
+      </div>
+      <div class="popup-result-game active-hidden">
+        <h4>Результат <span class="result-game-sprint"></span></h4>
+        <div class="wrapper-result">
+          <div class="box-bad-answer">
+            <p class="wrong-result">Ошибок <span class="number-wrong"></span></p>
+            <div class="block-wrong"></div>
+          </div>
+          <div class="box-nice-answer">
+            <p class="correct-result">Знаю <span class="number-correct"></span></p>
+            <div class="block-correct"></div>
+          </div>
+        </div>
+        <div class="box-btn-repeat-exit">
+          <button class="button-repeat">Еще раз</button>
+          <button class="button-exit">Закончить игру</button>
+          <button class="button-repeat-from-textbook active-hidden">Еще раз</button>
+          <button class="button-exit-from-textbook active-hidden">Закончить игру</button>
+        </div>
+      </div>
+      <div class="popup-statistic">
+        <div class="statistic-close-btn"></div>
+        <h3 class="title-statistic">Краткосрочная статистика за сегодня</h3>
+        <div class="box-statistic game-sprint-statistic">
+          <h4 class="title-games-stat title-sprint-stat">Спринт</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-sprint-words">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint">0</span></p>
+            </li>
+          </ul>
+        </div>
+        <div class="box-statistic game-audio-statistic">
+          <h4 class="title-games-stat title-audio-stat">Аудиовызов</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-audio-words">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio">0</span></p>
+            </li>
+          </ul>
+        </div>
+        <div class="box-statistic all-words-statistic">
+          <h4 class="title-games-stat title-audio-stat">Статистика по словам</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-new-words">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Изученных слов: <span class="learned-words-stat">0</span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0</span></p>
+            </li>
+          </ul>
+        </div>
       </div>
     `;
     const root = document.createElement('div');

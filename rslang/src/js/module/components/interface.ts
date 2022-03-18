@@ -13,11 +13,12 @@ interface ILoginUser {
 }
 
 interface IGeneralInfo {
-  currentPage: string;
+  currentPage?: string;
   groupWords: number;
   pageWords: number;
-  isSignupUser: boolean;
-  wordId: string | null;
+  isSignupUser?: boolean;
+  wordId?: string | null;
+  levelGame?: number;
 }
 
 interface IWords {
@@ -25,7 +26,8 @@ interface IWords {
   audioExample?: string;
   audioMeaning?: string;
   group?: number;
-  id: string;
+  id?: string;
+  _id?: string;
   image: string;
   page?: number;
   textExample: string;
@@ -37,9 +39,43 @@ interface IWords {
   wordTranslate: string;
 }
 
+interface IStoreGame {
+  gameAudio: IWords[];
+  gameSprint: IWords[];
+  arrAnswerGameAudio: string[];
+  arrAnswerGameSprint: string[];
+  countGame: number;
+  countCorrectAnswerInRowSprint: number;
+  countPaginationSprint: number;
+  currentWordTranslate: string;
+  currentWord: string;
+  randomWord: string;
+  trueAnswerGame: {
+    [key: string]: string;
+  };
+  falseAnswerGame: {
+    [key: string]: string;
+  };
+  optionalAudioCall: {
+    correct?: number;
+    wrong?: number;
+    total?: number;
+  };
+  optionalSprint: {
+    correct?: number;
+    wrong?: number;
+    total?: number;
+  };
+  gamesAnswer: {
+    correct?: number;
+    wrong?: number;
+  };
+  difficultyWord: string;
+}
+
 interface IUserWord {
   difficulty: string;
-  optional: { group: number, page: number }
+  optional: { gamesAnswer: { correct: number, wrong: number } }
 }
 
 interface IWordsSignupUser {
@@ -65,4 +101,47 @@ interface IResponseWordsSignUser {
   totalCount: Array<{ count: number }>;
 }
 
-export { ICreateUser, ILoginUser, IWords, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser };
+interface IOptionalGames {
+  correct?: number;
+  wrong?: number; 
+  total?: number;
+}
+
+interface IResponseGetWord {
+  gamesAnswer: IOptionalGames;
+  difficultyWord: string;
+}
+
+interface IGamesStatistic {
+  audio: { 
+    correctAnswer: number, 
+    wrongAnswer: number, 
+    newWords: number 
+  },
+  sprint: { 
+    correctAnswer: number, 
+    wrongAnswer: number, 
+    newWords: number
+  }
+}
+
+interface IDailyStat {
+  date: string;
+  games: IGamesStatistic;
+  allWordsDaily: number;
+  wordsList: string[];
+}
+
+export { 
+  ICreateUser,
+  ILoginUser,
+  IWords,
+  IGeneralInfo,
+  IResponseWordsSignUser,
+  IWordsSignupUser,
+  IStoreGame,
+  IUserWord,
+  IOptionalGames,
+  IResponseGetWord,
+  IDailyStat,
+};
