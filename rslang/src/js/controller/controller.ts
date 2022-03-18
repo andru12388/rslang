@@ -160,6 +160,11 @@ class AppController extends GamesController {
     });
   }
 
+  hideBlockGame() {
+    const gamesBlock = <HTMLElement>document.querySelector('.games-block');
+    gamesBlock.classList.add('active-hidden');
+  }
+
   navigationPageWords() {
     this.main.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
@@ -619,8 +624,7 @@ class AppController extends GamesController {
             break;
           case 'learned-words':
             await this.outputDifficultWordPage();
-            const gamesBlock = <HTMLElement>document.querySelector('.games-block');
-            gamesBlock.classList.add('active-hidden');
+            this.hideBlockGame();
             utils.disabledLinkFromDifficultPage();
             await utils.getAllLearnedCardsWords(storeUserInfo);
             this.returnDifficultPageFromLearnedPage();

@@ -118,7 +118,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: difficultyWord,
-        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } },
       }),
     });
     const content = await response.json();
@@ -139,7 +139,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: difficultyWord,
-        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } },
       }),
     });
     const content = await response.json();
@@ -172,7 +172,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: levelWord,
-        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } },
       }),
     });
     const content = await response.json();
@@ -193,7 +193,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         difficulty: levelWord,
-        optional: { gamesAnswer: { correct: correct, wrong: wrong } } 
+        optional: { gamesAnswer: { correct: correct, wrong: wrong } },
       }),
     });
     const content = await response.json();
@@ -286,7 +286,7 @@ class RequestsApi {
       },
       body: JSON.stringify({
         learnedWords: 0,
-        optional: {... statistic} 
+        optional: { ... statistic },
       }),
     });
     const content = await response.json();

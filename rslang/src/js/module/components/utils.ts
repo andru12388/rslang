@@ -1,6 +1,6 @@
 import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IWordsSignupUser } from './interface';
 import RequestsApi from '../requestsApi';
-import { storeUserInfo, storage, storeGameRound } from '../../controller/storage';
+import { storeUserInfo, storage } from '../../controller/storage';
 import CreateCard from '../../view/createCardsWords';
 import Paginator from '../../view/pagination';
 import PreloaderPage from './preloader';
@@ -53,7 +53,18 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
-        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate, el.userWord);
+        const createCardsDifficulty = new CreateCard(
+          el._id, el.image, 
+          el.word, 
+          el.wordTranslate, 
+          el.transcription, 
+          el.audio, 
+          el.textMeaning, 
+          el.textMeaningTranslate, 
+          el.textExample, 
+          el.textExampleTranslate, 
+          el.userWord,
+        );
         createCardsDifficulty.renderCardsDifficultyPage();
       });
   }
@@ -65,7 +76,19 @@ class Utils {
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()
       .forEach((el: IWordsSignupUser) => {
-        const createCardsDifficulty = new CreateCard(el._id, el.image, el.word, el.wordTranslate, el.transcription, el.audio, el.textMeaning, el.textMeaningTranslate, el.textExample, el.textExampleTranslate, el.userWord);
+        const createCardsDifficulty = new CreateCard(
+          el._id, 
+          el.image, 
+          el.word, 
+          el.wordTranslate, 
+          el.transcription, 
+          el.audio, 
+          el.textMeaning, 
+          el.textMeaningTranslate, 
+          el.textExample, 
+          el.textExampleTranslate, 
+          el.userWord,
+        );
         createCardsDifficulty.renderCardsLearnedPage();
       });
   }

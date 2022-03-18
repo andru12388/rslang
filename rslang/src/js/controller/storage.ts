@@ -40,10 +40,10 @@ const dailyStat: IDailyStat = {
   date: new Date().toLocaleDateString(),
   games: {
     audio: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 },
-    sprint: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 }
+    sprint: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 },
   },
   allWordsDaily: 0,
-  wordsList: []
+  wordsList: [],
 };
 
 window.addEventListener('load', () => {

@@ -143,5 +143,5 @@ export {
   IUserWord,
   IOptionalGames,
   IResponseGetWord,
-  IDailyStat
+  IDailyStat,
 };

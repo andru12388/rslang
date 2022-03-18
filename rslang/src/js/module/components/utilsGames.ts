@@ -37,12 +37,12 @@ class UtilsGames {
   async saveStatisticInDataBase({ trueAnswerGame, falseAnswerGame }: IStoreGame) {
     const totalSprintWords = <HTMLButtonElement>document.querySelector('.total-sprint-words');
     const percentAnswerSprint = <HTMLButtonElement>document.querySelector('.percent-answer-sprint');
-    const longSeriesSprint = <HTMLButtonElement>document.querySelector('.long-series-sprint');
+    // const longSeriesSprint = <HTMLButtonElement>document.querySelector('.long-series-sprint');
     const totalAudioWords = <HTMLButtonElement>document.querySelector('.total-audio-words');
     const percentAnswerAudio = <HTMLButtonElement>document.querySelector('.percent-answer-audio');
-    const longSeriesAudio = <HTMLButtonElement>document.querySelector('.long-series-audio');
+    // const longSeriesAudio = <HTMLButtonElement>document.querySelector('.long-series-audio');
     const totalNewWords = <HTMLButtonElement>document.querySelector('.total-new-words');
-    const learnedWordsStat = <HTMLButtonElement>document.querySelector('.learned-words-stat');
+    // const learnedWordsStat = <HTMLButtonElement>document.querySelector('.learned-words-stat');
     const percentCorrectAnswer = <HTMLButtonElement>document.querySelector('.percent-correct-answer');
     try {
       const response = await api.getStatistic(storeUserInfo);
@@ -79,7 +79,7 @@ class UtilsGames {
       // learnedWordsStat.textContent = `${}`;
       percentCorrectAnswer.textContent = `${percentCurrentAll}%`;
     } catch (error) {
-      
+      await api.updateStatistic(storeUserInfo, dailyStat);
     }
   }
 
@@ -87,10 +87,11 @@ class UtilsGames {
 
   async getGamesWordsSprint(group: number, page: number) {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+    let count = page;
     while (storeGameRound.gameSprint.length < 80) {
-      page++;
-      if (page > 29) page = 0;
-      const newGameSprint = [...Object.values(await api.getTextbookWords(group, page))];
+      count++;
+      if (count > 29) count = 0;
+      const newGameSprint = [...Object.values(await api.getTextbookWords(group, count))];
       storeGameRound.gameSprint = [...storeGameRound.gameSprint, ...newGameSprint];
     }
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
@@ -102,7 +103,8 @@ class UtilsGames {
   }
 
   async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
-    let { groupWords: newGroupWords, pageWords: newPageWords } = storeGeneral;
+    const { groupWords: newGroupWords } = storeGeneral;
+    let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameSprint = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()];
@@ -181,7 +183,8 @@ class UtilsGames {
   }
 
   async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
-    let { groupWords: newGroupWords, pageWords: newPageWords } = storeGeneral;
+    const { groupWords: newGroupWords } = storeGeneral;
+    let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
       .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
       .flat()];
@@ -283,7 +286,9 @@ class UtilsGames {
   }
 
   async actionOnTrueRequestWrongResult(wordId: string) {
-    let { gamesAnswer, difficultyWord } = await this.saveResponseGameWordInStore(wordId);
+    const response = await this.saveResponseGameWordInStore(wordId);
+    let { difficultyWord } = response;
+    const { gamesAnswer } = response;
     if (difficultyWord === 'easy') {
       difficultyWord = 'normal';
     }
@@ -299,7 +304,9 @@ class UtilsGames {
   }
 
   async actionOnTrueRequestCorrectResult(wordId: string) {
-    let { gamesAnswer, difficultyWord } = await this.saveResponseGameWordInStore(wordId);
+    const response = await this.saveResponseGameWordInStore(wordId);
+    let { difficultyWord } = response;
+    const { gamesAnswer } = response;
     const differenceAnswer = <number>gamesAnswer.correct - <number>gamesAnswer.wrong;
     (<number>gamesAnswer.correct)++;
     if (differenceAnswer >= 3 && difficultyWord !== 'hard') {

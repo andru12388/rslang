@@ -58,7 +58,7 @@ class GamesController {
     const totalScores = <HTMLElement>document.querySelector('.total-score');
     const total = totalScores.textContent;
     this.resultGameSprint.textContent = `- ${total} очков`;
-    clearInterval(<NodeJS.Timer>this.interval);
+    clearInterval(<NodeJS.Timer> this.interval);
     await this.cancelAllRoundsGame(storeGameRound);
     this.playAudioResultGameAudio();
     this.exitPopupGame();
@@ -74,7 +74,7 @@ class GamesController {
       time.textContent = `${timeRound}`;
       timeRound--;
       if (timeRound === -1) {
-        clearInterval(<NodeJS.Timer>this.interval);
+        clearInterval(<NodeJS.Timer> this.interval);
         await this.cancelRoundGameSprint();
       }
     }, 1000);
@@ -457,7 +457,7 @@ class GamesController {
       storeGameRound.countGame = 0;
       storeGameRound.countCorrectAnswerInRowSprint = 0;
       storeGameRound.countPaginationSprint = 0;
-      clearInterval(<NodeJS.Timer>this.interval);
+      clearInterval(<NodeJS.Timer> this.interval);
       for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
       for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
       this.footer.classList.remove('active-hidden');
