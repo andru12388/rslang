@@ -22,6 +22,8 @@ class AppController extends GamesController {
 
   popupAbout = <HTMLElement>document.querySelector('.popup-about');
 
+  popupStatistic = <HTMLElement>document.querySelector('.popup-statistic');
+
   menuBurg = <HTMLElement>document.querySelector('.menu-btn');
 
   menuHeader = <HTMLElement>document.querySelector('.menu-header');
@@ -42,6 +44,8 @@ class AppController extends GamesController {
 
   aboutCloseBtn = <HTMLElement>document.querySelector('.about-close-btn');
 
+  statisticCloseBtn = <HTMLElement>document.querySelector('.statistic-close-btn');
+
   messageError = <HTMLElement>document.querySelector('.message-error');
 
   messageErrorSignin = <HTMLElement>document.querySelector('.message-error-signin');
@@ -55,6 +59,8 @@ class AppController extends GamesController {
   linkHome = <HTMLElement>document.querySelector('#link-home');
 
   linkTeam = <HTMLElement>document.querySelector('#link-team');
+
+  linkStatistic = <HTMLElement>document.querySelector('#link-statistic');
 
   logoLinkHome = <HTMLElement>document.querySelector('.logo');
 
@@ -468,6 +474,20 @@ class AppController extends GamesController {
     });
   }
 
+  hideStatistic() {
+    this.statisticCloseBtn.addEventListener('click', () => {
+      this.popupStatistic.classList.remove('active');
+    });
+  }
+
+  goToStatistic() {
+    this.linkStatistic.addEventListener('click', () => {
+      this.popupStatistic.classList.add('active');
+      this.menuBurg.click();
+      this.hideStatistic();
+    });
+  }
+
   showPersonalAccount() {
     this.logOutBox.classList.add('active');
     this.signIn.classList.add('active-hidden');
@@ -636,6 +656,7 @@ class AppController extends GamesController {
     this.goToDifficultWordsPage();
     this.showHideTeamPage();
     this.showHideLearningProgress();
+    this.goToStatistic();
   }
 }
 

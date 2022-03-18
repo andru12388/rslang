@@ -244,7 +244,7 @@ class RenderView {
               </ul>
             </li>
             <li class="menu-list-item menu-list-item-statistic active-hidden">
-              <a href="" class="menu-link"><i class="fas fa-trophy"></i>Статистика</a>
+              <a href="" class="menu-link" id="link-statistic"><i class="fas fa-trophy"></i>Статистика</a>
             </li>
             <li class="menu-list-item">
               <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>Команда</a>
@@ -347,6 +347,52 @@ class RenderView {
           <button class="button-exit">Закончить игру</button>
           <button class="button-repeat-from-textbook active-hidden">Еще раз</button>
           <button class="button-exit-from-textbook active-hidden">Закончить игру</button>
+        </div>
+      </div>
+      <div class="popup-statistic">
+        <div class="statistic-close-btn"></div>
+        <h3 class="title-statistic">Краткосрочная статистика за сегодня</h3>
+        <div class="box-statistic game-sprint-statistic">
+          <h4 class="title-games-stat title-sprint-stat">Спринт</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-sprint-words"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint"></span></p>
+            </li>
+          </ul>
+        </div>
+        <div class="box-statistic game-audio-statistic">
+          <h4 class="title-games-stat title-audio-stat">Аудиовызов</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-audio-words"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio"></span></p>
+            </li>
+          </ul>
+        </div>
+        <div class="box-statistic all-words-statistic">
+          <h4 class="title-games-stat title-audio-stat">Статистика по словам</h4>
+          <ul>
+            <li>
+              <p class="text-statistic">Всего новых слов: <span class="total-new-words"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Изученных слов: <span class="learned-words-stat"></span></p>
+            </li>
+            <li>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer"></span></p>
+            </li>
+          </ul>
         </div>
       </div>
     `;
