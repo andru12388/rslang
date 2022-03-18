@@ -104,6 +104,12 @@ class RenderView {
           <h2 class="title-game-audio-call">Спринт</h2>
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>🡄</button> - ответить неверно</p>
+          <p><button>🡆</button> - ответить верно</p>
+        </details>
         <p class="selection-title-game">Выберите сложность игры</p>
         <div class="levels-game">
           <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
@@ -128,6 +134,13 @@ class RenderView {
           <h2 class="title-game-audio-call">Аудиовызов</h2>
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>SPACE</button> - не знаю</p>
+          <p><button>ENTER</button> - далее</p>
+          <p><button>1,2,3,4,5</button> - варианты ответов</p>
+        </details>
         <p class="selection-title-game">Выберите сложность игры</p>
         <div class="levels-game">
           <div class="levels-game-item item-1" data-group="0">1 (A1)</div>
@@ -152,6 +165,13 @@ class RenderView {
           <h2 class="title-game-audio-call">Аудиовызов</h2>
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>SPACE</button> - не знаю</p>
+          <p><button>ENTER</button> - далее</p>
+          <p><button>1,2,3,4,5</button> - варианты ответов</p>
+        </details>
         <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
           <button class="btn-cancel">Выйти</button>
@@ -168,6 +188,12 @@ class RenderView {
           <h2 class="title-game-audio-call">Спринт</h2>
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
+        <details class="description-keyboard">
+          <summary>Управление с клавиатуры</summary>
+          <p><button>F</button> - полноэкранный режим</p>
+          <p><button>🡄</button> - ответить неверно</p>
+          <p><button>🡆</button> - ответить верно</p>
+        </details>
         <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
           <button class="btn-cancel">Выйти</button>
