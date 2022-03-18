@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IStoreGame } from './components/interface';
+import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IDailyStat } from './components/interface';
 import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
@@ -260,6 +260,35 @@ class RequestsApi {
     if (response.ok) {
       preloaderPage.hidePreloaderPage();
     }
+    const content = await response.json();
+    return content;
+  }
+
+  async getStatistic({ userId, token }: ILoginUser): Promise<IDailyStat> {
+    const response = await fetch(`${this.users}/${userId}/statistics`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const content = await response.json();
+    return content;
+  }
+
+  async updateStatistic({ userId, token }: ILoginUser, statistic: IDailyStat): Promise<IDailyStat> {
+    const response = await fetch(`${this.users}/${userId}/statistics`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        learnedWords: 0,
+        optional: {... statistic} 
+      }),
+    });
     const content = await response.json();
     return content;
   }

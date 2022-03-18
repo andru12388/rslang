@@ -356,13 +356,13 @@ class RenderView {
           <h4 class="title-games-stat title-sprint-stat">Спринт</h4>
           <ul>
             <li>
-              <p class="text-statistic">Всего новых слов: <span class="total-sprint-words"></span></p>
+              <p class="text-statistic">Всего новых слов: <span class="total-sprint-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint"></span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint"></span></p>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint">0</span></p>
             </li>
           </ul>
         </div>
@@ -370,13 +370,13 @@ class RenderView {
           <h4 class="title-games-stat title-audio-stat">Аудиовызов</h4>
           <ul>
             <li>
-              <p class="text-statistic">Всего новых слов: <span class="total-audio-words"></span></p>
+              <p class="text-statistic">Всего новых слов: <span class="total-audio-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio"></span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio"></span></p>
+              <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio">0</span></p>
             </li>
           </ul>
         </div>
@@ -384,13 +384,13 @@ class RenderView {
           <h4 class="title-games-stat title-audio-stat">Статистика по словам</h4>
           <ul>
             <li>
-              <p class="text-statistic">Всего новых слов: <span class="total-new-words"></span></p>
+              <p class="text-statistic">Всего новых слов: <span class="total-new-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Изученных слов: <span class="learned-words-stat"></span></p>
+              <p class="text-statistic">Изученных слов: <span class="learned-words-stat">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer"></span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0</span></p>
             </li>
           </ul>
         </div>

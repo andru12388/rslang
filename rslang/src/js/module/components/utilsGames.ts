@@ -1,6 +1,6 @@
 import RequestsApi from '../requestsApi';
-import { storeGameRound, storeUserInfo, storage } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord, IWords } from './interface';
+import { storeGameRound, storeUserInfo, storage, dailyStat } from '../../controller/storage';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord, IDailyStat } from './interface';
 
 const api = new RequestsApi();
 
@@ -19,6 +19,67 @@ class UtilsGames {
         .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
         .flat()];
       storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
+    }
+  }
+
+  saveStatisticStorage(dataResponse: IDailyStat) {
+    dailyStat.date = dataResponse.date;
+    dailyStat.allWordsDaily = dataResponse.allWordsDaily;
+    dailyStat.games = dataResponse.games;
+    dailyStat.wordsList = dataResponse.wordsList;
+  }
+
+  uniqueNewWords({ trueAnswerGame, falseAnswerGame }: IStoreGame): Set<string> {
+    const uniqueValue = new Set([...Object.keys(trueAnswerGame), ...Object.keys(falseAnswerGame), ...dailyStat.wordsList]);
+    return uniqueValue;
+  }
+
+  async saveStatisticInDataBase({ trueAnswerGame, falseAnswerGame }: IStoreGame) {
+    const totalSprintWords = <HTMLButtonElement>document.querySelector('.total-sprint-words');
+    const percentAnswerSprint = <HTMLButtonElement>document.querySelector('.percent-answer-sprint');
+    const longSeriesSprint = <HTMLButtonElement>document.querySelector('.long-series-sprint');
+    const totalAudioWords = <HTMLButtonElement>document.querySelector('.total-audio-words');
+    const percentAnswerAudio = <HTMLButtonElement>document.querySelector('.percent-answer-audio');
+    const longSeriesAudio = <HTMLButtonElement>document.querySelector('.long-series-audio');
+    const totalNewWords = <HTMLButtonElement>document.querySelector('.total-new-words');
+    const learnedWordsStat = <HTMLButtonElement>document.querySelector('.learned-words-stat');
+    const percentCorrectAnswer = <HTMLButtonElement>document.querySelector('.percent-correct-answer');
+    try {
+      const response = await api.getStatistic(storeUserInfo);
+      this.saveStatisticStorage(response);
+      const totalAnswer = Object.keys(trueAnswerGame).length + Object.keys(falseAnswerGame).length;
+      if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+        dailyStat.games.audio.correctAnswer += Object.keys(trueAnswerGame).length;
+        dailyStat.games.audio.wrongAnswer += Object.keys(falseAnswerGame).length;
+        dailyStat.games.audio.newWords += this.uniqueNewWords(storeGameRound).size;
+      }
+      if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
+        dailyStat.games.sprint.correctAnswer += Object.keys(trueAnswerGame).length;
+        dailyStat.games.sprint.wrongAnswer += Object.keys(falseAnswerGame).length;
+        dailyStat.games.sprint.newWords += this.uniqueNewWords(storeGameRound).size;
+      }
+      dailyStat.date = new Date().toLocaleDateString();
+      dailyStat.allWordsDaily += totalAnswer;
+      dailyStat.wordsList = [...this.uniqueNewWords(storeGameRound)];
+
+      const totalCurrentAnswerAll = dailyStat.games.audio.correctAnswer + dailyStat.games.sprint.correctAnswer;
+      const totalWordsAudio = dailyStat.games.audio.correctAnswer + dailyStat.games.audio.wrongAnswer;
+      const totalWordsSprint = dailyStat.games.sprint.correctAnswer + dailyStat.games.sprint.wrongAnswer;
+      const percentSprint = (dailyStat.games.sprint.correctAnswer / totalWordsSprint) * 100;
+      const percentAudio = (dailyStat.games.audio.correctAnswer / totalWordsAudio) * 100;
+      const percentCurrentAll = (totalCurrentAnswerAll / dailyStat.allWordsDaily) * 100;
+      
+      totalSprintWords.textContent = `${dailyStat.games.sprint.newWords}`;
+      percentAnswerSprint.textContent = `${percentSprint}%`;
+
+      totalAudioWords.textContent = `${dailyStat.games.audio.newWords}`;
+      percentAnswerAudio.textContent = `${percentAudio}%`;
+
+      totalNewWords.textContent = `${dailyStat.games.sprint.newWords + dailyStat.games.audio.newWords}`;
+      // learnedWordsStat.textContent = `${}`;
+      percentCorrectAnswer.textContent = `${percentCurrentAll}%`;
+    } catch (error) {
+      
     }
   }
 

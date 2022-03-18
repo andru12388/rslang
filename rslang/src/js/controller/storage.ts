@@ -1,4 +1,4 @@
-import { ILoginUser, IGeneralInfo, IStoreGame } from '../module/components/interface';
+import { ILoginUser, IGeneralInfo, IStoreGame, IDailyStat } from '../module/components/interface';
 
 const storeUserInfo: ILoginUser = {
   message: null,
@@ -36,6 +36,16 @@ const storeGameRound: IStoreGame = {
   difficultyWord: '',
 };
 
+const dailyStat: IDailyStat = {
+  date: new Date().toLocaleDateString(),
+  games: {
+    audio: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 },
+    sprint: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 }
+  },
+  allWordsDaily: 0,
+  wordsList: []
+};
+
 window.addEventListener('load', () => {
   if (localStorage.getItem('general-info')) {
     storage = JSON.parse(<string>localStorage.getItem('general-info'));
@@ -46,4 +56,4 @@ window.addEventListener('load', () => {
 //   localStorage.setItem('general-info', JSON.stringify(storage));
 // });
 
-export { storeUserInfo, storage, storeGameRound };
+export { storeUserInfo, storage, storeGameRound, dailyStat };

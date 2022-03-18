@@ -112,6 +112,26 @@ interface IResponseGetWord {
   difficultyWord: string;
 }
 
+interface IGamesStatistic {
+  audio: { 
+    correctAnswer: number, 
+    wrongAnswer: number, 
+    newWords: number 
+  },
+  sprint: { 
+    correctAnswer: number, 
+    wrongAnswer: number, 
+    newWords: number
+  }
+}
+
+interface IDailyStat {
+  date: string;
+  games: IGamesStatistic;
+  allWordsDaily: number;
+  wordsList: string[];
+}
+
 export { 
   ICreateUser,
   ILoginUser,
@@ -122,5 +142,6 @@ export {
   IStoreGame,
   IUserWord,
   IOptionalGames,
-  IResponseGetWord
+  IResponseGetWord,
+  IDailyStat
 };
