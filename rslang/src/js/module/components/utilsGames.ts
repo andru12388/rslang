@@ -1,6 +1,6 @@
 import RequestsApi from '../requestsApi';
-import { storeGameRound, storeUserInfo, storage, dailyStat } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord, IDailyStat } from './interface';
+import { storeGameRound, storeUserInfo, storage } from '../../controller/storage';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord } from './interface';
 
 const api = new RequestsApi();
 

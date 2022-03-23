@@ -32,11 +32,12 @@ class StatisticGames {
   recordNewWordsGamesInStatistic({ trueAnswerGame, falseAnswerGame }: IStoreGame, { wordsList: { allWordsList } }: IDailyStat): number {
     const totalAnswer = [...Object.keys(trueAnswerGame), ...Object.keys(falseAnswerGame)];
     return totalAnswer.reduce((total, item) => {
+      let count = total;
       if (allWordsList.includes(item)) {
-        return total;
+        return count;
       }
-      total++;
-      return total;
+      count++;
+      return count;
     }, 0);
   }
 
