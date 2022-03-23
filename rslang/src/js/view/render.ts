@@ -105,7 +105,7 @@ class RenderView {
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
           <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
@@ -135,7 +135,7 @@ class RenderView {
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button>SPACE</button> - не знаю</p>
           <p><button>ENTER</button> - далее</p>
@@ -166,7 +166,7 @@ class RenderView {
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button>SPACE</button> - не знаю</p>
           <p><button>ENTER</button> - далее</p>
@@ -189,7 +189,7 @@ class RenderView {
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
           <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
@@ -247,7 +247,7 @@ class RenderView {
               <a href="" class="menu-link" id="link-statistic"><i class="fas fa-trophy"></i>Статистика</a>
             </li>
             <li class="menu-list-item">
-              <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>Команда</a>
+              <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>О приложении</a>
             </li>
           </ul>
         </nav>
@@ -324,7 +324,7 @@ class RenderView {
             <p class="popap-description-card">Подробная статистика твоих достижений, изученных слов и ошибок. Ставь цели и вдохновляйся на новые достижения!</p>
           </div>
         </div>
-        <h2 class="popap-team">Команда</h2>
+        <h2 class="popap-team">Разработчик</h2>
         <figure class="my-foto">
 					<img class="img-responsive" src="./assets/img/Avatar.jpg" alt="My photo">
 				</figure>

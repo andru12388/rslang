@@ -233,16 +233,23 @@
     border-radius: 1.5rem
 
 @media (max-width: 700px)
+  .textbook-content
+    display: flex
+    flex-direction: column
+  .textbook-title
+    order: -2
+  .games-block
+    order: -1
   .card-words
-    width: 16rem
+    width: 22rem
   .card-words-img
-    width: 16rem
-    height: 10.25rem
+    width: 22rem
+    height: 13.25rem
   .word
-    font-size: 1.2rem
+    font-size: 1.6rem
   .word-translate,
   .word-transcription
-    font-size: 1rem
+    font-size: 1.2rem
   .icon-audio
     width: 1.1rem
     height: 0.85rem
@@ -261,7 +268,10 @@
     font-size: 25px
     width: 50px
     height: 50px
+    bottom: 70px
 
+  .selection-title-game 
+    font-size: 1.1rem
   .back-to-textbook,
   .link-study-word,
   .back-to-difficult
@@ -304,6 +314,25 @@
     text-transform: uppercase
     padding: 0.4rem 0.8rem
     border-radius: 1.2rem
+  .pagination-textbook
+    width: 100%
+    justify-content: space-evenly
+    background: rgba(#ccc, 1)
+    backdrop-filter: blur(8rem)
+    padding: 1rem
+    margin: 0
+    position: fixed
+    bottom: 0
+    z-index: 20
+    left: 50%
+    transform: translateX(-50%)
+  .box-statistic
+    width: 26rem
+  .title-statistic
+    font-size: 1.2rem
+  .statistic-close-btn
+    width: 1.5rem
+    height: 1.5rem
 
 
 @media (max-width: 570px)
@@ -369,6 +398,10 @@
     transform: translateX(-50%)
   .top
     bottom: 70px
+  .selection-title-game 
+    font-size: 1rem
+    width: 70%
+    text-align: center
 
   .nav-difficult-words
     flex-direction: column
@@ -380,6 +413,14 @@
     border-radius: 1.2rem
     margin-bottom: 1rem
     width: 12rem
+  .game-sprint
+    width: 23rem
+  .timer-game
+    width: 80px
+    height: 80px
+  .card-game-sprint
+    width: 22rem
+  
 
 
 @media (max-width: 500px)
@@ -487,6 +528,21 @@
   .block-button-popap-game
     width: 20rem
 
+  .text-statistic
+    font-size: 0.8rem
+  .title-games-stat
+    font-size: 1rem
+  .box-statistic
+    width: 19rem
+    padding: 0.5rem
+  .title-statistic
+    font-size: 1rem
+  .statistic-close-btn
+    width: 1rem
+    height: 1rem
+  .box-statistic ul
+    padding-left: 1.4rem
+
 @media (max-width: 400px)
   .header .h2
     visibility: hidden
@@ -524,8 +580,8 @@
     padding: 0.5rem
   .selection-title-game
     font-size: 1rem
-    font-weight: 500
-    margin-top: 3rem
+    font-weight: 700
+    margin-top: 1rem
     margin-bottom: 2rem
   .block-answer-game
     align-items: stretch
@@ -534,7 +590,7 @@
     gap: 0.5rem
     width: 16rem
   .button-game
-    font-size: 0.8rem
+    font-size: 1rem
     font-weight: 400
     border-radius: 1.2rem
   .box-correct-answer .card-words-img
@@ -563,6 +619,21 @@
   .game-audio-fullscreen
     width: 1.4rem
     height: 1.5rem
+  .popup-game-level,
+  .wrapper-games
+    height: calc(100vh - 9rem)
+
+  .block-score
+    flex-direction: column
+  .point-word
+    margin-top: 1rem
+    order: 2
+  .total-point
+    order: 1
+  .game-sprint
+    width: 17rem
+  .card-game-sprint
+    width: 17rem
   
 
 @media (max-width: 340px)
@@ -583,3 +654,17 @@
         left: -4.5rem
         font-size: 0.7rem
         width: 9.5rem
+  .text-statistic
+    font-size: 0.7rem
+  .title-games-stat
+    font-size: 0.9rem
+  .box-statistic
+    width: 17rem
+    padding: 0.4rem
+  .title-statistic
+    font-size: 0.9rem
+  .statistic-close-btn
+    width: 0.8rem
+    height: 0.8rem
+  .box-statistic ul
+    padding-left: 1.2rem
