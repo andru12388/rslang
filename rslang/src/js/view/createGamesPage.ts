@@ -17,7 +17,7 @@ class CreateGamePage {
     this.main = <HTMLElement>document.querySelector('.main');
   }
 
-  createRoundGameAudio() {
+  createRoundGameAudio(): void {
     this.main.innerHTML = '';
     const page = `
       <div class="wrapper-games">
@@ -39,7 +39,7 @@ class CreateGamePage {
     this.main.insertAdjacentHTML('beforeend', page);
   }
 
-  createCorrectAnswer() {
+  createCorrectAnswer(): void {
     const boxCorrectAnswer = <HTMLElement>document.querySelector('.box-correct-answer');
     boxCorrectAnswer.innerHTML = '';
     const blockAnswer = `
@@ -55,7 +55,7 @@ class CreateGamePage {
     boxCorrectAnswer.insertAdjacentHTML('beforeend', blockAnswer);
   }
 
-  startGameSprint() {
+  startGameSprint(): void {
     this.main.innerHTML = '';
     const page = `
       <div class="wrapper-games">
@@ -90,7 +90,7 @@ class CreateGamePage {
     this.main.insertAdjacentHTML('beforeend', page);
   }
 
-  createRoundGameSprint() {
+  createRoundGameSprint(): void {
     const questionBox = <HTMLElement>document.querySelector('.question-box');
     questionBox.innerHTML = '';
     const blockQuestion = `

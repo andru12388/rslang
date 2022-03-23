@@ -11,7 +11,7 @@ class Paginator {
     this.parentElement = parentElement;
   }
 
-  renderNumberPage(pageNum: number) {
+  renderNumberPage(pageNum: number): void {
     const button = document.createElement('button');
     button.setAttribute('data-page', `${pageNum - 1}`);
     button.textContent = `${pageNum}`;
@@ -22,7 +22,7 @@ class Paginator {
     this.parentElement.append(button);
   }
 
-  renderLinkPagination(pageNum: number) {
+  renderLinkPagination(pageNum: number): void {
     const button = document.createElement('button');
     switch (pageNum) {
       case 1:
@@ -43,14 +43,14 @@ class Paginator {
     }
   }
 
-  renderDotsPagination() {
+  renderDotsPagination(): void {
     const span = document.createElement('span');
     span.classList.add('rest-page');
     span.innerHTML = '...';
     this.parentElement.append(span);
   }
 
-  renderPagination() {
+  renderPagination(): void {
     if (this.all === 1) {
       return;
     }

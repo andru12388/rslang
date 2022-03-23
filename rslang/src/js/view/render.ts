@@ -20,7 +20,7 @@ class RenderView {
     `;
   }
 
-  renderLevelsWords() {
+  renderLevelsWords(): string {
     return `
       <div class="difficulty-levels-words">
         <div class="levels-item item-1" data-group="0">1 (A1)</div>
@@ -33,7 +33,7 @@ class RenderView {
     `;
   }
 
-  renderTextbook() {
+  renderTextbook(): string {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-textbook">
@@ -66,12 +66,12 @@ class RenderView {
     `;
   }
 
-  renderDifficultyPage() {
+  renderDifficultyPage(): string {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-difficult-words">
         <div class="nav-difficult-words">
-          <button href="" class="back-to-textbook">🠔 назад в учебник</button>
+          <button href="" class="back-to-textbook"><i class="fas fa-arrow-left"></i> назад в учебник</button>
           <button href="" class="back-to-difficult" disabled>Сложные слова</button>
           <button href="" class="link-study-word">Изученные слова</button>
         </div>
@@ -97,7 +97,7 @@ class RenderView {
     `;
   }
 
-  renderGameSprint() {
+  renderGameSprint(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -105,10 +105,10 @@ class RenderView {
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
-          <p><button>🡄</button> - ответить неверно</p>
-          <p><button>🡆</button> - ответить верно</p>
+          <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
+          <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
         </details>
         <p class="selection-title-game">Выберите сложность игры</p>
         <div class="levels-game">
@@ -127,7 +127,7 @@ class RenderView {
     `;
   }
 
-  renderGameAudioCall() {
+  renderGameAudioCall(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -135,7 +135,7 @@ class RenderView {
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button>SPACE</button> - не знаю</p>
           <p><button>ENTER</button> - далее</p>
@@ -158,7 +158,7 @@ class RenderView {
     `;
   }
 
-  renderGameAudioCallFromTextbook() {
+  renderGameAudioCallFromTextbook(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -166,7 +166,7 @@ class RenderView {
           <p class="description-game-audio">Игра Аудиовызов улучшает твое восприятие речи на слух.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
           <p><button>SPACE</button> - не знаю</p>
           <p><button>ENTER</button> - далее</p>
@@ -181,7 +181,7 @@ class RenderView {
     `;
   }
 
-  renderGameSprintFromTextbook() {
+  renderGameSprintFromTextbook(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -189,10 +189,10 @@ class RenderView {
           <p class="description-game-audio">Игра Спринт учит быстро переводить слова.</p>
         </div>
         <details class="description-keyboard">
-          <summary>Управление с клавиатуры</summary>
+          <summary>Управление на клавиатуре</summary>
           <p><button>F</button> - полноэкранный режим</p>
-          <p><button>🡄</button> - ответить неверно</p>
-          <p><button>🡆</button> - ответить верно</p>
+          <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
+          <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
         </details>
         <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
@@ -203,7 +203,7 @@ class RenderView {
     `;
   }
 
-  selectionRenderPage() {
+  selectionRenderPage(): string {
     if (localStorage.getItem('general-info')) {
       const store = JSON.parse(<string>localStorage.getItem('general-info'));
       switch (store.currentPage) {
@@ -247,7 +247,7 @@ class RenderView {
               <a href="" class="menu-link" id="link-statistic"><i class="fas fa-trophy"></i>Статистика</a>
             </li>
             <li class="menu-list-item">
-              <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>Команда</a>
+              <a href="" class="menu-link" id="link-team"><i class="fas fa-user-friends"></i>О приложении</a>
             </li>
           </ul>
         </nav>
@@ -324,7 +324,7 @@ class RenderView {
             <p class="popap-description-card">Подробная статистика твоих достижений, изученных слов и ошибок. Ставь цели и вдохновляйся на новые достижения!</p>
           </div>
         </div>
-        <h2 class="popap-team">Команда</h2>
+        <h2 class="popap-team">Разработчик</h2>
         <figure class="my-foto">
 					<img class="img-responsive" src="./assets/img/Avatar.jpg" alt="My photo">
 				</figure>
@@ -359,7 +359,7 @@ class RenderView {
               <p class="text-statistic">Всего новых слов: <span class="total-sprint-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0%</span></p>
             </li>
             <li>
               <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint">0</span></p>
@@ -373,7 +373,7 @@ class RenderView {
               <p class="text-statistic">Всего новых слов: <span class="total-audio-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0%</span></p>
             </li>
             <li>
               <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio">0</span></p>
@@ -390,7 +390,7 @@ class RenderView {
               <p class="text-statistic">Изученных слов: <span class="learned-words-stat">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0%</span></p>
             </li>
           </ul>
         </div>

@@ -1,13 +1,13 @@
 import RequestsApi from '../requestsApi';
-import { storeGameRound, storeUserInfo, storage, dailyStat } from '../../controller/storage';
-import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord, IDailyStat } from './interface';
+import { storeGameRound, storeUserInfo, storage } from '../../controller/storage';
+import { ILoginUser, IGeneralInfo, IResponseWordsSignUser, IStoreGame, IResponseGetWord } from './interface';
 
 const api = new RequestsApi();
 
 class UtilsGames {
   audioLevelUp = new Audio() as HTMLAudioElement;
 
-  async getGamesWordsFromDifficultyPage(selectGame: string) {
+  async getGamesWordsFromDifficultyPage(selectGame: string): Promise<void> {
     if (selectGame === 'game-sprint') {
       storeGameRound.gameSprint = [...Object.values(await api.getDifficultWordsSignupUser(storeUserInfo))
         .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
@@ -22,70 +22,9 @@ class UtilsGames {
     }
   }
 
-  saveStatisticStorage(dataResponse: IDailyStat) {
-    dailyStat.date = dataResponse.date;
-    dailyStat.allWordsDaily = dataResponse.allWordsDaily;
-    dailyStat.games = dataResponse.games;
-    dailyStat.wordsList = dataResponse.wordsList;
-  }
-
-  uniqueNewWords({ trueAnswerGame, falseAnswerGame }: IStoreGame): Set<string> {
-    const uniqueValue = new Set([...Object.keys(trueAnswerGame), ...Object.keys(falseAnswerGame), ...dailyStat.wordsList]);
-    return uniqueValue;
-  }
-
-  async saveStatisticInDataBase({ trueAnswerGame, falseAnswerGame }: IStoreGame) {
-    const totalSprintWords = <HTMLButtonElement>document.querySelector('.total-sprint-words');
-    const percentAnswerSprint = <HTMLButtonElement>document.querySelector('.percent-answer-sprint');
-    // const longSeriesSprint = <HTMLButtonElement>document.querySelector('.long-series-sprint');
-    const totalAudioWords = <HTMLButtonElement>document.querySelector('.total-audio-words');
-    const percentAnswerAudio = <HTMLButtonElement>document.querySelector('.percent-answer-audio');
-    // const longSeriesAudio = <HTMLButtonElement>document.querySelector('.long-series-audio');
-    const totalNewWords = <HTMLButtonElement>document.querySelector('.total-new-words');
-    // const learnedWordsStat = <HTMLButtonElement>document.querySelector('.learned-words-stat');
-    const percentCorrectAnswer = <HTMLButtonElement>document.querySelector('.percent-correct-answer');
-    try {
-      const response = await api.getStatistic(storeUserInfo);
-      this.saveStatisticStorage(response);
-      const totalAnswer = Object.keys(trueAnswerGame).length + Object.keys(falseAnswerGame).length;
-      if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
-        dailyStat.games.audio.correctAnswer += Object.keys(trueAnswerGame).length;
-        dailyStat.games.audio.wrongAnswer += Object.keys(falseAnswerGame).length;
-        dailyStat.games.audio.newWords += this.uniqueNewWords(storeGameRound).size;
-      }
-      if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
-        dailyStat.games.sprint.correctAnswer += Object.keys(trueAnswerGame).length;
-        dailyStat.games.sprint.wrongAnswer += Object.keys(falseAnswerGame).length;
-        dailyStat.games.sprint.newWords += this.uniqueNewWords(storeGameRound).size;
-      }
-      dailyStat.date = new Date().toLocaleDateString();
-      dailyStat.allWordsDaily += totalAnswer;
-      dailyStat.wordsList = [...this.uniqueNewWords(storeGameRound)];
-
-      const totalCurrentAnswerAll = dailyStat.games.audio.correctAnswer + dailyStat.games.sprint.correctAnswer;
-      const totalWordsAudio = dailyStat.games.audio.correctAnswer + dailyStat.games.audio.wrongAnswer;
-      const totalWordsSprint = dailyStat.games.sprint.correctAnswer + dailyStat.games.sprint.wrongAnswer;
-      const percentSprint = (dailyStat.games.sprint.correctAnswer / totalWordsSprint) * 100;
-      const percentAudio = (dailyStat.games.audio.correctAnswer / totalWordsAudio) * 100;
-      const percentCurrentAll = (totalCurrentAnswerAll / dailyStat.allWordsDaily) * 100;
-      
-      totalSprintWords.textContent = `${dailyStat.games.sprint.newWords}`;
-      percentAnswerSprint.textContent = `${percentSprint}%`;
-
-      totalAudioWords.textContent = `${dailyStat.games.audio.newWords}`;
-      percentAnswerAudio.textContent = `${percentAudio}%`;
-
-      totalNewWords.textContent = `${dailyStat.games.sprint.newWords + dailyStat.games.audio.newWords}`;
-      // learnedWordsStat.textContent = `${}`;
-      percentCorrectAnswer.textContent = `${percentCurrentAll}%`;
-    } catch (error) {
-      await api.updateStatistic(storeUserInfo, dailyStat);
-    }
-  }
-
   // Sprint //
 
-  async getGamesWordsSprint(group: number, page: number) {
+  async getGamesWordsSprint(group: number, page: number): Promise<void> {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
     let count = page;
     while (storeGameRound.gameSprint.length < 80) {
@@ -97,12 +36,12 @@ class UtilsGames {
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
   }
 
-  async getGameSprintWords(group: number, page: number) {
+  async getGameSprintWords(group: number, page: number): Promise<void> {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
   }
 
-  async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+  async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo): Promise<void> {
     const { groupWords: newGroupWords } = storeGeneral;
     let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameSprint = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
@@ -131,7 +70,7 @@ class UtilsGames {
     return [...arrAllAnswer, word].sort(() => Math.random() - 0.5);
   }
 
-  factorPointsGameSprint({ countCorrectAnswerInRowSprint }: IStoreGame) {
+  factorPointsGameSprint({ countCorrectAnswerInRowSprint }: IStoreGame): void {
     const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
     this.audioLevelUp.src = './assets/audio/level-up.mp3';
     this.audioLevelUp.volume = 0.3;
@@ -155,7 +94,7 @@ class UtilsGames {
     }
   }
 
-  plusPointsInTotalScoreSprint() {
+  plusPointsInTotalScoreSprint(): void  {
     const totalScores = <HTMLElement>document.querySelector('.total-score');
     const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
     const total = Number(totalScores.textContent);
@@ -177,12 +116,12 @@ class UtilsGames {
 
   // Audiocall //
 
-  async getGamesWords(group: number, page: number) {
+  async getGamesWords(group: number, page: number): Promise<void> {
     storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
     storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
-  async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+  async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo): Promise<void> {
     const { groupWords: newGroupWords } = storeGeneral;
     let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
@@ -231,7 +170,55 @@ class UtilsGames {
     return correctIdWord;
   }
 
-  createResultTrueAnswer({ gameAudio, gameSprint, countGame, trueAnswerGame }: IStoreGame) {
+  async selectRequestGameAudio(): Promise<void> {
+    if (storage.currentPage === 'difficult-words') {
+      await this.getGamesWordsFromDifficultyPage('game-audio');
+    } else {
+      if (storage.isSignupUser) {
+        await this.getGamesWordsTextbookSignupUser(storeUserInfo, storage);
+      } else {
+        await this.getGamesWords(storage.groupWords, storage.pageWords);
+      }
+    }
+  }
+
+  async selectRequestGameSprint(): Promise<void> {
+    if (storage.currentPage === 'difficult-words') {
+      await this.getGamesWordsFromDifficultyPage('game-sprint');
+    } else {
+      if (storage.isSignupUser) {
+        await this.getGamesWordsSprintTextbookSignupUser(storeUserInfo, storage);
+      } else {
+        await this.getGameSprintWords(storage.groupWords, storage.pageWords);
+      }
+    }
+  }
+
+  async saveInDataBaseResultCorrectGames(): Promise<void> {
+    const wordID = this.selectCorrectId(storeGameRound);
+    if (storage.isSignupUser) {
+      try {
+        const response = await this.saveResponseGameWordInStore(wordID);
+        await this.actionOnTrueRequestCorrectResult(response, wordID);
+      } catch (error) {
+        await this.actionOnFalseRequestCorrectResult(wordID);
+      }
+    }
+  }
+
+  async saveInDataBaseResultWrongGames(): Promise<void> {
+    const wordID = this.selectCorrectId(storeGameRound);
+    if (storage.isSignupUser) {
+      try {
+        const response = await this.saveResponseGameWordInStore(wordID);
+        await this.actionOnTrueRequestWrongResult(response, wordID);
+      } catch (error) {
+        await this.actionOnFalseRequestWrongResult(wordID);
+      }
+    }
+  }
+
+  createResultTrueAnswer({ gameAudio, gameSprint, countGame, trueAnswerGame }: IStoreGame): void {
     const blockCorrect = <HTMLElement>document.querySelector('.block-correct');
     let dataRound = null;
     if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
@@ -254,7 +241,7 @@ class UtilsGames {
     blockCorrect.append(div);
   }
 
-  createResultFalseAnswer({ gameAudio, gameSprint, countGame, falseAnswerGame }: IStoreGame) {
+  createResultFalseAnswer({ gameAudio, gameSprint, countGame, falseAnswerGame }: IStoreGame): void {
     const blockWrong = <HTMLElement>document.querySelector('.block-wrong');
     let dataRound = null;
     if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
@@ -285,10 +272,9 @@ class UtilsGames {
     };
   }
 
-  async actionOnTrueRequestWrongResult(wordId: string) {
-    const response = await this.saveResponseGameWordInStore(wordId);
-    let { difficultyWord } = response;
-    const { gamesAnswer } = response;
+  async actionOnTrueRequestWrongResult(responseData: IResponseGetWord, wordId: string): Promise<void> {
+    let { difficultyWord } = responseData;
+    const { gamesAnswer } = responseData;
     if (difficultyWord === 'easy') {
       difficultyWord = 'normal';
     }
@@ -296,55 +282,34 @@ class UtilsGames {
     await api.updateGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnFalseRequestWrongResult(wordId: string) {
+  async actionOnFalseRequestWrongResult(wordId: string): Promise<void> {
     const gamesAnswer = { correct: 0, wrong: 0 };
     const difficultyWord = 'normal';
     gamesAnswer.wrong++;
     await api.createGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnTrueRequestCorrectResult(wordId: string) {
-    const response = await this.saveResponseGameWordInStore(wordId);
-    let { difficultyWord } = response;
-    const { gamesAnswer } = response;
-    const differenceAnswer = <number>gamesAnswer.correct - <number>gamesAnswer.wrong;
+  async actionOnTrueRequestCorrectResult(responseData: IResponseGetWord, wordId: string): Promise<void> {
+    let { difficultyWord } = responseData;
+    const { gamesAnswer } = responseData;
     (<number>gamesAnswer.correct)++;
+    const differenceAnswer = <number>gamesAnswer.correct - <number>gamesAnswer.wrong;
     if (differenceAnswer >= 3 && difficultyWord !== 'hard') {
       difficultyWord = 'easy';
+      storeGameRound.learnWordsInGames++;
     }
     if (differenceAnswer >= 5 && difficultyWord === 'hard') {
       difficultyWord = 'easy';
+      storeGameRound.learnWordsInGames++;
     }
     await api.updateGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnFalseRequestCorrectResult(wordId: string) {
+  async actionOnFalseRequestCorrectResult(wordId: string): Promise<void> {
     const gamesAnswer = { correct: 0, wrong: 0 };
     const difficultyWord = 'normal';
     gamesAnswer.correct++;
     await api.createGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
-  }
-
-  async savedWrongResultGameDataBase() {
-    const resultFalse = Object.keys(storeGameRound.falseAnswerGame);
-    for await (const item of resultFalse) {
-      try {
-        await this.actionOnTrueRequestWrongResult(item);
-      } catch (error) {
-        await this.actionOnFalseRequestWrongResult(item);
-      }
-    }
-  }
-
-  async savedCorrectResultGameDataBase() {
-    const resultCorrect = Object.keys(storeGameRound.trueAnswerGame);
-    for await (const item of resultCorrect) {
-      try {
-        await this.actionOnTrueRequestCorrectResult(item);
-      } catch (error) {
-        await this.actionOnFalseRequestCorrectResult(item);
-      }
-    }
   }
 
 }

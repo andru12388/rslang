@@ -44,9 +44,12 @@ interface IStoreGame {
   gameSprint: IWords[];
   arrAnswerGameAudio: string[];
   arrAnswerGameSprint: string[];
+  longSeriesAnswer: number[];
   countGame: number;
   countCorrectAnswerInRowSprint: number;
   countPaginationSprint: number;
+  learnWordsInGames: number;
+  isClearDailyStat: boolean;
   currentWordTranslate: string;
   currentWord: string;
   randomWord: string;
@@ -116,20 +119,35 @@ interface IGamesStatistic {
   audio: { 
     correctAnswer: number, 
     wrongAnswer: number, 
-    newWords: number 
+    newWords: number,
+    percentCorrect: number,
+    longSeries: number
   },
   sprint: { 
     correctAnswer: number, 
     wrongAnswer: number, 
-    newWords: number
+    newWords: number,
+    percentCorrect: number,
+    longSeries: number
   }
 }
 
 interface IDailyStat {
   date: string;
   games: IGamesStatistic;
+  totalNewWords: number;
+  learnedWordsDaily: number;
+  percentAllCorrect: number;
   allWordsDaily: number;
-  wordsList: string[];
+  wordsList: {
+    allWordsList: string[],
+  };
+}
+
+interface IResponseDailyStat {
+  id: string;
+  learnedWords: number;
+  optional: IDailyStat;
 }
 
 export { 
@@ -144,4 +162,5 @@ export {
   IOptionalGames,
   IResponseGetWord,
   IDailyStat,
+  IResponseDailyStat,
 };

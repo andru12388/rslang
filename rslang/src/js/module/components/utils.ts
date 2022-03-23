@@ -11,7 +11,7 @@ const preloaderPage = new PreloaderPage();
 
 class Utils {
 
-  async getCardsWords(group: number, page: number) {
+  async getCardsWords(group: number, page: number): Promise<void> {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words')).innerHTML = '';
     Object.values(await api.getTextbookWords(group, page)).forEach((item) => {
@@ -20,7 +20,7 @@ class Utils {
     });
   }
 
-  async getCardsWordsSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+  async getCardsWordsSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo): Promise<void> {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words')).innerHTML = '';
     Object.values(await api.getTextbookWordsSignupUser(storeUser, storeGeneral))
@@ -46,7 +46,7 @@ class Utils {
       });
   }
 
-  async getAllDifficultyCardsWords(storeUser: ILoginUser) {
+  async getAllDifficultyCardsWords(storeUser: ILoginUser): Promise<void> {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
     Object.values(await api.getDifficultWordsSignupUser(storeUser))
@@ -69,7 +69,7 @@ class Utils {
       });
   }
 
-  async getAllLearnedCardsWords(storeUser: ILoginUser) {
+  async getAllLearnedCardsWords(storeUser: ILoginUser): Promise<void> {
     preloaderPage.showPreloaderPage();
     (<HTMLElement>document.querySelector('.wrapper-card-words-difficult')).innerHTML = '';
     Object.values(await api.getLearnedWordsSignupUser(storeUser))
@@ -93,13 +93,13 @@ class Utils {
       });
   }
 
-  getPaginationCards(pageWords: number, allPageWords = 30, parentElement: HTMLElement = <HTMLElement>document.querySelector('.pagination-textbook')) {
+  getPaginationCards(pageWords: number, allPageWords = 30, parentElement: HTMLElement = <HTMLElement>document.querySelector('.pagination-textbook')): void {
     parentElement.innerHTML = '';
     const paginator = new Paginator(pageWords + 1, allPageWords, parentElement);
     paginator.renderPagination();
   }
 
-  async outputWordsAndPagination() {
+  async outputWordsAndPagination(): Promise<void> {
     localStorage.setItem('general-info', JSON.stringify(storage));
     if (storage.isSignupUser) {
       await this.getCardsWordsSignupUser(storeUserInfo, storage);
@@ -110,7 +110,7 @@ class Utils {
     this.isAllLearnedWordAndDifficulty();
   }
 
-  toggleDisableArrowPagination() {
+  toggleDisableArrowPagination(): void {
     const nextArrow = <HTMLButtonElement>document.querySelector('.next-arrow');
     const prevArrow = <HTMLButtonElement>document.querySelector('.prev-arrow');
     switch (storage.pageWords) {
@@ -127,7 +127,7 @@ class Utils {
     }
   }
 
-  isEmptyDifficultyWords() {
+  isEmptyDifficultyWords(): void {
     const wrapperCardWordsDifficult = (<HTMLElement>document.querySelector('.wrapper-card-words-difficult'));
     if (!wrapperCardWordsDifficult.firstChild) {
       const blockMessageEmpty = '<div class="empty-block"><p class="empty-message">Пока в этой категории ничего нет.</p></div>';
@@ -135,7 +135,7 @@ class Utils {
     }
   }
 
-  isAllLearnedWordAndDifficulty() {
+  isAllLearnedWordAndDifficulty(): void {
     if (storage.isSignupUser) {
       const cardWords = <NodeListOf<Element>>document.querySelectorAll('.card-words');
       const main = <HTMLElement>document.querySelector('.main');
@@ -161,7 +161,7 @@ class Utils {
     }
   }
 
-  removeClassActiveFromMain() {
+  removeClassActiveFromMain(): void {
     const main = <HTMLElement>document.querySelector('.main');
     main.classList.remove('active-study');
     if (storage.currentPage === 'textbook') {
@@ -172,14 +172,14 @@ class Utils {
     }
   }
 
-  disabledLinkFromDifficultPage() {
+  disabledLinkFromDifficultPage(): void {
     const linkStudyWord = <HTMLElement>document.querySelector('.link-study-word');
     const backToDifficult = <HTMLElement>document.querySelector('.back-to-difficult');
     linkStudyWord.setAttribute('disabled', 'disabled');
     backToDifficult.removeAttribute('disabled');
   }
 
-  updateStorageUserInfo() {
+  updateStorageUserInfo(): void {
     const { name, token, refreshToken, userId, message } = JSON.parse(<string>localStorage.getItem('user-info'));
     storeUserInfo.name = name;
     storeUserInfo.message = message;
@@ -188,7 +188,7 @@ class Utils {
     storeUserInfo.userId = userId;
   }
 
-  updateStorageGeneralInfo() {
+  updateStorageGeneralInfo(): void {
     const { currentPage, groupWords, pageWords, isSignupUser, wordId } = JSON.parse(<string>localStorage.getItem('general-info'));
     storage.currentPage = currentPage;
     storage.groupWords = groupWords;
@@ -197,7 +197,7 @@ class Utils {
     storage.wordId = wordId;
   }
 
-  async conditionLoadWords() {
+  async conditionLoadWords(): Promise<void> {
     if (storage.isSignupUser && storage.currentPage === 'textbook') {
       await this.getCardsWordsSignupUser(storeUserInfo, storage);
     }
@@ -206,7 +206,7 @@ class Utils {
     }
   }
 
-  signupUser() {
+  signupUser(): void {
     storage.isSignupUser = true;
     localStorage.setItem('general-info', JSON.stringify(storage));
     const menuListItem = <NodeListOf<Element>>document.querySelectorAll('.menu-list-item');
@@ -218,7 +218,7 @@ class Utils {
     }
   }
 
-  notSignupUser() {
+  notSignupUser(): void {
     storage.isSignupUser = false;
     localStorage.setItem('general-info', JSON.stringify(storage));
     const menuListItemDifficulty = <HTMLElement>document.querySelector('.menu-list-item-difficulty');
@@ -232,7 +232,7 @@ class Utils {
     }
   }
 
-  showHideBtnDifficulty() {
+  showHideBtnDifficulty(): void {
     const blockBtnDifficulty = <NodeListOf<Element>>document.querySelectorAll('.block-btn');
     if (storage.isSignupUser) {
       blockBtnDifficulty.forEach((item) => item.classList.remove('active-hidden'));
@@ -242,7 +242,7 @@ class Utils {
     this.showHideBtnIconInfoStat();
   }
 
-  showHideBtnIconInfoStat() {
+  showHideBtnIconInfoStat(): void {
     const iconInfoStat = <NodeListOf<Element>>document.querySelectorAll('.icon-info-stat');
     if (storage.isSignupUser) {
       iconInfoStat.forEach((item) => item.classList.remove('active-hidden'));
@@ -251,7 +251,7 @@ class Utils {
     }
   }
 
-  showHideSectionDifficulty() {
+  showHideSectionDifficulty(): void {
     const difficultWords = <HTMLElement>document.querySelector('.difficult-words');
     if (storage.isSignupUser) {
       difficultWords.classList.remove('active-hidden');
@@ -260,7 +260,7 @@ class Utils {
     }
   }
 
-  activeLevelWords() {
+  activeLevelWords(): void {
     const levelWords = <NodeListOf<Element>>document.querySelectorAll('.levels-item');
     levelWords.forEach((item) => {
       if (Number((<HTMLElement>item).dataset.group) === storage.groupWords) {

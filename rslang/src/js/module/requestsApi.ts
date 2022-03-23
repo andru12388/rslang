@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IDailyStat } from './components/interface';
+import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IResponseDailyStat, IDailyStat, IUserWord } from './components/interface';
 import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
@@ -13,7 +13,7 @@ class RequestsApi {
 
   words = `${this.base}/words`;
 
-  async createUser(user: ICreateUser) {
+  async createUser(user: ICreateUser): Promise<ICreateUser> {
     const messageError = <HTMLElement>document.querySelector('.message-error');
     const response = await fetch(`${this.users}`, {
       method: 'POST',
@@ -31,7 +31,7 @@ class RequestsApi {
     return content;
   }
 
-  async loginUser({ email, password }: ICreateUser) {
+  async loginUser({ email, password }: ICreateUser): Promise<void> {
     const messageErrorSignin = <HTMLElement>document.querySelector('.message-error-signin');
     const response = await fetch(`${this.signin}`, {
       method: 'POST',
@@ -55,7 +55,7 @@ class RequestsApi {
     localStorage.setItem('user-info', JSON.stringify(content));
   }
 
-  async getNewUserToken({ userId, refreshToken }: ILoginUser) {
+  async getNewUserToken({ userId, refreshToken }: ILoginUser): Promise<void> {
     const response = await fetch(`${this.users}/${userId}/tokens`, {
       headers: {
         'Authorization': `Bearer ${refreshToken}`,
@@ -69,7 +69,7 @@ class RequestsApi {
     localStorage.setItem('user-info', JSON.stringify(storeUserInfo));
   }
 
-  async getUser({ userId, token }: ILoginUser) {
+  async getUser({ userId, token }: ILoginUser): Promise<ICreateUser> {
     const response = await fetch(`${this.users}/${userId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -92,7 +92,7 @@ class RequestsApi {
     return content;
   }
 
-  async getGameWord({ userId, token }: ILoginUser, wordId: string) {
+  async getGameWord({ userId, token }: ILoginUser, wordId: string): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -108,7 +108,7 @@ class RequestsApi {
     { userId, token }: ILoginUser,
     { correct, wrong }: IOptionalGames,
     difficultyWord: string,
-    wordId: string) {
+    wordId: string): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
@@ -129,7 +129,7 @@ class RequestsApi {
     { userId, token }: ILoginUser,
     { correct, wrong }: IOptionalGames,
     difficultyWord: string,
-    wordId: string) {
+    wordId: string): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -146,7 +146,7 @@ class RequestsApi {
     return content;
   }
 
-  async getWord({ userId, token }: ILoginUser, { wordId }: IGeneralInfo) {
+  async getWord({ userId, token }: ILoginUser, { wordId }: IGeneralInfo): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -162,7 +162,7 @@ class RequestsApi {
     { userId, token }: ILoginUser,
     { wordId }: IGeneralInfo,
     { correct, wrong }: IOptionalGames,
-    levelWord: string) {
+    levelWord: string): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'POST',
       headers: {
@@ -183,7 +183,7 @@ class RequestsApi {
     { userId, token }: ILoginUser,
     { wordId }: IGeneralInfo,
     { correct, wrong }: IOptionalGames,
-    levelWord: string) {
+    levelWord: string): Promise<IUserWord> {
     const response = await fetch(`${this.users}/${userId}/words/${wordId}`, {
       method: 'PUT',
       headers: {
@@ -264,7 +264,7 @@ class RequestsApi {
     return content;
   }
 
-  async getStatistic({ userId, token }: ILoginUser): Promise<IDailyStat> {
+  async getStatistic({ userId, token }: ILoginUser): Promise<IResponseDailyStat> {
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       headers: {
         'Authorization': `Bearer ${token}`,
