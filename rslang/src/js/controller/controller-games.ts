@@ -56,7 +56,7 @@ class GamesController {
 
   interval: NodeJS.Timer | null = null;
 
-  async cancelRoundGameSprint() {
+  async cancelRoundGameSprint(): Promise<void> {
     const totalScores = <HTMLElement>document.querySelector('.total-score');
     const total = totalScores.textContent;
     this.resultGameSprint.textContent = `- ${total} очков`;
@@ -69,7 +69,7 @@ class GamesController {
     this.repeatPopupGameFromTextbook();
   }
 
-  timer() {
+  timer(): void {
     const time = <HTMLElement>document.querySelector('.time');
     let timeRound = 59;
     this.interval = setInterval(async () => {
@@ -82,7 +82,7 @@ class GamesController {
     }, 1000);
   }
 
-  startRoundGameSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+  startRoundGameSprint({ currentWordTranslate, currentWord }: IStoreGame): void {
     storeGameRound.randomWord = utilsGames.getRandomArrAnswerSprint(currentWordTranslate)[utilsGames.getRandom(0, 1)];
     const createGamePage = new CreateGamePage(currentWord, storeGameRound.randomWord);
     createGamePage.startGameSprint();
@@ -91,7 +91,7 @@ class GamesController {
     this.exitRoundGame();
   }
 
-  async actionOnWrongAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnWrongAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame): Promise<void> {
     const paginationItem = <NodeListOf<Element>>document.querySelectorAll('.pagination-item');
     storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
     utilsGames.createResultFalseAnswer(storeGameRound);
@@ -114,7 +114,7 @@ class GamesController {
     }
   }
 
-  async actionOnCorrectAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnCorrectAnswerSprint({ currentWordTranslate, currentWord }: IStoreGame): Promise<void> {
     storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
     utilsGames.createResultTrueAnswer(storeGameRound);
     this.installPathsAndVolumeAudio();
@@ -135,7 +135,7 @@ class GamesController {
     }
   }
 
-  selectAnswerGameSprint() {
+  selectAnswerGameSprint(): void {
     const blockBtnGameSprint = <HTMLElement>document.querySelector('.block-btn-game-sprint');
     blockBtnGameSprint.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
@@ -156,7 +156,7 @@ class GamesController {
     });
   }
 
-  showGameSprint() {
+  showGameSprint(): void {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameSprint());
     this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-sprint.webp")';
@@ -168,7 +168,7 @@ class GamesController {
     this.exitGames();
   }
 
-  showGameSprintFromTextbook() {
+  showGameSprintFromTextbook(): void {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameSprintFromTextbook());
     this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-sprint.webp")';
@@ -179,7 +179,7 @@ class GamesController {
     this.exitGames();
   }
 
-  goToGameSprint() {
+  goToGameSprint(): void {
     this.linkGameSprint.addEventListener('click', () => {
       storage.currentPage = 'game-sprint';
       localStorage.setItem('general-info', JSON.stringify(storage));
@@ -189,7 +189,7 @@ class GamesController {
     });
   }
 
-  goToGameSprintFromPageTextbook() {
+  goToGameSprintFromPageTextbook(): void {
     const btnGameSprint = <HTMLElement>document.querySelector('.game-card-sprint');
     btnGameSprint.addEventListener('click', async () => {
       await utilsGames.selectRequestGameSprint();
@@ -203,14 +203,14 @@ class GamesController {
 
   // AudioGame //
 
-  installPathsAndVolumeAudio() {
+  installPathsAndVolumeAudio(): void {
     this.audioCorrect.src = './assets/audio/correct-answer.mp3';
     this.audioWrong.src = './assets/audio/wrong-answer.mp3';
     this.audioCorrect.volume = 0.3;
     this.audioWrong.volume = 0.3;
   }
 
-  showGameAudio() {
+  showGameAudio(): void {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameAudioCall());
     this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-audio.webp")';
@@ -222,7 +222,7 @@ class GamesController {
     this.exitGames();
   }
 
-  showGameAudioFromTextbook() {
+  showGameAudioFromTextbook(): void {
     this.main.innerHTML = '';
     this.main.insertAdjacentHTML('beforeend', render.renderGameAudioCallFromTextbook());
     this.wrapper.style.backgroundImage = 'url("./assets/img/bg-game-audio.webp")';
@@ -233,7 +233,7 @@ class GamesController {
     this.exitGames();
   }
 
-  goToGameAudio() {
+  goToGameAudio(): void {
     this.linkGameAudio.addEventListener('click', () => {
       storage.currentPage = 'game-audio';
       localStorage.setItem('general-info', JSON.stringify(storage));
@@ -243,7 +243,7 @@ class GamesController {
     });
   }
 
-  goToGameAudioFromPageTextbook() {
+  goToGameAudioFromPageTextbook(): void {
     const btnGameAudio = <HTMLElement>document.querySelector('.game-card-audio-call');
     btnGameAudio.addEventListener('click', async () => {
       await utilsGames.selectRequestGameAudio();
@@ -255,7 +255,7 @@ class GamesController {
     });
   }
 
-  hideShowToggleBtnPopupGame() {
+  hideShowToggleBtnPopupGame(): void {
     if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-sprint') {
       this.btnExitPopupGameFromTextbook.classList.add('active-hidden');
       this.btnRepeatPopupGameFromTextbook.classList.add('active-hidden');
@@ -269,7 +269,7 @@ class GamesController {
     }
   }
 
-  saveDataRoundInStoreGameRound() {
+  saveDataRoundInStoreGameRound(): void {
     if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
       const dataRound = storeGameRound.gameSprint[storeGameRound.countGame];
       storeGameRound.currentWord = dataRound.word;
@@ -281,7 +281,7 @@ class GamesController {
     }
   }
 
-  createBtnAnswer({ currentWordTranslate }: IStoreGame) {
+  createBtnAnswer({ currentWordTranslate }: IStoreGame): void {
     const arrAnswer = utilsGames.getRandomArrAnswer(currentWordTranslate);
     const blockAnswerGame = <HTMLButtonElement>document.querySelector('.block-answer-game');
     arrAnswer.forEach((item, index) => {
@@ -292,7 +292,7 @@ class GamesController {
     });
   }
 
-  startRoundGameAudio({ gameAudio, countGame }: IStoreGame) {
+  startRoundGameAudio({ gameAudio, countGame }: IStoreGame): void {
     const dataRound = gameAudio[countGame];
     const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createRoundGameAudio();
@@ -305,7 +305,7 @@ class GamesController {
     this.selectAnswer(storeGameRound);
   }
 
-  clickStartButton() {
+  clickStartButton(): void {
     const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
     btnStart.addEventListener('click', () => {
       this.saveDataRoundInStoreGameRound();
@@ -317,7 +317,7 @@ class GamesController {
     });
   }
 
-  checkDisabledAnswer({ currentWordTranslate }: IStoreGame) {
+  checkDisabledAnswer({ currentWordTranslate }: IStoreGame): void {
     const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
     btnAnswerItem.forEach((item) => {
       (<HTMLButtonElement>item).disabled = true;
@@ -327,7 +327,7 @@ class GamesController {
     });
   }
 
-  hideShowBtnWhenAnswer() {
+  hideShowBtnWhenAnswer(): void {
     const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
     const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
     const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
@@ -336,14 +336,14 @@ class GamesController {
     btnNext.classList.remove('active-hidden');
   }
 
-  answerBtnNotKnow() {
+  answerBtnNotKnow(): void {
     const btnNotKnow = <HTMLButtonElement>document.querySelector('.btn-not-know');
     btnNotKnow.addEventListener('click', () => {
       this.actionOnWrongAnswer(storeGameRound);
     });
   }
 
-  async cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame) {
+  async cancelAllRoundsGame({ falseAnswerGame, trueAnswerGame }: IStoreGame): Promise<void> {
     this.popupResultGame.classList.remove('active-hidden');
     this.main.innerHTML = '';
     this.numberWrong.textContent = String(Object.keys(falseAnswerGame).length);
@@ -361,7 +361,7 @@ class GamesController {
     for (const item in trueAnswerGame) delete trueAnswerGame[item];
   }
 
-  pressBtnNext() {
+  pressBtnNext(): void {
     const btnNext = <HTMLButtonElement>document.querySelector('.btn-next');
     btnNext.addEventListener('click', async () => {
       storeGameRound.countGame++;
@@ -379,7 +379,7 @@ class GamesController {
     });
   }
 
-  async actionOnCorrectAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnCorrectAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame): Promise<void> {
     const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
     const dataRound = gameAudio[countGame];
     const wordID = utilsGames.selectCorrectId(storeGameRound);
@@ -395,7 +395,7 @@ class GamesController {
     await utilsGames.saveInDataBaseResultCorrectGames();
   }
 
-  async actionOnWrongAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnWrongAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame): Promise<void> {
     const dataRound = gameAudio[countGame];
     const wordID = utilsGames.selectCorrectId(storeGameRound);
     this.hideShowBtnWhenAnswer();
@@ -411,7 +411,7 @@ class GamesController {
     await utilsGames.saveInDataBaseResultWrongGames();
   }
 
-  selectAnswer({ currentWordTranslate }: IStoreGame) {
+  selectAnswer({ currentWordTranslate }: IStoreGame): void {
     const blockAnswerGame = <HTMLElement>document.querySelector('.block-answer-game');
     blockAnswerGame.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
@@ -431,14 +431,14 @@ class GamesController {
     });
   }
 
-  transitionTextbook() {
+  transitionTextbook(): void {
     this.linkTextbook.addEventListener('click', async () => {
       this.goToGameAudioFromPageTextbook();
       this.goToGameSprintFromPageTextbook();
     });
   }
 
-  exitGames() {
+  exitGames(): void {
     const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
     btnCancel.addEventListener('click', () => {
       this.footer.style.display = '';
@@ -446,7 +446,7 @@ class GamesController {
     });
   }
 
-  exitRoundGame() {
+  exitRoundGame(): void {
     const btnExit = <HTMLElement>document.querySelector('.game-audio-close');
     btnExit.addEventListener('click', () => {
       this.popupBlockCorrect.innerHTML = '';
@@ -464,7 +464,7 @@ class GamesController {
     });
   }
 
-  fullscreenRoundGame() {
+  fullscreenRoundGame(): void {
     document.addEventListener('click', (event) => {
       const element = <HTMLElement>event.target;
       if (!element.classList.contains('game-audio-fullscreen')) return false;
@@ -478,7 +478,7 @@ class GamesController {
     });
   }
 
-  exitPopupGame() {
+  exitPopupGame(): void {
     this.buttonExitPopupGame.addEventListener('click', () => {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
@@ -489,13 +489,13 @@ class GamesController {
     });
   }
 
-  exitPopupGameFromTextbook() {
+  exitPopupGameFromTextbook(): void {
     this.btnExitPopupGameFromTextbook.addEventListener('click', () => {
       this.buttonExitPopupGame.click();
     });
   }
 
-  repeatPopupGameAudio() {
+  repeatPopupGameAudio(): void {
     this.buttonRepeatPopupGame.addEventListener('click', () => {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
@@ -509,7 +509,7 @@ class GamesController {
     });
   }
 
-  repeatPopupGameFromTextbook() {
+  repeatPopupGameFromTextbook(): void {
     this.btnRepeatPopupGameFromTextbook.addEventListener('click', async () => {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
@@ -525,7 +525,7 @@ class GamesController {
     });
   }
 
-  currentLevelGame() {
+  currentLevelGame(): void {
     const levelGame = <NodeListOf<Element>>document.querySelectorAll('.levels-game-item');
     levelGame.forEach((item) => {
       if ((<HTMLElement>item).dataset.group === String(storage.levelGame)) {
@@ -536,7 +536,7 @@ class GamesController {
     });
   }
 
-  selectionLevelGame() {
+  selectionLevelGame(): void {
     const blockLevelsGame = <HTMLElement>document.querySelector('.levels-game');
     const btnStart = <HTMLButtonElement>document.querySelector('.btn-start');
     blockLevelsGame.addEventListener('click', async (event) => {
@@ -554,7 +554,7 @@ class GamesController {
     });
   }
 
-  keyDownHandler() {
+  keyDownHandler(): void {
     document.addEventListener('keydown', (event) => {
       if ((<HTMLElement> this.main.firstElementChild).className === 'wrapper-games') {
         if (event.code == 'KeyF') {
@@ -609,7 +609,7 @@ class GamesController {
     });
   }
 
-  playAudioGameAudio() {
+  playAudioGameAudio(): void {
     const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
     iconMute.addEventListener('click', (event) => {
       const audio = new Audio() as HTMLAudioElement;
@@ -621,7 +621,7 @@ class GamesController {
     });
   }
 
-  playAudioAnswerGameAudio() {
+  playAudioAnswerGameAudio(): void {
     const iconAudioGame = <HTMLButtonElement>document.querySelector('.icon-audio-game');
     const iconMute = <HTMLButtonElement>document.querySelector('.icon-mute');
     iconAudioGame.addEventListener('click', () => {
@@ -629,7 +629,7 @@ class GamesController {
     });
   }
 
-  playAudioResultGameAudio() {
+  playAudioResultGameAudio(): void {
     const iconAudioPopup = <NodeListOf<Element>>document.querySelectorAll('.icon-audio-popup');
     iconAudioPopup.forEach((item) => {
       item.addEventListener('click', (event) => {
@@ -643,7 +643,7 @@ class GamesController {
     });
   }
 
-  rebootPage() {
+  rebootPage(): void {
     window.addEventListener('load', async () => {
       if (localStorage.getItem('general-info')) {
         utils.updateStorageGeneralInfo();
@@ -670,7 +670,7 @@ class GamesController {
     });
   }
 
-  startAllListenerGames() {
+  startAllListenerGames(): void {
     this.goToGameSprint();
     this.goToGameAudio();
     this.rebootPage();

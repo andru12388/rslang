@@ -74,7 +74,7 @@ class AppController extends GamesController {
 
   audio = new Audio() as HTMLAudioElement;
 
-  showMenu() {
+  showMenu(): void {
     this.menuBurg.addEventListener('click', () => {
       this.menuBurg.classList.toggle('active');
       this.menuHeader.classList.toggle('active');
@@ -82,7 +82,7 @@ class AppController extends GamesController {
     });
   }
 
-  async outputTextbook() {
+  async outputTextbook(): Promise<void> {
     storage.currentPage = 'textbook';
     localStorage.setItem('general-info', JSON.stringify(storage));
     this.main.innerHTML = render.renderTextbook();
@@ -103,7 +103,7 @@ class AppController extends GamesController {
     this.transitionFromTextbookToHardWords();
   }
 
-  async outputDifficultWordPage() {
+  async outputDifficultWordPage(): Promise<void> {
     storage.currentPage = 'difficult-words';
     localStorage.setItem('general-info', JSON.stringify(storage));
     this.main.innerHTML = '';
@@ -115,7 +115,7 @@ class AppController extends GamesController {
     this.listenerGamesStart();
   }
 
-  goToTextbook() {
+  goToTextbook(): void {
     this.linkTextbook.addEventListener('click', async () => {
       await this.outputTextbook();
       this.wrapper.style.backgroundImage = '';
@@ -124,7 +124,7 @@ class AppController extends GamesController {
     });
   }
 
-  goToDifficultWordsPage() {
+  goToDifficultWordsPage(): void {
     this.menuListItemDifficulty.addEventListener('click', async () => {
       await this.outputDifficultWordPage();
       this.wrapper.style.backgroundImage = '';
@@ -134,7 +134,7 @@ class AppController extends GamesController {
     });
   }
 
-  goToLearnedWordsPage() {
+  goToLearnedWordsPage(): void {
     const linkStudyWord = <HTMLElement>document.querySelector('.link-study-word');
     const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     linkStudyWord.addEventListener('click', async () => {
@@ -150,7 +150,7 @@ class AppController extends GamesController {
     });
   }
 
-  returnDifficultPageFromLearnedPage() {
+  returnDifficultPageFromLearnedPage(): void {
     const backToDifficult = <HTMLElement>document.querySelector('.back-to-difficult');
     const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     backToDifficult.addEventListener('click', async () => {
@@ -162,12 +162,12 @@ class AppController extends GamesController {
     });
   }
 
-  hideBlockGame() {
+  hideBlockGame(): void {
     const gamesBlock = <HTMLElement>document.querySelector('.games-block');
     gamesBlock.classList.add('active-hidden');
   }
 
-  navigationPageWords() {
+  navigationPageWords(): void {
     this.main.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
       if (element.classList.contains('next-arrow')) {
@@ -210,7 +210,7 @@ class AppController extends GamesController {
     });
   }
 
-  addWordDifficult() {
+  addWordDifficult(): void {
     const buttonAddDifficult = <NodeListOf<Element>>document.querySelectorAll('.button-add-difficult');
     buttonAddDifficult.forEach((item) => {
       item.addEventListener('click', async (event) => {
@@ -243,7 +243,7 @@ class AppController extends GamesController {
     });
   }
 
-  deleteWordDifficult() {
+  deleteWordDifficult(): void {
     const buttonDeleteDifficult = <NodeListOf<Element>>document.querySelectorAll('.button-delete-difficult');
     buttonDeleteDifficult.forEach((item) => {
       item.addEventListener('click', async (event) => {
@@ -266,7 +266,7 @@ class AppController extends GamesController {
     });
   }
 
-  deleteWordLearned() {
+  deleteWordLearned(): void {
     const buttonDeleteStudy = <NodeListOf<Element>>document.querySelectorAll('.button-delete-study');
     buttonDeleteStudy.forEach((item) => {
       item.addEventListener('click', async (event) => {
@@ -289,7 +289,7 @@ class AppController extends GamesController {
     });
   }
 
-  addLearnedWords() {
+  addLearnedWords(): void {
     const buttonStudyWord = <NodeListOf<Element>>document.querySelectorAll('.button-study-word');
     buttonStudyWord.forEach((item) => {
       item.addEventListener('click', async (event) => {
@@ -322,7 +322,7 @@ class AppController extends GamesController {
     });
   }
 
-  playAudioExample() {
+  playAudioExample(): void {
     this.main.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
       if (element.classList.contains('icon-audio')) {
@@ -356,7 +356,7 @@ class AppController extends GamesController {
     });
   }
 
-  showHideLearningProgress() {
+  showHideLearningProgress(): void {
     this.main.addEventListener('click',  (event) => {
       const element = <HTMLElement>event.target;
       const messageElement = (<HTMLElement>event.target).nextElementSibling;
@@ -365,7 +365,7 @@ class AppController extends GamesController {
     });
   }
 
-  goToHome() {
+  goToHome(): void {
     this.linkHome.addEventListener('click', () => {
       storage.currentPage = 'home';
       localStorage.setItem('general-info', JSON.stringify(storage));
@@ -388,7 +388,7 @@ class AppController extends GamesController {
     });
   }
 
-  showSubMenu() {
+  showSubMenu(): void {
     this.menuHeader.addEventListener('click', (event) => {
       event.preventDefault();
       if ((event.target as HTMLElement).classList.contains('sub-menu-link') === true) {
@@ -399,7 +399,7 @@ class AppController extends GamesController {
     });
   }
   
-  hideMenuClickBody() {
+  hideMenuClickBody(): void {
     this.wrapper.addEventListener('click', (event) => {
       if ((event.target as HTMLElement).classList.contains('wrapper')) {
         this.menuBurg.classList.remove('active');
@@ -410,7 +410,7 @@ class AppController extends GamesController {
     });
   }
   
-  showRegisteredForm() {
+  showRegisteredForm(): void {
     this.linkToRegistered.addEventListener('click', (event) => {
       event.preventDefault();
       this.formPopapRegistered.classList.toggle('active');
@@ -418,7 +418,7 @@ class AppController extends GamesController {
     });
   }
   
-  showSigninForm() {
+  showSigninForm(): void {
     this.linkToSignup.addEventListener('click', (event) => {
       event.preventDefault();
       this.formPopapRegistered.classList.toggle('active');
@@ -426,14 +426,14 @@ class AppController extends GamesController {
     });
   }
   
-  closeFormRegist() {
+  closeFormRegist(): void {
     this.formCloseBtn.addEventListener('click', () => {
       this.popupSignIn.classList.toggle('active');
       this.wrapper.classList.remove('active');
     });
   }
 
-  transitionFromTextbookToHardWords() {
+  transitionFromTextbookToHardWords(): void {
     const difficultWords = <HTMLElement>document.querySelector('.difficult-words');
     difficultWords.addEventListener('click', async () => {
       await this.outputDifficultWordPage();
@@ -444,12 +444,12 @@ class AppController extends GamesController {
     });
   }
 
-  listenerGamesStart() {
+  listenerGamesStart(): void {
     this.goToGameAudioFromPageTextbook();
     this.goToGameSprintFromPageTextbook();
   }
 
-  transitionFromHardWordsToTextbook() {
+  transitionFromHardWordsToTextbook(): void {
     const backToTextbooks = <HTMLElement>document.querySelector('.back-to-textbook');
     backToTextbooks.addEventListener('click', async () => {
       await this.outputTextbook();
@@ -457,14 +457,14 @@ class AppController extends GamesController {
     });
   }
   
-  openFormRegist() {
+  openFormRegist(): void {
     this.signIn.addEventListener('click', () => {
       this.popupSignIn.classList.toggle('active');
       this.wrapper.classList.add('active');
     });
   }
 
-  showHideTeamPage() {
+  showHideTeamPage(): void {
     this.aboutCloseBtn.addEventListener('click', () => {
       this.popupAbout.classList.remove('active');
     });
@@ -474,20 +474,20 @@ class AppController extends GamesController {
     });
   }
 
-  goToInfoProject() {
+  goToInfoProject(): void {
     const btnInfoProject = <HTMLElement>document.querySelector('.btn-details');
     btnInfoProject.addEventListener('click', () => {
       this.popupAbout.classList.add('active');
     });
   }
 
-  hideStatistic() {
+  hideStatistic(): void {
     this.statisticCloseBtn.addEventListener('click', () => {
       this.popupStatistic.classList.remove('active');
     });
   }
 
-  goToStatistic() {
+  goToStatistic(): void {
     this.linkStatistic.addEventListener('click', () => {
       this.popupStatistic.classList.add('active');
       this.menuBurg.click();
@@ -495,13 +495,13 @@ class AppController extends GamesController {
     });
   }
 
-  showPersonalAccount() {
+  showPersonalAccount(): void {
     this.logOutBox.classList.add('active');
     this.signIn.classList.add('active-hidden');
     this.formCloseBtn.click();
   }
 
-  logOutUser() {
+  logOutUser(): void {
     this.wrapper.addEventListener('click', (event) => {
       if ((event.target as HTMLElement).classList.contains('log-out') !== true) return false;
       this.logOutBox.classList.remove('active');
@@ -516,7 +516,7 @@ class AppController extends GamesController {
     });
   }
   
-  registeredUser() {
+  registeredUser(): void {
     this.formPopapRegistered.addEventListener('submit', async (event) => {
       event.preventDefault();
       this.messageError.textContent = '';
@@ -535,7 +535,7 @@ class AppController extends GamesController {
     });
   }
 
-  async getRefreshToken() {
+  async getRefreshToken(): Promise<void> {
     try {
       await api.getNewUserToken(storeUserInfo);
       await api.getUser(storeUserInfo);
@@ -554,7 +554,7 @@ class AppController extends GamesController {
     }
   }
   
-  loginAccountUser() {
+  loginAccountUser(): void {
     this.formPopapSignup.addEventListener('submit', async (event) => {
       event.preventDefault();
       this.messageErrorSignin.textContent = '';
@@ -579,7 +579,7 @@ class AppController extends GamesController {
     });
   }
 
-  getLocalStorage() {
+  getLocalStorage(): void {
     window.addEventListener('load', async () => {
       if (localStorage.getItem('user-info')) {
         utils.updateStorageUserInfo();
@@ -647,7 +647,7 @@ class AppController extends GamesController {
     });
   }
 
-  listenerAll() {
+  listenerAll(): void {
     this.showMenu();
     this.showSubMenu();
     this.hideMenuClickBody();

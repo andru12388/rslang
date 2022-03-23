@@ -41,7 +41,7 @@ class StatisticGames {
     }, 0);
   }
 
-  updateDataStatisticGames({ trueAnswerGame, falseAnswerGame }: IStoreGame, newDailyStat: IDailyStat) {
+  updateDataStatisticGames({ trueAnswerGame, falseAnswerGame }: IStoreGame, newDailyStat: IDailyStat): void {
     if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
       newDailyStat.games.audio.correctAnswer += Object.keys(trueAnswerGame).length;
       newDailyStat.games.audio.wrongAnswer += Object.keys(falseAnswerGame).length;
@@ -68,7 +68,7 @@ class StatisticGames {
     }
   }
 
-  updateDataStatistic({ trueAnswerGame, falseAnswerGame }: IStoreGame, newDailyStat: IDailyStat) {
+  updateDataStatistic({ trueAnswerGame, falseAnswerGame }: IStoreGame, newDailyStat: IDailyStat): void {
     const totalAnswer = Object.keys(trueAnswerGame).length + Object.keys(falseAnswerGame).length;
     this.updateDataStatisticGames(storeGameRound, newDailyStat);
     newDailyStat.allWordsDaily += totalAnswer;
@@ -79,7 +79,7 @@ class StatisticGames {
     newDailyStat.wordsList.allWordsList = [...this.uniqueNewWords(storeGameRound, newDailyStat)];
   }
 
-  renderStatisticInPage(newDailyStat: IDailyStat) {
+  renderStatisticInPage(newDailyStat: IDailyStat): void {
     const totalSprintWords = <HTMLButtonElement>document.querySelector('.total-sprint-words');
     const percentAnswerSprint = <HTMLButtonElement>document.querySelector('.percent-answer-sprint');
     const longSeriesSprint = <HTMLButtonElement>document.querySelector('.long-series-sprint');
@@ -100,7 +100,7 @@ class StatisticGames {
     percentCorrectAnswer.textContent = `${newDailyStat.percentAllCorrect}%`;
   }
 
-  async saveStatisticInDataBase() {
+  async saveStatisticInDataBase(): Promise<void> {
     try {
       const { optional } = await api.getStatistic(storeUserInfo);
       const newDailyStat = this.saveStatisticStorage(optional);
@@ -112,7 +112,7 @@ class StatisticGames {
     }
   }
 
-  async getStatisticAfterReloadPage() {
+  async getStatisticAfterReloadPage(): Promise<void> {
     try {
       const { optional } = await api.getStatistic(storeUserInfo);
       const newDailyStat = this.saveStatisticStorage(optional);

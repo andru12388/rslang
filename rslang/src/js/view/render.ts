@@ -20,7 +20,7 @@ class RenderView {
     `;
   }
 
-  renderLevelsWords() {
+  renderLevelsWords(): string {
     return `
       <div class="difficulty-levels-words">
         <div class="levels-item item-1" data-group="0">1 (A1)</div>
@@ -33,7 +33,7 @@ class RenderView {
     `;
   }
 
-  renderTextbook() {
+  renderTextbook(): string {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-textbook">
@@ -66,7 +66,7 @@ class RenderView {
     `;
   }
 
-  renderDifficultyPage() {
+  renderDifficultyPage(): string {
     return `
       <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-difficult-words">
@@ -97,7 +97,7 @@ class RenderView {
     `;
   }
 
-  renderGameSprint() {
+  renderGameSprint(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -127,7 +127,7 @@ class RenderView {
     `;
   }
 
-  renderGameAudioCall() {
+  renderGameAudioCall(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -158,7 +158,7 @@ class RenderView {
     `;
   }
 
-  renderGameAudioCallFromTextbook() {
+  renderGameAudioCallFromTextbook(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -181,7 +181,7 @@ class RenderView {
     `;
   }
 
-  renderGameSprintFromTextbook() {
+  renderGameSprintFromTextbook(): string {
     return `
       <div class="popup-game-level active-hidden">
         <div class="block-description-game">
@@ -203,7 +203,7 @@ class RenderView {
     `;
   }
 
-  selectionRenderPage() {
+  selectionRenderPage(): string {
     if (localStorage.getItem('general-info')) {
       const store = JSON.parse(<string>localStorage.getItem('general-info'));
       switch (store.currentPage) {

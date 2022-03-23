@@ -7,7 +7,7 @@ const api = new RequestsApi();
 class UtilsGames {
   audioLevelUp = new Audio() as HTMLAudioElement;
 
-  async getGamesWordsFromDifficultyPage(selectGame: string) {
+  async getGamesWordsFromDifficultyPage(selectGame: string): Promise<void> {
     if (selectGame === 'game-sprint') {
       storeGameRound.gameSprint = [...Object.values(await api.getDifficultWordsSignupUser(storeUserInfo))
         .map((item) => (<IResponseWordsSignUser>item).paginatedResults)
@@ -24,7 +24,7 @@ class UtilsGames {
 
   // Sprint //
 
-  async getGamesWordsSprint(group: number, page: number) {
+  async getGamesWordsSprint(group: number, page: number): Promise<void> {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
     let count = page;
     while (storeGameRound.gameSprint.length < 80) {
@@ -36,12 +36,12 @@ class UtilsGames {
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
   }
 
-  async getGameSprintWords(group: number, page: number) {
+  async getGameSprintWords(group: number, page: number): Promise<void> {
     storeGameRound.gameSprint = [...Object.values(await api.getTextbookWords(group, page))];
     storeGameRound.arrAnswerGameSprint = [...storeGameRound.gameSprint.map((item) => item.wordTranslate)];
   }
 
-  async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+  async getGamesWordsSprintTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo): Promise<void> {
     const { groupWords: newGroupWords } = storeGeneral;
     let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameSprint = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
@@ -70,7 +70,7 @@ class UtilsGames {
     return [...arrAllAnswer, word].sort(() => Math.random() - 0.5);
   }
 
-  factorPointsGameSprint({ countCorrectAnswerInRowSprint }: IStoreGame) {
+  factorPointsGameSprint({ countCorrectAnswerInRowSprint }: IStoreGame): void {
     const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
     this.audioLevelUp.src = './assets/audio/level-up.mp3';
     this.audioLevelUp.volume = 0.3;
@@ -94,7 +94,7 @@ class UtilsGames {
     }
   }
 
-  plusPointsInTotalScoreSprint() {
+  plusPointsInTotalScoreSprint(): void  {
     const totalScores = <HTMLElement>document.querySelector('.total-score');
     const qualityPoints = <HTMLElement>document.querySelector('.quality-points');
     const total = Number(totalScores.textContent);
@@ -116,12 +116,12 @@ class UtilsGames {
 
   // Audiocall //
 
-  async getGamesWords(group: number, page: number) {
+  async getGamesWords(group: number, page: number): Promise<void> {
     storeGameRound.gameAudio = [...Object.values(await api.getTextbookWords(group, page))];
     storeGameRound.arrAnswerGameAudio = [...storeGameRound.gameAudio.map((item) => item.wordTranslate)];
   }
 
-  async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo) {
+  async getGamesWordsTextbookSignupUser(storeUser: ILoginUser, storeGeneral: IGeneralInfo): Promise<void> {
     const { groupWords: newGroupWords } = storeGeneral;
     let { pageWords: newPageWords } = storeGeneral;
     storeGameRound.gameAudio = [...Object.values(await api.getGameTextbookWordsSignupUser(storeUser, storeGeneral))
@@ -170,7 +170,7 @@ class UtilsGames {
     return correctIdWord;
   }
 
-  async selectRequestGameAudio() {
+  async selectRequestGameAudio(): Promise<void> {
     if (storage.currentPage === 'difficult-words') {
       await this.getGamesWordsFromDifficultyPage('game-audio');
     } else {
@@ -182,7 +182,7 @@ class UtilsGames {
     }
   }
 
-  async selectRequestGameSprint() {
+  async selectRequestGameSprint(): Promise<void> {
     if (storage.currentPage === 'difficult-words') {
       await this.getGamesWordsFromDifficultyPage('game-sprint');
     } else {
@@ -194,7 +194,7 @@ class UtilsGames {
     }
   }
 
-  async saveInDataBaseResultCorrectGames() {
+  async saveInDataBaseResultCorrectGames(): Promise<void> {
     const wordID = this.selectCorrectId(storeGameRound);
     if (storage.isSignupUser) {
       try {
@@ -206,7 +206,7 @@ class UtilsGames {
     }
   }
 
-  async saveInDataBaseResultWrongGames() {
+  async saveInDataBaseResultWrongGames(): Promise<void> {
     const wordID = this.selectCorrectId(storeGameRound);
     if (storage.isSignupUser) {
       try {
@@ -218,7 +218,7 @@ class UtilsGames {
     }
   }
 
-  createResultTrueAnswer({ gameAudio, gameSprint, countGame, trueAnswerGame }: IStoreGame) {
+  createResultTrueAnswer({ gameAudio, gameSprint, countGame, trueAnswerGame }: IStoreGame): void {
     const blockCorrect = <HTMLElement>document.querySelector('.block-correct');
     let dataRound = null;
     if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
@@ -241,7 +241,7 @@ class UtilsGames {
     blockCorrect.append(div);
   }
 
-  createResultFalseAnswer({ gameAudio, gameSprint, countGame, falseAnswerGame }: IStoreGame) {
+  createResultFalseAnswer({ gameAudio, gameSprint, countGame, falseAnswerGame }: IStoreGame): void {
     const blockWrong = <HTMLElement>document.querySelector('.block-wrong');
     let dataRound = null;
     if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
@@ -272,7 +272,7 @@ class UtilsGames {
     };
   }
 
-  async actionOnTrueRequestWrongResult(responseData: IResponseGetWord, wordId: string) {
+  async actionOnTrueRequestWrongResult(responseData: IResponseGetWord, wordId: string): Promise<void> {
     let { difficultyWord } = responseData;
     const { gamesAnswer } = responseData;
     if (difficultyWord === 'easy') {
@@ -282,14 +282,14 @@ class UtilsGames {
     await api.updateGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnFalseRequestWrongResult(wordId: string) {
+  async actionOnFalseRequestWrongResult(wordId: string): Promise<void> {
     const gamesAnswer = { correct: 0, wrong: 0 };
     const difficultyWord = 'normal';
     gamesAnswer.wrong++;
     await api.createGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnTrueRequestCorrectResult(responseData: IResponseGetWord, wordId: string) {
+  async actionOnTrueRequestCorrectResult(responseData: IResponseGetWord, wordId: string): Promise<void> {
     let { difficultyWord } = responseData;
     const { gamesAnswer } = responseData;
     (<number>gamesAnswer.correct)++;
@@ -305,7 +305,7 @@ class UtilsGames {
     await api.updateGameWords(storeUserInfo, gamesAnswer, difficultyWord, wordId);
   }
 
-  async actionOnFalseRequestCorrectResult(wordId: string) {
+  async actionOnFalseRequestCorrectResult(wordId: string): Promise<void> {
     const gamesAnswer = { correct: 0, wrong: 0 };
     const difficultyWord = 'normal';
     gamesAnswer.correct++;

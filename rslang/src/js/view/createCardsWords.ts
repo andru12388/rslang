@@ -56,7 +56,7 @@ class CreateCard {
   }
 
 
-  createAndRenderCards() {
+  createAndRenderCards(): void {
     const card = `
       <div class="card-words">
         <button class="icon-info-stat active-hidden" title="Прогресс изучения"></button>
@@ -91,7 +91,7 @@ class CreateCard {
     this.wrapperCardWords.insertAdjacentHTML('beforeend', card);
   }
 
-  createAndRenderCardsDifficulty() {
+  createAndRenderCardsDifficulty(): void {
     const card = `
       <div class="card-words active-difficulty">
         <button class="icon-info-stat active-hidden" title="Прогресс изучения"></button>
@@ -126,7 +126,7 @@ class CreateCard {
     this.wrapperCardWords.insertAdjacentHTML('beforeend', card);
   }
 
-  renderCardsDifficultyPage() {
+  renderCardsDifficultyPage(): void {
     const card = `
       <div class="card-words active-difficulty">
         <button class="icon-info-stat active-hidden" title="Прогресс изучения"></button>
@@ -160,7 +160,7 @@ class CreateCard {
     this.wrapperCardWordsDifficult.insertAdjacentHTML('beforeend', card);
   }
 
-  createAndRenderCardsLearned() {
+  createAndRenderCardsLearned(): void {
     const card = `
       <div class="card-words active-learnt">
         <button class="icon-info-stat active-hidden" title="Прогресс изучения"></button>
@@ -195,7 +195,7 @@ class CreateCard {
     this.wrapperCardWords.insertAdjacentHTML('beforeend', card);
   }
 
-  renderCardsLearnedPage() {
+  renderCardsLearnedPage(): void {
     const card = `
       <div class="card-words active-learnt">
         <button class="icon-info-stat active-hidden" title="Прогресс изучения"></button>
