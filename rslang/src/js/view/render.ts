@@ -71,7 +71,7 @@ class RenderView {
       <div class="preloader-page"><div class="pulse"></div></div>
       <div class="wrapper-difficult-words">
         <div class="nav-difficult-words">
-          <button href="" class="back-to-textbook">🠔 назад в учебник</button>
+          <button href="" class="back-to-textbook"><i class="fas fa-arrow-left"></i> назад в учебник</button>
           <button href="" class="back-to-difficult" disabled>Сложные слова</button>
           <button href="" class="link-study-word">Изученные слова</button>
         </div>
@@ -107,8 +107,8 @@ class RenderView {
         <details class="description-keyboard">
           <summary>Управление с клавиатуры</summary>
           <p><button>F</button> - полноэкранный режим</p>
-          <p><button>🡄</button> - ответить неверно</p>
-          <p><button>🡆</button> - ответить верно</p>
+          <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
+          <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
         </details>
         <p class="selection-title-game">Выберите сложность игры</p>
         <div class="levels-game">
@@ -191,8 +191,8 @@ class RenderView {
         <details class="description-keyboard">
           <summary>Управление с клавиатуры</summary>
           <p><button>F</button> - полноэкранный режим</p>
-          <p><button>🡄</button> - ответить неверно</p>
-          <p><button>🡆</button> - ответить верно</p>
+          <p><button><i class="fas fa-arrow-left"></i></button> - ответить неверно</p>
+          <p><button><i class="fas fa-arrow-right"></i></button> - ответить верно</p>
         </details>
         <p class="selection-title-game">Игра начнется с словами из текущей страницы учебника. Удачи!</p>
         <div class="block-button-popap-game">
@@ -359,7 +359,7 @@ class RenderView {
               <p class="text-statistic">Всего новых слов: <span class="total-sprint-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-sprint">0%</span></p>
             </li>
             <li>
               <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-sprint">0</span></p>
@@ -373,7 +373,7 @@ class RenderView {
               <p class="text-statistic">Всего новых слов: <span class="total-audio-words">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-answer-audio">0%</span></p>
             </li>
             <li>
               <p class="text-statistic">Самая длинная серия правильных ответов: <span class="long-series-audio">0</span></p>
@@ -390,7 +390,7 @@ class RenderView {
               <p class="text-statistic">Изученных слов: <span class="learned-words-stat">0</span></p>
             </li>
             <li>
-              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0</span></p>
+              <p class="text-statistic">Процент правильных ответов: <span class="percent-correct-answer">0%</span></p>
             </li>
           </ul>
         </div>

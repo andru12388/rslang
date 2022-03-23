@@ -1,4 +1,4 @@
-import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IDailyStat } from './components/interface';
+import { ICreateUser, ILoginUser, IWords, IGeneralInfo, IOptionalGames, IResponseDailyStat, IDailyStat } from './components/interface';
 import { storeUserInfo, storage } from '../controller/storage';
 import PreloaderPage from './components/preloader';
 
@@ -264,7 +264,7 @@ class RequestsApi {
     return content;
   }
 
-  async getStatistic({ userId, token }: ILoginUser): Promise<IDailyStat> {
+  async getStatistic({ userId, token }: ILoginUser): Promise<IResponseDailyStat> {
     const response = await fetch(`${this.users}/${userId}/statistics`, {
       headers: {
         'Authorization': `Bearer ${token}`,

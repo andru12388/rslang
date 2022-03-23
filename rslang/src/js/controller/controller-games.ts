@@ -1,13 +1,15 @@
 import RenderView from '../view/render';
-import { storage, storeGameRound, storeUserInfo } from './storage';
+import { storage, storeGameRound } from './storage';
 import { IStoreGame } from '../module/components/interface';
 import Utils from '../module/components/utils';
 import UtilsGames from '../module/components/utilsGames';
+import StatisticGames from '../module/components/statistic';
 import CreateGamePage from '../view/createGamesPage';
 
 const render = new RenderView();
 const utils = new Utils();
 const utilsGames = new UtilsGames();
+const statistic = new StatisticGames();
 
 class GamesController {
   linkGameAudio = <HTMLElement>document.querySelector('#link-game-audio');
@@ -95,10 +97,12 @@ class GamesController {
     utilsGames.createResultFalseAnswer(storeGameRound);
     this.installPathsAndVolumeAudio();
     this.audioWrong.play();
+    storeGameRound.longSeriesAnswer.push(storeGameRound.countCorrectAnswerInRowSprint);
     storeGameRound.countCorrectAnswerInRowSprint = 0;
     storeGameRound.countPaginationSprint = 0;
     utilsGames.factorPointsGameSprint(storeGameRound);
     paginationItem.forEach((item) => (<HTMLElement>item).style.background = 'none');
+    await utilsGames.saveInDataBaseResultWrongGames();
     storeGameRound.countGame++;
     if (storeGameRound.countGame > storeGameRound.gameSprint.length - 1) {
       await this.cancelRoundGameSprint();
@@ -119,6 +123,7 @@ class GamesController {
     utilsGames.factorPointsGameSprint(storeGameRound);
     utilsGames.plusPointsInTotalScoreSprint();
     utilsGames.resetPaginationGameSprint();
+    await utilsGames.saveInDataBaseResultCorrectGames();
     storeGameRound.countGame++;
     if (storeGameRound.countGame > storeGameRound.gameSprint.length - 1) {
       await this.cancelRoundGameSprint();
@@ -187,15 +192,7 @@ class GamesController {
   goToGameSprintFromPageTextbook() {
     const btnGameSprint = <HTMLElement>document.querySelector('.game-card-sprint');
     btnGameSprint.addEventListener('click', async () => {
-      if (storage.currentPage === 'difficult-words') {
-        await utilsGames.getGamesWordsFromDifficultyPage('game-sprint');
-      } else {
-        if (storage.isSignupUser) {
-          await utilsGames.getGamesWordsSprintTextbookSignupUser(storeUserInfo, storage);
-        } else {
-          await utilsGames.getGameSprintWords(storage.groupWords, storage.pageWords);
-        }
-      }
+      await utilsGames.selectRequestGameSprint();
       storage.currentPage = 'game-sprint-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
@@ -249,15 +246,7 @@ class GamesController {
   goToGameAudioFromPageTextbook() {
     const btnGameAudio = <HTMLElement>document.querySelector('.game-card-audio-call');
     btnGameAudio.addEventListener('click', async () => {
-      if (storage.currentPage === 'difficult-words') {
-        await utilsGames.getGamesWordsFromDifficultyPage('game-audio');
-      } else {
-        if (storage.isSignupUser) {
-          await utilsGames.getGamesWordsTextbookSignupUser(storeUserInfo, storage);
-        } else {
-          await utilsGames.getGamesWords(storage.groupWords, storage.pageWords);
-        }
-      }
+      await utilsGames.selectRequestGameAudio();
       storage.currentPage = 'game-audio-from-textbook';
       localStorage.setItem('general-info', JSON.stringify(storage));
       this.hideShowToggleBtnPopupGame();
@@ -267,7 +256,7 @@ class GamesController {
   }
 
   hideShowToggleBtnPopupGame() {
-    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-audio-from-textbook') {
+    if (storage.currentPage === 'game-audio' || storage.currentPage === 'game-sprint') {
       this.btnExitPopupGameFromTextbook.classList.add('active-hidden');
       this.btnRepeatPopupGameFromTextbook.classList.add('active-hidden');
       this.buttonRepeatPopupGame.classList.remove('active-hidden');
@@ -359,13 +348,15 @@ class GamesController {
     this.main.innerHTML = '';
     this.numberWrong.textContent = String(Object.keys(falseAnswerGame).length);
     this.numberCorrect.textContent = String(Object.keys(trueAnswerGame).length);
+    storeGameRound.longSeriesAnswer.push(storeGameRound.countCorrectAnswerInRowSprint);
     storeGameRound.countGame = 0;
     storeGameRound.countCorrectAnswerInRowSprint = 0;
     storeGameRound.countPaginationSprint = 0;
     if (storage.isSignupUser) {
-      await utilsGames.savedWrongResultGameDataBase();
-      await utilsGames.savedCorrectResultGameDataBase();
+      await statistic.saveStatisticInDataBase();
     }
+    storeGameRound.longSeriesAnswer.length = 0;
+    storeGameRound.learnWordsInGames = 0;
     for (const item in falseAnswerGame) delete falseAnswerGame[item];
     for (const item in trueAnswerGame) delete trueAnswerGame[item];
   }
@@ -388,34 +379,41 @@ class GamesController {
     });
   }
 
-  actionOnCorrectAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnCorrectAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
     const btnAnswerItem = <NodeListOf<Element>>document.querySelectorAll('.btn-answer-item');
     const dataRound = gameAudio[countGame];
+    const wordID = utilsGames.selectCorrectId(storeGameRound);
     this.hideShowBtnWhenAnswer();
     const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createCorrectAnswer();
     btnAnswerItem.forEach((item) => (<HTMLButtonElement>item).disabled = true);
-    storeGameRound.trueAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    storeGameRound.trueAnswerGame[wordID] = (`${currentWord} - ${currentWordTranslate}`);
+    storeGameRound.countCorrectAnswerInRowSprint++;
     utilsGames.createResultTrueAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();
+    await utilsGames.saveInDataBaseResultCorrectGames();
   }
 
-  actionOnWrongAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
+  async actionOnWrongAnswer({ gameAudio, countGame, currentWordTranslate, currentWord }: IStoreGame) {
     const dataRound = gameAudio[countGame];
+    const wordID = utilsGames.selectCorrectId(storeGameRound);
     this.hideShowBtnWhenAnswer();
     const createGamePage = new CreateGamePage(dataRound.word, dataRound.wordTranslate, dataRound.audio, dataRound.image);
     createGamePage.createCorrectAnswer();
     this.checkDisabledAnswer(storeGameRound);
-    storeGameRound.falseAnswerGame[utilsGames.selectCorrectId(storeGameRound)] = (`${currentWord} - ${currentWordTranslate}`);
+    storeGameRound.falseAnswerGame[wordID] = (`${currentWord} - ${currentWordTranslate}`);
+    storeGameRound.longSeriesAnswer.push(storeGameRound.countCorrectAnswerInRowSprint);
+    storeGameRound.countCorrectAnswerInRowSprint = 0;
     utilsGames.createResultFalseAnswer(storeGameRound);
     this.playAudioAnswerGameAudio();
     this.pressBtnNext();
+    await utilsGames.saveInDataBaseResultWrongGames();
   }
 
   selectAnswer({ currentWordTranslate }: IStoreGame) {
     const blockAnswerGame = <HTMLElement>document.querySelector('.block-answer-game');
-    blockAnswerGame.addEventListener('click', (event) => {
+    blockAnswerGame.addEventListener('click', async (event) => {
       const element = <HTMLElement>event.target;
       if (!element.classList.contains('btn-answer-item')) return false;
       const answer = (<string>element.textContent).slice(2);
@@ -423,12 +421,12 @@ class GamesController {
         element.style.background = 'green';
         this.installPathsAndVolumeAudio();
         this.audioCorrect.play();
-        this.actionOnCorrectAnswer(storeGameRound);
+        await this.actionOnCorrectAnswer(storeGameRound);
       } else {
         element.style.background = 'red';
         this.installPathsAndVolumeAudio();
         this.audioWrong.play();
-        this.actionOnWrongAnswer(storeGameRound);
+        await this.actionOnWrongAnswer(storeGameRound);
       }
     });
   }
@@ -443,7 +441,6 @@ class GamesController {
   exitGames() {
     const btnCancel = <HTMLElement>document.querySelector('.btn-cancel');
     btnCancel.addEventListener('click', () => {
-      this.footer.classList.remove('active-hidden');
       this.footer.style.display = '';
       this.logoLinkHome.click();
     });
@@ -457,10 +454,11 @@ class GamesController {
       storeGameRound.countGame = 0;
       storeGameRound.countCorrectAnswerInRowSprint = 0;
       storeGameRound.countPaginationSprint = 0;
+      storeGameRound.longSeriesAnswer.length = 0;
+      storeGameRound.learnWordsInGames = 0;
       clearInterval(<NodeJS.Timer> this.interval);
       for (const item in storeGameRound.falseAnswerGame) delete storeGameRound.falseAnswerGame[item];
       for (const item in storeGameRound.trueAnswerGame) delete storeGameRound.trueAnswerGame[item];
-      this.footer.classList.remove('active-hidden');
       this.footer.style.display = '';
       this.logoLinkHome.click();
     });
@@ -486,7 +484,6 @@ class GamesController {
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
       this.resultGameSprint.textContent = '';
-      this.footer.classList.remove('active-hidden');
       this.footer.style.display = '';
       this.logoLinkHome.click();
     });
@@ -513,15 +510,17 @@ class GamesController {
   }
 
   repeatPopupGameFromTextbook() {
-    this.btnRepeatPopupGameFromTextbook.addEventListener('click', () => {
+    this.btnRepeatPopupGameFromTextbook.addEventListener('click', async () => {
       this.popupResultGame.classList.add('active-hidden');
       this.popupBlockCorrect.innerHTML = '';
       this.popupBlockWrong.innerHTML = '';
       this.resultGameSprint.textContent = '';
       if (storage.currentPage === 'game-sprint' || storage.currentPage === 'game-sprint-from-textbook') {
         this.showGameSprintFromTextbook();
+        await utilsGames.selectRequestGameSprint();
       } else {
         this.showGameAudioFromTextbook();
+        await utilsGames.selectRequestGameAudio();
       }
     });
   }
@@ -673,7 +672,6 @@ class GamesController {
 
   startAllListenerGames() {
     this.goToGameSprint();
-
     this.goToGameAudio();
     this.rebootPage();
     this.transitionTextbook();

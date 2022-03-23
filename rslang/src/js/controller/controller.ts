@@ -4,10 +4,12 @@ import RequestsApi from '../module/requestsApi';
 import { storeUserInfo, storage, storeGameRound } from './storage';
 import Utils from '../module/components/utils';
 import GamesController from './controller-games';
+import StatisticGames from '../module/components/statistic';
 
 const api = new RequestsApi();
 const render = new RenderView();
 const utils = new Utils();
+const statistic = new StatisticGames();
 
 class AppController extends GamesController {
   wrapper = <HTMLElement>document.querySelector('.wrapper');
@@ -528,6 +530,7 @@ class AppController extends GamesController {
       await api.loginUser(newUser);
       this.logOutBox.innerHTML = render.renderLogOut(<string>newUser.name);
       this.showPersonalAccount();
+      await statistic.getStatisticAfterReloadPage();
       utils.signupUser();
     });
   }
@@ -539,6 +542,7 @@ class AppController extends GamesController {
       this.logOutBox.innerHTML = render.renderLogOut(<string>storeUserInfo.name);
       this.logOutBox.classList.add('active');
       this.signIn.classList.add('active-hidden');
+      await statistic.getStatisticAfterReloadPage();
       utils.signupUser();
       this.addWordDifficult();
       this.addLearnedWords();
@@ -568,6 +572,7 @@ class AppController extends GamesController {
       utils.showHideBtnDifficulty();
       this.addWordDifficult();
       this.addLearnedWords();
+      await statistic.getStatisticAfterReloadPage();
       if (storage.currentPage === 'textbook') {
         utils.isAllLearnedWordAndDifficulty();
       }
@@ -583,6 +588,7 @@ class AppController extends GamesController {
           this.logOutBox.innerHTML = render.renderLogOut(<string>storeUserInfo.name);
           this.logOutBox.classList.add('active');
           this.signIn.classList.add('active-hidden');
+          await statistic.getStatisticAfterReloadPage();
           utils.signupUser();
           this.addWordDifficult();
           this.addLearnedWords();

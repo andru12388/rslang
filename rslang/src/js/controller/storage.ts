@@ -22,9 +22,12 @@ const storeGameRound: IStoreGame = {
   gameSprint: [],
   arrAnswerGameAudio: [],
   arrAnswerGameSprint: [],
+  longSeriesAnswer: [],
   countGame: 0,
   countCorrectAnswerInRowSprint: 0,
   countPaginationSprint: 0,
+  learnWordsInGames: 0,
+  isClearDailyStat: false,
   currentWordTranslate: '',
   currentWord: '',
   randomWord: '',
@@ -39,11 +42,16 @@ const storeGameRound: IStoreGame = {
 const dailyStat: IDailyStat = {
   date: new Date().toLocaleDateString(),
   games: {
-    audio: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 },
-    sprint: { correctAnswer: 0, wrongAnswer: 0, newWords: 0 },
+    audio: { correctAnswer: 0, wrongAnswer: 0, newWords: 0, percentCorrect: 0, longSeries: 0 },
+    sprint: { correctAnswer: 0, wrongAnswer: 0, newWords: 0, percentCorrect: 0, longSeries: 0 },
   },
+  totalNewWords: 0,
+  learnedWordsDaily: 0,
+  percentAllCorrect: 0,
   allWordsDaily: 0,
-  wordsList: [],
+  wordsList: {
+    allWordsList: [],
+  },
 };
 
 window.addEventListener('load', () => {
@@ -51,9 +59,5 @@ window.addEventListener('load', () => {
     storage = JSON.parse(<string>localStorage.getItem('general-info'));
   }
 });
-
-// window.addEventListener('beforeunload', () => {
-//   localStorage.setItem('general-info', JSON.stringify(storage));
-// });
 
 export { storeUserInfo, storage, storeGameRound, dailyStat };
